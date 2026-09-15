@@ -12,7 +12,13 @@
     <nav><a href="#" id="logout">Log out</a></nav>
 </header>
 <main>
-    <h1>Income</h1>
+    <div class="section-header">
+        <h1>Income</h1>
+        <div>
+            <button class="btn secondary" id="live-update" type="button">Live update</button>
+            <span class="msg" id="live-update-msg" style="display:inline-block;margin-left:0.5rem"></span>
+        </div>
+    </div>
     <p class="lead" id="scope-note">Showing the stores you've been given access to.</p>
 
     <h2>Totals</h2>
@@ -44,29 +50,34 @@ document.getElementById("logout").addEventListener("click", async (e) => {
     window.location.href = "login.html";
 });
 
-// RLS scopes this to only the stores this account has been granted (store_daily_income is a
-// security_invoker view over order_income, which enforces that row-by-row before aggregating).
-const { data: stores } = await supabase.from("stores_public").select("id, name");
+// RLS scopes both to only the stores this account has been granted.
+let stores = [];
 const nameFor = (id) => stores?.find((s) => s.id === id)?.name ?? id;
 
-if (!stores || !stores.length) {
-    document.getElementById("scope-note").textContent =
-        "You don't have access to any store yet. Ask the admin to grant you access.";
-}
+async function loadIncome() {
+    const { data: storeRows } = await supabase.from("stores_public").select("id, name");
+    stores = storeRows || [];
 
-const { data: daily, error } = await supabase
-    .from("store_daily_totals")
-    .select("store_id, day, orders, total_cents")
-    .order("day", { ascending: false })
-    .limit(200);
+    if (!stores.length) {
+        document.getElementById("scope-note").textContent =
+            "You don't have access to any store yet. Ask the admin to grant you access.";
+    }
 
-const summaryBody = document.querySelector("#summary-table tbody");
-const dailyBody = document.querySelector("#daily-table tbody");
+    const { data: daily, error } = await supabase
+        .from("store_daily_totals")
+        .select("store_id, day, orders, total_cents")
+        .order("day", { ascending: false })
+        .limit(200);
 
-if (error || !daily) {
-    summaryBody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
-    dailyBody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
-} else {
+    const summaryBody = document.querySelector("#summary-table tbody");
+    const dailyBody = document.querySelector("#daily-table tbody");
+
+    if (error || !daily) {
+        summaryBody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
+        dailyBody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
+        return;
+    }
+
     const byStore = new Map();
     for (const row of daily) {
         const entry = byStore.get(row.store_id) || { days: 0, total: 0 };
@@ -83,6 +94,19 @@ if (error || !daily) {
         ? daily.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
         : `<tr><td colspan="4">No income yet.</td></tr>`;
 }
+
+document.getElementById("live-update").addEventListener("click", async () => {
+    const button = document.getElementById("live-update");
+    const msg = document.getElementById("live-update-msg");
+    button.disabled = true;
+    button.textContent = "Updating…";
+    await loadIncome();
+    button.disabled = false;
+    button.textContent = "Live update";
+    msg.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+});
+
+await loadIncome();
 
 document.getElementById("export-excel").addEventListener("click", async () => {
     const button = document.getElementById("export-excel");
