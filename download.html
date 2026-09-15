@@ -9,12 +9,19 @@
 <body>
 <header class="site">
     <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
-    <nav><a href="#" id="logout">Log out</a></nav>
+    <nav>
+        <a href="menu-creator.html">Menu Creator</a>
+        <a href="#" id="logout">Log out</a>
+    </nav>
 </header>
 <main class="narrow">
     <h1>Download PDA</h1>
     <p class="lead" style="font-size:0.92rem" id="intro">Latest release, ready to install.</p>
     <div id="release-card"></div>
+    <p class="lead" style="font-size:0.88rem;margin-top:2rem">
+        Building your menu before install? Use the <a href="menu-creator.html">Menu Creator</a>
+        to prepare a CSV you can import straight into the PDA.
+    </p>
 </main>
 <script type="module">
 import { supabase, requireRole, formatDate, SUPABASE_URL } from "./assets/supabase-client.js";

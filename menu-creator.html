@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu Creator · AlexZaxa Solutions PDA</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site">
+    <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <nav>
+        <a href="download.html">Download</a>
+        <a href="#" id="logout">Log out</a>
+    </nav>
+</header>
+<main>
+    <h1>Menu Creator</h1>
+    <p class="lead">
+        Build a menu here, then download it as a CSV and import it in your PDA's Control Center
+        (Menu &rarr; Import CSV). Everything stays in your browser until you download it —
+        nothing here is saved to alexzaxa.com. Your draft is kept in this browser only, so it
+        survives a refresh but won't follow you to another device.
+    </p>
+
+    <h2>Add a product</h2>
+    <form id="product-form" class="stack" style="max-width:480px">
+        <label for="p-category">Category</label>
+        <input id="p-category" required placeholder="e.g. Coffee">
+        <label for="p-name">Name</label>
+        <input id="p-name" required placeholder="e.g. Espresso">
+        <label for="p-description">Description (optional)</label>
+        <input id="p-description" placeholder="e.g. Single shot">
+        <label for="p-price">Price</label>
+        <input id="p-price" type="number" step="0.01" min="0" max="10000" required placeholder="2.50">
+        <label for="p-sku">SKU (optional)</label>
+        <input id="p-sku" placeholder="e.g. COF-ESP">
+        <label for="p-vat">VAT rate % (optional, defaults to 24)</label>
+        <input id="p-vat" type="number" step="0.1" min="0" max="100" placeholder="24">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Add product</button>
+    </form>
+
+    <h2>Add a size/variant</h2>
+    <p class="lead" style="font-size:0.88rem">Attaches an extra size (e.g. Large) to a product already added below, with its own price.</p>
+    <form id="variant-form" class="stack" style="max-width:480px">
+        <label for="v-product">Product</label>
+        <select id="v-product"></select>
+        <label for="v-name">Size name</label>
+        <input id="v-name" required placeholder="e.g. Large">
+        <label for="v-price">Price</label>
+        <input id="v-price" type="number" step="0.01" min="0" max="10000" required placeholder="10.00">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Add size</button>
+        <p class="msg" id="variant-msg"></p>
+    </form>
+
+    <h2>Add an extra/modifier</h2>
+    <p class="lead" style="font-size:0.88rem">An add-on like "Extra cheese" — apply it to one product, or to every product in a category.</p>
+    <form id="modifier-form" class="stack" style="max-width:480px">
+        <label for="m-category">Category it applies to</label>
+        <input id="m-category" required placeholder="e.g. Pizza">
+        <label for="m-target">Applies to</label>
+        <select id="m-target">
+            <option value="*">Every product in that category</option>
+        </select>
+        <label for="m-name">Extra name</label>
+        <input id="m-name" required placeholder="e.g. Extra cheese">
+        <label for="m-price">Price</label>
+        <input id="m-price" type="number" step="0.01" min="0" max="10000" required placeholder="1.00">
+        <label for="m-group">Group name (optional)</label>
+        <input id="m-group" placeholder="Defaults to ΕΞΤΡΑ ΥΛΙΚΑ">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Add extra</button>
+    </form>
+
+    <div class="section-header">
+        <h2>Menu so far</h2>
+        <div>
+            <button class="btn secondary" id="clear-all" type="button">Clear all</button>
+            <button class="btn" id="download-csv" type="button">Download CSV</button>
+        </div>
+    </div>
+    <table id="rows-table">
+        <thead><tr><th>Type</th><th>Category</th><th>Name</th><th>Price</th><th>Detail</th><th></th></tr></thead>
+        <tbody><tr><td colspan="6">Nothing added yet.</td></tr></tbody>
+    </table>
+</main>
+<script type="module">
+import { supabase, requireRole } from "./assets/supabase-client.js";
+
+const auth = await requireRole(["admin", "download"]);
+if (!auth) throw new Error("redirecting");
+
+document.getElementById("logout").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    window.location.href = "login.html";
+});
+
+const STORAGE_KEY = "alexzaxa-pda-menu-draft";
+let rows = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+    render();
+}
+
+function csvEscape(value) {
+    const s = String(value ?? "");
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+}
+
+function render() {
+    const tbody = document.querySelector("#rows-table tbody");
+    tbody.innerHTML = rows.length
+        ? rows.map((r, i) => `
+            <tr>
+                <td>${r.record_type}</td>
+                <td>${r.category}</td>
+                <td>${r.name}</td>
+                <td>${Number(r.price).toFixed(2)}</td>
+                <td>${r.record_type === "variant" ? `size of "${r.parent_name}"` : r.record_type === "modifier" ? `extra for ${r.parent_name === "*" ? `all of ${r.applies_to_category}` : r.parent_name}` : (r.description || "")}</td>
+                <td><button class="btn danger remove-row" data-index="${i}">Remove</button></td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="6">Nothing added yet.</td></tr>`;
+
+    tbody.querySelectorAll(".remove-row").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            rows.splice(Number(btn.dataset.index), 1);
+            save();
+        });
+    });
+
+    // Product dropdown for the variant form
+    const products = rows.filter((r) => r.record_type === "product");
+    const productSelect = document.getElementById("v-product");
+    productSelect.innerHTML = products.length
+        ? products.map((p) => `<option value="${p.category}|||${p.name}">${p.name} (${p.category})</option>`).join("")
+        : `<option value="">Add a product first</option>`;
+
+    // Product dropdown for the modifier form, filtered as the category field changes
+    refreshModifierTargets();
+}
+
+function refreshModifierTargets() {
+    const category = document.getElementById("m-category").value.trim().toLowerCase();
+    const select = document.getElementById("m-target");
+    const products = rows.filter((r) => r.record_type === "product" && r.category.toLowerCase() === category);
+    select.innerHTML = `<option value="*">Every product in that category</option>` +
+        products.map((p) => `<option value="${p.name}">${p.name} only</option>`).join("");
+}
+document.getElementById("m-category").addEventListener("input", refreshModifierTargets);
+
+document.getElementById("product-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    rows.push({
+        record_type: "product",
+        category: document.getElementById("p-category").value.trim(),
+        name: document.getElementById("p-name").value.trim(),
+        description: document.getElementById("p-description").value.trim(),
+        price: document.getElementById("p-price").value,
+        sku: document.getElementById("p-sku").value.trim(),
+        vat_rate: document.getElementById("p-vat").value || "24",
+        parent_name: "", applies_to_category: "", group_name: "",
+    });
+    document.getElementById("product-form").reset();
+    save();
+});
+
+document.getElementById("variant-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const msg = document.getElementById("variant-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const selected = document.getElementById("v-product").value;
+    if (!selected) {
+        msg.textContent = "Add a product first.";
+        msg.className = "msg error";
+        return;
+    }
+    const [category, parentName] = selected.split("|||");
+    rows.push({
+        record_type: "variant",
+        category, name: document.getElementById("v-name").value.trim(),
+        description: "", price: document.getElementById("v-price").value,
+        sku: "", vat_rate: "24", parent_name: parentName,
+        applies_to_category: "", group_name: "",
+    });
+    document.getElementById("variant-form").reset();
+    save();
+});
+
+document.getElementById("modifier-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const category = document.getElementById("m-category").value.trim();
+    rows.push({
+        record_type: "modifier",
+        category, name: document.getElementById("m-name").value.trim(),
+        description: "", price: document.getElementById("m-price").value,
+        sku: "", vat_rate: "24",
+        parent_name: document.getElementById("m-target").value || "*",
+        applies_to_category: category,
+        group_name: document.getElementById("m-group").value.trim() || "ΕΞΤΡΑ ΥΛΙΚΑ",
+    });
+    document.getElementById("modifier-form").reset();
+    save();
+});
+
+document.getElementById("clear-all").addEventListener("click", () => {
+    if (!rows.length) return;
+    if (!confirm("Clear the whole menu draft? This can't be undone.")) return;
+    rows = [];
+    save();
+});
+
+document.getElementById("download-csv").addEventListener("click", () => {
+    if (!rows.length) {
+        alert("Add at least one product first.");
+        return;
+    }
+    const header = ["record_type", "category", "name", "description", "price", "sku", "vat_rate", "parent_name", "applies_to_category", "group_name"];
+    const lines = [header.join(",")];
+    for (const r of rows) {
+        lines.push(header.map((col) => csvEscape(col === "price" ? Number(r[col]).toFixed(2) : r[col])).join(","));
+    }
+    const csv = "﻿" + lines.join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "menu.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+render();
+</script>
+</body>
+</html>
