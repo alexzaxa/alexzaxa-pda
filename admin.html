@@ -52,10 +52,10 @@
     </table>
 
     <h2>Income overview</h2>
-    <p class="lead">Last 500 synced orders, grouped by store.</p>
+    <p class="lead">Daily total per store, most recent first.</p>
     <table id="income-table">
-        <thead><tr><th>Store</th><th>Orders</th><th>Total</th></tr></thead>
-        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+        <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
+        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
     </table>
 </main>
 <script type="module">
@@ -226,30 +226,22 @@ async function loadGrants() {
     });
 }
 
-// --- Income overview (client-side aggregation of the most recent rows) ---
+// --- Income overview: day-by-store totals, computed in Postgres (store_daily_income view) ---
 async function loadIncome() {
     const tbody = document.querySelector("#income-table tbody");
     const { data, error } = await supabase
-        .from("order_income")
-        .select("store_id, total_cents")
-        .order("closed_at", { ascending: false })
-        .limit(500);
+        .from("store_daily_income")
+        .select("store_id, day, orders, total_cents")
+        .order("day", { ascending: false })
+        .limit(120);
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
         return;
     }
-    const byStore = new Map();
-    for (const row of data) {
-        const entry = byStore.get(row.store_id) || { orders: 0, total: 0 };
-        entry.orders += 1;
-        entry.total += row.total_cents;
-        byStore.set(row.store_id, entry);
-    }
     const nameFor = (id) => storesCache.find((s) => s.id === id)?.name ?? id;
-    const rows = [...byStore.entries()].sort((a, b) => b[1].total - a[1].total);
-    tbody.innerHTML = rows.length
-        ? rows.map(([id, e]) => `<tr><td>${nameFor(id)}</td><td>${e.orders}</td><td>${formatCents(e.total)}</td></tr>`).join("")
-        : `<tr><td colspan="3">No income synced yet.</td></tr>`;
+    tbody.innerHTML = data.length
+        ? data.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
+        : `<tr><td colspan="4">No income synced yet.</td></tr>`;
 }
 
 await loadStores();
