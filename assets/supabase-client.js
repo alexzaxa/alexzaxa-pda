@@ -13,6 +13,19 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { detectSessionInUrl: false, persistSession: true, autoRefreshToken: true },
 });
 
+// Download accounts are username-only (no email) - Supabase Auth still needs an email-shaped
+// identifier internally, so one is derived deterministically here and never shown to the user
+// or sent anywhere. Must match supabase/functions/manage-download-user's DOWNLOAD_EMAIL_DOMAIN.
+const DOWNLOAD_EMAIL_DOMAIN = "downloads.alexzaxa-pda.internal";
+export function usernameToEmail(username) {
+    return `${username.toLowerCase()}@${DOWNLOAD_EMAIL_DOMAIN}`;
+}
+
+const ROLE_HOME = { admin: "admin.html", restricted: "dashboard.html", download: "download.html" };
+export function roleHome(role) {
+    return ROLE_HOME[role] || "login.html";
+}
+
 export async function requireSession() {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
@@ -22,7 +35,8 @@ export async function requireSession() {
     return data.session;
 }
 
-export async function requireRole(role) {
+export async function requireRole(allowedRoles) {
+    const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
     const session = await requireSession();
     if (!session) return null;
     const { data: profile, error } = await supabase
@@ -34,8 +48,8 @@ export async function requireRole(role) {
         window.location.href = "login.html";
         return null;
     }
-    if (role && profile.role !== role) {
-        window.location.href = profile.role === "admin" ? "admin.html" : "dashboard.html";
+    if (roles.length && !roles.includes(profile.role)) {
+        window.location.href = roleHome(profile.role);
         return null;
     }
     return { session, role: profile.role };

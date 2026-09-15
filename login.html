@@ -28,26 +28,26 @@
     <div id="login-view">
         <h1>Log in</h1>
         <form id="login-form" class="stack">
-            <label for="email">Email</label>
-            <input id="email" type="email" required autocomplete="username">
+            <label for="email">Email or username</label>
+            <input id="email" required autocomplete="username">
             <label for="password">Password</label>
             <input id="password" type="password" required autocomplete="current-password">
             <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
             <p class="msg" id="msg"></p>
         </form>
         <p class="msg" style="color:var(--text-dim)">
-            New here? You should have received an email invite to set your password — use that
-            link instead of this form the first time.
+            Admin/dashboard accounts: use the email invite link the first time. Download accounts:
+            log in directly with the username and password the admin gave you.
         </p>
     </div>
 </main>
 <script type="module">
-import { supabase } from "./assets/supabase-client.js";
+import { supabase, roleHome, usernameToEmail } from "./assets/supabase-client.js";
 
 async function goToRoleHome() {
     const { data: { session } } = await supabase.auth.getSession();
     const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single();
-    window.location.href = profile?.role === "admin" ? "admin.html" : "dashboard.html";
+    window.location.href = roleHome(profile?.role);
 }
 
 // Invite/recovery links land as #access_token=...&type=invite (or type=recovery). Parsed and
@@ -106,7 +106,8 @@ if (isInviteOrRecovery) {
         event.preventDefault();
         const msg = document.getElementById("msg");
         msg.textContent = ""; msg.className = "msg";
-        const email = document.getElementById("email").value.trim();
+        const input = document.getElementById("email").value.trim();
+        const email = input.includes("@") ? input : usernameToEmail(input);
         const password = document.getElementById("password").value;
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {

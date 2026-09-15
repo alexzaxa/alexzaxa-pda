@@ -60,6 +60,21 @@
         <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
     </table>
 
+    <h2>Download access</h2>
+    <p class="lead">Username-only accounts (no email) for people who should only see the <a href="download.html">download page</a> — not the income dashboards. You set the password directly and tell them in person; there's no invite email for these.</p>
+    <form id="create-download-user-form" class="stack" style="max-width:420px">
+        <label for="download-username">Username</label>
+        <input id="download-username" required pattern="[a-z0-9_-]{3,32}" placeholder="e.g. nikos">
+        <label for="download-password">Password (tell them this directly)</label>
+        <input id="download-password" type="text" required minlength="8" placeholder="At least 8 characters">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Create download account</button>
+        <p class="msg" id="create-download-user-msg"></p>
+    </form>
+    <table id="download-users-table">
+        <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
+        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+    </table>
+
     <h2>Income overview</h2>
     <div class="section-header">
         <p class="lead">Daily total per store, most recent first. Raw order detail is kept 15 days; daily totals are kept forever.</p>
@@ -209,6 +224,76 @@ async function loadRestrictedProfiles() {
     select.innerHTML = data.map((p) => `<option value="${p.id}">${p.email}</option>`).join("");
 }
 
+// --- Download-only accounts (username, no email) ---
+document.getElementById("create-download-user-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById("create-download-user-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const username = document.getElementById("download-username").value.trim();
+    const password = document.getElementById("download-password").value;
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-download-user`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ action: "create", username, password }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to create account.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = `Created "${result.username}". Tell them the username and password directly — log in at login.html.`;
+    msg.className = "msg success";
+    document.getElementById("create-download-user-form").reset();
+    await loadDownloadUsers();
+});
+
+async function loadDownloadUsers() {
+    const { data, error } = await supabase
+        .from("profiles").select("id, username, created_at").eq("role", "download").order("created_at", { ascending: false });
+    const tbody = document.querySelector("#download-users-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="3">Could not load download accounts.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((u) => `
+            <tr>
+                <td>${u.username}</td>
+                <td>${formatDate(u.created_at)}</td>
+                <td><button class="btn danger revoke-download" data-id="${u.id}" data-username="${u.username}">Revoke</button></td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="3">No download accounts yet.</td></tr>`;
+
+    tbody.querySelectorAll(".revoke-download").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Revoke download access for "${btn.dataset.username}"? This deletes their login entirely.`)) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-download-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "delete", user_id: btn.dataset.id }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to revoke.");
+                return;
+            }
+            await loadDownloadUsers();
+        });
+    });
+}
+
 // --- Grants ---
 document.getElementById("grant-form").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -315,6 +400,7 @@ async function loadEverything() {
     await loadStores(); // also reloads income
     await loadRestrictedProfiles();
     await loadGrants();
+    await loadDownloadUsers();
 }
 
 document.getElementById("live-update").addEventListener("click", async () => {
