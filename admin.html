@@ -52,7 +52,10 @@
     </table>
 
     <h2>Income overview</h2>
-    <p class="lead">Daily total per store, most recent first.</p>
+    <div class="section-header">
+        <p class="lead">Daily total per store, most recent first. Raw order detail is kept 15 days; daily totals are kept forever.</p>
+        <button class="btn secondary" id="export-excel" type="button">Export to Excel</button>
+    </div>
     <table id="income-table">
         <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
         <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
@@ -60,6 +63,7 @@
 </main>
 <script type="module">
 import { supabase, requireRole, formatCents, formatDate, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
+import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("admin");
 if (!auth) throw new Error("redirecting");
@@ -120,18 +124,42 @@ async function loadStores() {
                 <td>${s.name}</td>
                 <td>${s.slug}</td>
                 <td>${formatDate(s.created_at)}</td>
-                <td>${s.active ? "active" : "inactive"}</td>
-                <td style="white-space:nowrap">
-                    <button class="btn secondary toggle-active" data-id="${s.id}" data-active="${s.active}">${s.active ? "Deactivate" : "Reactivate"}</button>
-                    <button class="btn danger delete-store" data-id="${s.id}" data-name="${s.name}">Delete</button>
+                <td>${s.active ? "active" : "terminated"}</td>
+                <td>
+                    <div class="menu">
+                        <button class="menu-trigger" type="button" aria-label="Actions">&#8942;</button>
+                        <div class="menu-list">
+                            <button class="toggle-active" data-id="${s.id}" data-active="${s.active}" data-name="${s.name}">${s.active ? "Terminate PDA" : "Reactivate PDA"}</button>
+                            <button class="danger delete-store" data-id="${s.id}" data-name="${s.name}">Delete permanently</button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         `).join("")
         : `<tr><td colspan="5">No stores yet.</td></tr>`;
 
+    tbody.querySelectorAll(".menu-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const list = trigger.nextElementSibling;
+            const wasOpen = list.classList.contains("open");
+            document.querySelectorAll(".menu-list.open").forEach((m) => m.classList.remove("open"));
+            if (!wasOpen) list.classList.add("open");
+        });
+    });
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".menu-list.open").forEach((m) => m.classList.remove("open"));
+    });
+
     tbody.querySelectorAll(".toggle-active").forEach((btn) => {
         btn.addEventListener("click", async () => {
             const nowActive = btn.dataset.active === "true";
+            if (nowActive) {
+                const proceed = confirm(
+                    `Terminate the PDA for "${btn.dataset.name}"?\n\nTheir software checks in periodically (not instantly) - once it does, it will lock and stop taking orders until you reactivate this store. Income sync also stops immediately.`
+                );
+                if (!proceed) return;
+            }
             const { error: updateError } = await supabase
                 .from("stores").update({ active: !nowActive }).eq("id", btn.dataset.id);
             if (updateError) { alert(updateError.message); return; }
@@ -142,9 +170,9 @@ async function loadStores() {
     tbody.querySelectorAll(".delete-store").forEach((btn) => {
         btn.addEventListener("click", async () => {
             const { count } = await supabase
-                .from("order_income").select("id", { count: "exact", head: true }).eq("store_id", btn.dataset.id);
+                .from("store_daily_totals").select("day", { count: "exact", head: true }).eq("store_id", btn.dataset.id);
             const warning = count
-                ? `Delete "${btn.dataset.name}" permanently? This also erases ${count} synced income record(s) for this store — this cannot be undone.\n\nIf you just want to stop it syncing, use Deactivate instead.`
+                ? `Delete "${btn.dataset.name}" permanently? This erases its entire income history (${count} day(s) of totals, plus any recent raw records) and cannot be undone.\n\nIf you just want to stop them using it while keeping their history, use Terminate PDA instead.`
                 : `Delete "${btn.dataset.name}" permanently? This cannot be undone.`;
             if (!confirm(warning)) return;
             const { error: deleteError } = await supabase.from("stores").delete().eq("id", btn.dataset.id);
@@ -226,11 +254,11 @@ async function loadGrants() {
     });
 }
 
-// --- Income overview: day-by-store totals, computed in Postgres (store_daily_income view) ---
+// --- Income overview: day-by-store totals, computed in Postgres (store_daily_totals table) ---
 async function loadIncome() {
     const tbody = document.querySelector("#income-table tbody");
     const { data, error } = await supabase
-        .from("store_daily_income")
+        .from("store_daily_totals")
         .select("store_id, day, orders, total_cents")
         .order("day", { ascending: false })
         .limit(120);
@@ -243,6 +271,36 @@ async function loadIncome() {
         ? data.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
         : `<tr><td colspan="4">No income synced yet.</td></tr>`;
 }
+
+document.getElementById("export-excel").addEventListener("click", async () => {
+    const button = document.getElementById("export-excel");
+    button.disabled = true;
+    button.textContent = "Exporting…";
+    try {
+        const { data, error } = await supabase
+            .from("store_daily_totals")
+            .select("store_id, day, orders, total_cents")
+            .order("day", { ascending: true });
+        if (error || !data.length) {
+            alert(error ? error.message : "No income to export yet.");
+            return;
+        }
+        const nameFor = (id) => storesCache.find((s) => s.id === id)?.name ?? id;
+        const rows = data.map((r) => ({
+            Store: nameFor(r.store_id),
+            Day: r.day,
+            Orders: r.orders,
+            "Total (EUR)": r.total_cents / 100,
+        }));
+        const sheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, sheet, "Daily income");
+        XLSX.writeFile(workbook, `alexzaxa-pda-income-${new Date().toISOString().slice(0, 10)}.xlsx`);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Export to Excel";
+    }
+});
 
 await loadStores();
 await loadRestrictedProfiles();

@@ -22,6 +22,10 @@
     </table>
 
     <h2>Daily totals</h2>
+    <div class="section-header">
+        <p class="lead">Raw order detail is kept 15 days; daily totals are kept forever.</p>
+        <button class="btn secondary" id="export-excel" type="button">Export to Excel</button>
+    </div>
     <table id="daily-table">
         <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
         <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
@@ -29,6 +33,7 @@
 </main>
 <script type="module">
 import { supabase, requireRole, formatCents } from "./assets/supabase-client.js";
+import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("restricted");
 if (!auth) throw new Error("redirecting");
@@ -50,7 +55,7 @@ if (!stores || !stores.length) {
 }
 
 const { data: daily, error } = await supabase
-    .from("store_daily_income")
+    .from("store_daily_totals")
     .select("store_id, day, orders, total_cents")
     .order("day", { ascending: false })
     .limit(200);
@@ -78,6 +83,35 @@ if (error || !daily) {
         ? daily.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
         : `<tr><td colspan="4">No income yet.</td></tr>`;
 }
+
+document.getElementById("export-excel").addEventListener("click", async () => {
+    const button = document.getElementById("export-excel");
+    button.disabled = true;
+    button.textContent = "Exporting…";
+    try {
+        const { data, error: exportError } = await supabase
+            .from("store_daily_totals")
+            .select("store_id, day, orders, total_cents")
+            .order("day", { ascending: true });
+        if (exportError || !data.length) {
+            alert(exportError ? exportError.message : "No income to export yet.");
+            return;
+        }
+        const rows = data.map((r) => ({
+            Store: nameFor(r.store_id),
+            Day: r.day,
+            Orders: r.orders,
+            "Total (EUR)": r.total_cents / 100,
+        }));
+        const sheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, sheet, "Daily income");
+        XLSX.writeFile(workbook, `alexzaxa-pda-income-${new Date().toISOString().slice(0, 10)}.xlsx`);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Export to Excel";
+    }
+});
 </script>
 </body>
 </html>

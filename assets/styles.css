@@ -144,6 +144,50 @@ form.stack { display: flex; flex-direction: column; }
     justify-content: space-between;
 }
 
+.menu {
+    position: relative;
+    display: inline-block;
+}
+.menu-trigger {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.menu-trigger:hover { background: var(--surface-2); }
+.menu-list {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 170px;
+    z-index: 10;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.menu-list.open { display: block; }
+.menu-list button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text);
+    padding: 0.6rem 0.9rem;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+.menu-list button:hover { background: var(--surface-2); }
+.menu-list button.danger { color: var(--danger); }
+
 .reveal {
     background: var(--surface-2);
     border: 1px solid var(--border);
