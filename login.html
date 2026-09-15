@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in · AlexZaxa Solutions PDA</title>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<header class="site">
+    <div class="brand"><a href="/" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <nav><a href="/changelog.html">Changelog</a></nav>
+</header>
+<main class="narrow">
+    <h1>Log in</h1>
+    <form id="login-form" class="stack">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="username">
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
+        <p class="msg" id="msg"></p>
+    </form>
+    <p class="msg" style="color:var(--text-dim)">
+        New here? You should have received an email invite to set your password — use that link
+        instead of this form the first time.
+    </p>
+</main>
+<script type="module">
+import { supabase } from "/assets/supabase-client.js";
+
+const form = document.getElementById("login-form");
+const msg = document.getElementById("msg");
+
+const { data: existing } = await supabase.auth.getSession();
+if (existing.session) {
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", existing.session.user.id).single();
+    window.location.href = profile?.role === "admin" ? "/admin.html" : "/dashboard.html";
+}
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    msg.textContent = "";
+    msg.className = "msg";
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+        msg.textContent = error.message;
+        msg.className = "msg error";
+        return;
+    }
+    const { data: profile, error: profileError } = await supabase
+        .from("profiles").select("role").eq("id", data.user.id).single();
+    if (profileError || !profile) {
+        msg.textContent = "Logged in, but no profile found. Contact the admin.";
+        msg.className = "msg error";
+        return;
+    }
+    window.location.href = profile.role === "admin" ? "/admin.html" : "/dashboard.html";
+});
+</script>
+</body>
+</html>

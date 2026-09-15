@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · AlexZaxa Solutions PDA</title>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<header class="site">
+    <div class="brand"><a href="/" style="color:inherit">AlexZaxa Solutions PDA</a> <span class="badge admin">admin</span></div>
+    <nav>
+        <a href="/changelog.html">Changelog</a>
+        <a href="#" id="logout">Log out</a>
+    </nav>
+</header>
+<main>
+    <h1>Admin</h1>
+
+    <h2>New store</h2>
+    <p class="lead">Creates a store and its one-time sync secret. Copy the install command below immediately — the secret is never shown again.</p>
+    <form id="create-store-form" class="stack" style="max-width:420px">
+        <label for="store-name">Store name</label>
+        <input id="store-name" required placeholder="e.g. Xilino Coffee Bar">
+        <button class="btn" type="submit" style="margin-top:1.5rem">Create store</button>
+        <p class="msg" id="create-store-msg"></p>
+    </form>
+    <div id="new-store-secret" style="display:none">
+        <p class="msg success">Store created. Run this on the restaurant PC during install (this secret will not be shown again):</p>
+        <div class="reveal" id="install-command"></div>
+    </div>
+
+    <h2>Stores</h2>
+    <table id="stores-table">
+        <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th></tr></thead>
+        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+    </table>
+
+    <h2>Access grants</h2>
+    <p class="lead">Restricted accounts see nothing until granted access to a specific store here.</p>
+    <form id="grant-form" class="stack" style="max-width:420px">
+        <label for="grant-profile">Restricted account</label>
+        <select id="grant-profile"></select>
+        <label for="grant-store">Store</label>
+        <select id="grant-store"></select>
+        <button class="btn" type="submit" style="margin-top:1.5rem">Grant access</button>
+        <p class="msg" id="grant-msg"></p>
+    </form>
+    <table id="grants-table">
+        <thead><tr><th>Account</th><th>Store</th><th>Granted</th><th></th></tr></thead>
+        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+    </table>
+
+    <h2>Income overview</h2>
+    <p class="lead">Last 500 synced orders, grouped by store.</p>
+    <table id="income-table">
+        <thead><tr><th>Store</th><th>Orders</th><th>Total</th></tr></thead>
+        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+    </table>
+</main>
+<script type="module">
+import { supabase, requireRole, formatCents, formatDate, SUPABASE_URL, SUPABASE_ANON_KEY } from "/assets/supabase-client.js";
+
+const auth = await requireRole("admin");
+if (!auth) throw new Error("redirecting");
+
+document.getElementById("logout").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    window.location.href = "/login.html";
+});
+
+// --- Create store ---
+document.getElementById("create-store-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById("create-store-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const name = document.getElementById("store-name").value.trim();
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/create-store`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ name }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to create store.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = `Created "${result.store.name}".`;
+    msg.className = "msg success";
+    document.getElementById("store-name").value = "";
+    const cmd = `.\\INSTALL-ALEXZAXA-PDA.ps1 -StoreId "${result.store.id}" -StoreSecret "${result.secret}" -SupabaseAnonKey "${SUPABASE_ANON_KEY}"`;
+    document.getElementById("install-command").textContent = cmd;
+    document.getElementById("new-store-secret").style.display = "block";
+    await loadStores();
+});
+
+// --- Stores table + dropdowns ---
+let storesCache = [];
+async function loadStores() {
+    const { data, error } = await supabase
+        .from("stores_public")
+        .select("id, name, slug, active, created_at")
+        .order("created_at", { ascending: false });
+    const tbody = document.querySelector("#stores-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Could not load stores.</td></tr>`;
+        return;
+    }
+    storesCache = data;
+    tbody.innerHTML = data.length
+        ? data.map((s) => `<tr><td>${s.name}</td><td>${s.slug}</td><td>${formatDate(s.created_at)}</td><td>${s.active ? "active" : "inactive"}</td></tr>`).join("")
+        : `<tr><td colspan="4">No stores yet.</td></tr>`;
+
+    const storeSelect = document.getElementById("grant-store");
+    storeSelect.innerHTML = data.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
+    await loadIncome();
+}
+
+// --- Restricted profiles for the grant dropdown ---
+let profilesCache = [];
+async function loadRestrictedProfiles() {
+    const { data, error } = await supabase.from("profiles").select("id, email").eq("role", "restricted").order("email");
+    const select = document.getElementById("grant-profile");
+    if (error || !data.length) {
+        select.innerHTML = `<option value="">No restricted accounts yet</option>`;
+        return;
+    }
+    profilesCache = data;
+    select.innerHTML = data.map((p) => `<option value="${p.id}">${p.email}</option>`).join("");
+}
+
+// --- Grants ---
+document.getElementById("grant-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById("grant-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const profile_id = document.getElementById("grant-profile").value;
+    const store_id = document.getElementById("grant-store").value;
+    if (!profile_id || !store_id) return;
+    const { data: { session } } = await supabase.auth.getSession();
+    const { error } = await supabase.from("store_access").insert({ profile_id, store_id, granted_by: session.user.id });
+    if (error) {
+        msg.textContent = error.message;
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = "Access granted.";
+    msg.className = "msg success";
+    await loadGrants();
+});
+
+async function loadGrants() {
+    // Resolved client-side from profilesCache/storesCache rather than a PostgREST embedded join,
+    // since store_access -> stores_public has no FK for PostgREST to embed through (it's a view).
+    const { data, error } = await supabase
+        .from("store_access")
+        .select("profile_id, store_id, granted_at")
+        .order("granted_at", { ascending: false });
+    const tbody = document.querySelector("#grants-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Could not load grants.</td></tr>`;
+        return;
+    }
+    const emailFor = (id) => profilesCache.find((p) => p.id === id)?.email ?? id;
+    const storeNameFor = (id) => storesCache.find((s) => s.id === id)?.name ?? id;
+    tbody.innerHTML = data.length
+        ? data.map((g) => `
+            <tr>
+                <td>${emailFor(g.profile_id)}</td>
+                <td>${storeNameFor(g.store_id)}</td>
+                <td>${formatDate(g.granted_at)}</td>
+                <td><button class="btn danger revoke" data-profile="${g.profile_id}" data-store="${g.store_id}">Revoke</button></td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4">No grants yet.</td></tr>`;
+
+    tbody.querySelectorAll(".revoke").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            await supabase.from("store_access").delete()
+                .eq("profile_id", btn.dataset.profile).eq("store_id", btn.dataset.store);
+            await loadGrants();
+        });
+    });
+}
+
+// --- Income overview (client-side aggregation of the most recent rows) ---
+async function loadIncome() {
+    const tbody = document.querySelector("#income-table tbody");
+    const { data, error } = await supabase
+        .from("order_income")
+        .select("store_id, total_cents")
+        .order("closed_at", { ascending: false })
+        .limit(500);
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
+        return;
+    }
+    const byStore = new Map();
+    for (const row of data) {
+        const entry = byStore.get(row.store_id) || { orders: 0, total: 0 };
+        entry.orders += 1;
+        entry.total += row.total_cents;
+        byStore.set(row.store_id, entry);
+    }
+    const nameFor = (id) => storesCache.find((s) => s.id === id)?.name ?? id;
+    const rows = [...byStore.entries()].sort((a, b) => b[1].total - a[1].total);
+    tbody.innerHTML = rows.length
+        ? rows.map(([id, e]) => `<tr><td>${nameFor(id)}</td><td>${e.orders}</td><td>${formatCents(e.total)}</td></tr>`).join("")
+        : `<tr><td colspan="3">No income synced yet.</td></tr>`;
+}
+
+await loadStores();
+await loadRestrictedProfiles();
+await loadGrants();
+</script>
+</body>
+</html>

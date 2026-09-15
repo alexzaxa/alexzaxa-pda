@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard · AlexZaxa Solutions PDA</title>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<header class="site">
+    <div class="brand"><a href="/" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <nav><a href="#" id="logout">Log out</a></nav>
+</header>
+<main>
+    <h1>Income</h1>
+    <p class="lead" id="scope-note">Showing the stores you've been given access to.</p>
+
+    <h2>By store</h2>
+    <table id="summary-table">
+        <thead><tr><th>Store</th><th>Orders</th><th>Total</th></tr></thead>
+        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+    </table>
+
+    <h2>Recent orders</h2>
+    <table id="orders-table">
+        <thead><tr><th>Store</th><th>Closed</th><th>Total</th><th>Payment</th></tr></thead>
+        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+    </table>
+</main>
+<script type="module">
+import { supabase, requireRole, formatCents, formatDate } from "/assets/supabase-client.js";
+
+const auth = await requireRole("restricted");
+if (!auth) throw new Error("redirecting");
+
+document.getElementById("logout").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    window.location.href = "/login.html";
+});
+
+// RLS scopes both queries to only the stores this account has been granted.
+const { data: stores } = await supabase.from("stores_public").select("id, name");
+const nameFor = (id) => stores?.find((s) => s.id === id)?.name ?? id;
+
+if (!stores || !stores.length) {
+    document.getElementById("scope-note").textContent =
+        "You don't have access to any store yet. Ask the admin to grant you access.";
+}
+
+const { data: orders, error } = await supabase
+    .from("order_income")
+    .select("store_id, closed_at, total_cents, payment_method")
+    .order("closed_at", { ascending: false })
+    .limit(200);
+
+const summaryBody = document.querySelector("#summary-table tbody");
+const ordersBody = document.querySelector("#orders-table tbody");
+
+if (error || !orders) {
+    summaryBody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
+    ordersBody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
+} else {
+    const byStore = new Map();
+    for (const row of orders) {
+        const entry = byStore.get(row.store_id) || { orders: 0, total: 0 };
+        entry.orders += 1;
+        entry.total += row.total_cents;
+        byStore.set(row.store_id, entry);
+    }
+    const summaryRows = [...byStore.entries()].sort((a, b) => b[1].total - a[1].total);
+    summaryBody.innerHTML = summaryRows.length
+        ? summaryRows.map(([id, e]) => `<tr><td>${nameFor(id)}</td><td>${e.orders}</td><td>${formatCents(e.total)}</td></tr>`).join("")
+        : `<tr><td colspan="3">No income yet.</td></tr>`;
+
+    ordersBody.innerHTML = orders.length
+        ? orders.slice(0, 50).map((o) => `
+            <tr>
+                <td>${nameFor(o.store_id)}</td>
+                <td>${formatDate(o.closed_at)}</td>
+                <td>${formatCents(o.total_cents)}</td>
+                <td>${o.payment_method ?? "—"}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4">No orders yet.</td></tr>`;
+}
+</script>
+</body>
+</html>

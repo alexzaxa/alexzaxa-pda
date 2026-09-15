@@ -1,0 +1,4 @@
+.seed-setup-key.local
+node_modules/
+.env
+.env.local
