@@ -12,53 +12,101 @@
     <nav><a href="changelog.html">Changelog</a></nav>
 </header>
 <main class="narrow">
-    <h1>Log in</h1>
-    <form id="login-form" class="stack">
-        <label for="email">Email</label>
-        <input id="email" type="email" required autocomplete="username">
-        <label for="password">Password</label>
-        <input id="password" type="password" required autocomplete="current-password">
-        <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
-        <p class="msg" id="msg"></p>
-    </form>
-    <p class="msg" style="color:var(--text-dim)">
-        New here? You should have received an email invite to set your password — use that link
-        instead of this form the first time.
-    </p>
+    <div id="set-password-view" style="display:none">
+        <h1>Set your password</h1>
+        <p class="lead" style="font-size:0.92rem">You're accepting an invite. Choose a password to finish setting up your account.</p>
+        <form id="set-password-form" class="stack">
+            <label for="new-password">New password</label>
+            <input id="new-password" type="password" required minlength="8" autocomplete="new-password">
+            <label for="confirm-password">Confirm password</label>
+            <input id="confirm-password" type="password" required minlength="8" autocomplete="new-password">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Set password &amp; continue</button>
+            <p class="msg" id="set-password-msg"></p>
+        </form>
+    </div>
+
+    <div id="login-view">
+        <h1>Log in</h1>
+        <form id="login-form" class="stack">
+            <label for="email">Email</label>
+            <input id="email" type="email" required autocomplete="username">
+            <label for="password">Password</label>
+            <input id="password" type="password" required autocomplete="current-password">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
+            <p class="msg" id="msg"></p>
+        </form>
+        <p class="msg" style="color:var(--text-dim)">
+            New here? You should have received an email invite to set your password — use that
+            link instead of this form the first time.
+        </p>
+    </div>
 </main>
 <script type="module">
 import { supabase } from "./assets/supabase-client.js";
 
-const form = document.getElementById("login-form");
-const msg = document.getElementById("msg");
-
-const { data: existing } = await supabase.auth.getSession();
-if (existing.session) {
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", existing.session.user.id).single();
+async function goToRoleHome() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single();
     window.location.href = profile?.role === "admin" ? "admin.html" : "dashboard.html";
 }
 
-form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    msg.textContent = "";
-    msg.className = "msg";
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-        msg.textContent = error.message;
-        msg.className = "msg error";
-        return;
+// Invite/recovery links land as #access_token=...&type=invite (or type=recovery). supabase-js's
+// detectSessionInUrl already establishes the session from this hash automatically; we only need
+// to notice the "type" ourselves (read before the hash is cleared) to know whether to show the
+// set-password form instead of jumping straight to a dashboard with no password ever set.
+const rawHash = window.location.hash;
+const isInviteOrRecovery = /type=(invite|recovery)/.test(rawHash);
+
+if (isInviteOrRecovery) {
+    document.getElementById("set-password-view").style.display = "block";
+    document.getElementById("login-view").style.display = "none";
+
+    // Give supabase-js a moment to finish parsing the hash into a session.
+    await supabase.auth.getSession();
+
+    document.getElementById("set-password-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const msg = document.getElementById("set-password-msg");
+        msg.textContent = ""; msg.className = "msg";
+        const p1 = document.getElementById("new-password").value;
+        const p2 = document.getElementById("confirm-password").value;
+        if (p1 !== p2) {
+            msg.textContent = "Passwords don't match.";
+            msg.className = "msg error";
+            return;
+        }
+        const { error } = await supabase.auth.updateUser({ password: p1 });
+        if (error) {
+            msg.textContent = error.message;
+            msg.className = "msg error";
+            return;
+        }
+        msg.textContent = "Password set. Redirecting…";
+        msg.className = "msg success";
+        history.replaceState(null, "", window.location.pathname);
+        await goToRoleHome();
+    });
+} else {
+    const { data: existing } = await supabase.auth.getSession();
+    if (existing.session) {
+        await goToRoleHome();
     }
-    const { data: profile, error: profileError } = await supabase
-        .from("profiles").select("role").eq("id", data.user.id).single();
-    if (profileError || !profile) {
-        msg.textContent = "Logged in, but no profile found. Contact the admin.";
-        msg.className = "msg error";
-        return;
-    }
-    window.location.href = profile.role === "admin" ? "admin.html" : "dashboard.html";
-});
+
+    document.getElementById("login-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const msg = document.getElementById("msg");
+        msg.textContent = ""; msg.className = "msg";
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            msg.textContent = error.message;
+            msg.className = "msg error";
+            return;
+        }
+        await goToRoleHome();
+    });
+}
 </script>
 </body>
 </html>
