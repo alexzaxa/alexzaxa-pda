@@ -32,8 +32,8 @@
 
     <h2>Stores</h2>
     <table id="stores-table">
-        <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th></tr></thead>
-        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+        <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th><th></th></tr></thead>
+        <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
     </table>
 
     <h2>Access grants</h2>
@@ -110,13 +110,49 @@ async function loadStores() {
         .order("created_at", { ascending: false });
     const tbody = document.querySelector("#stores-table tbody");
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="4">Could not load stores.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5">Could not load stores.</td></tr>`;
         return;
     }
     storesCache = data;
     tbody.innerHTML = data.length
-        ? data.map((s) => `<tr><td>${s.name}</td><td>${s.slug}</td><td>${formatDate(s.created_at)}</td><td>${s.active ? "active" : "inactive"}</td></tr>`).join("")
-        : `<tr><td colspan="4">No stores yet.</td></tr>`;
+        ? data.map((s) => `
+            <tr>
+                <td>${s.name}</td>
+                <td>${s.slug}</td>
+                <td>${formatDate(s.created_at)}</td>
+                <td>${s.active ? "active" : "inactive"}</td>
+                <td style="white-space:nowrap">
+                    <button class="btn secondary toggle-active" data-id="${s.id}" data-active="${s.active}">${s.active ? "Deactivate" : "Reactivate"}</button>
+                    <button class="btn danger delete-store" data-id="${s.id}" data-name="${s.name}">Delete</button>
+                </td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No stores yet.</td></tr>`;
+
+    tbody.querySelectorAll(".toggle-active").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const nowActive = btn.dataset.active === "true";
+            const { error: updateError } = await supabase
+                .from("stores").update({ active: !nowActive }).eq("id", btn.dataset.id);
+            if (updateError) { alert(updateError.message); return; }
+            await loadStores();
+        });
+    });
+
+    tbody.querySelectorAll(".delete-store").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const { count } = await supabase
+                .from("order_income").select("id", { count: "exact", head: true }).eq("store_id", btn.dataset.id);
+            const warning = count
+                ? `Delete "${btn.dataset.name}" permanently? This also erases ${count} synced income record(s) for this store — this cannot be undone.\n\nIf you just want to stop it syncing, use Deactivate instead.`
+                : `Delete "${btn.dataset.name}" permanently? This cannot be undone.`;
+            if (!confirm(warning)) return;
+            const { error: deleteError } = await supabase.from("stores").delete().eq("id", btn.dataset.id);
+            if (deleteError) { alert(deleteError.message); return; }
+            await loadStores();
+            await loadGrants();
+        });
+    });
 
     const storeSelect = document.getElementById("grant-store");
     storeSelect.innerHTML = data.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
