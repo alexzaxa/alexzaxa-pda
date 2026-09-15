@@ -1,9 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 export const SUPABASE_URL = "https://fuzbuvmpfriprinypbaz.supabase.co";
-// TODO: paste the project's anon/public key here (Settings -> API -> anon public).
-// This key is safe to ship in a public frontend - it has no access beyond what RLS allows.
-export const SUPABASE_ANON_KEY = "REPLACE_WITH_ANON_KEY";
+// Safe to ship in a public frontend - it has no access beyond what RLS allows.
+export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1emJ1dm1wZnJpcHJpbnlwYmF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0OTAyNzIsImV4cCI6MjEwNTA2NjI3Mn0.cScZuXf5YoFqAGNjroYVWt2TdYreEgGc3X22UyXbf9k";
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
