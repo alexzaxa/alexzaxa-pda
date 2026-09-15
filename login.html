@@ -50,19 +50,29 @@ async function goToRoleHome() {
     window.location.href = profile?.role === "admin" ? "admin.html" : "dashboard.html";
 }
 
-// Invite/recovery links land as #access_token=...&type=invite (or type=recovery). supabase-js's
-// detectSessionInUrl already establishes the session from this hash automatically; we only need
-// to notice the "type" ourselves (read before the hash is cleared) to know whether to show the
-// set-password form instead of jumping straight to a dashboard with no password ever set.
-const rawHash = window.location.hash;
-const isInviteOrRecovery = /type=(invite|recovery)/.test(rawHash);
+// Invite/recovery links land as #access_token=...&type=invite (or type=recovery). Parsed and
+// applied here manually (detectSessionInUrl is off — see assets/supabase-client.js) so there's
+// no race between the library auto-clearing the hash and this code reading it.
+const hashParams = new URLSearchParams(window.location.hash.slice(1));
+const accessToken = hashParams.get("access_token");
+const refreshToken = hashParams.get("refresh_token");
+const linkType = hashParams.get("type");
+const isInviteOrRecovery = Boolean(accessToken && refreshToken && (linkType === "invite" || linkType === "recovery"));
 
 if (isInviteOrRecovery) {
     document.getElementById("set-password-view").style.display = "block";
     document.getElementById("login-view").style.display = "none";
 
-    // Give supabase-js a moment to finish parsing the hash into a session.
-    await supabase.auth.getSession();
+    const { error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+    });
+    history.replaceState(null, "", window.location.pathname);
+    if (sessionError) {
+        document.getElementById("set-password-msg").textContent =
+            "This invite link has expired or already been used. Ask the admin to send a new one.";
+        document.getElementById("set-password-msg").className = "msg error";
+    }
 
     document.getElementById("set-password-form").addEventListener("submit", async (event) => {
         event.preventDefault();
