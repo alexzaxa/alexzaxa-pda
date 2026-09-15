@@ -10,7 +10,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export async function requireSession() {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
-        window.location.href = "/login.html";
+        window.location.href = "login.html";
         return null;
     }
     return data.session;
@@ -25,11 +25,11 @@ export async function requireRole(role) {
         .eq("id", session.user.id)
         .single();
     if (error || !profile) {
-        window.location.href = "/login.html";
+        window.location.href = "login.html";
         return null;
     }
     if (role && profile.role !== role) {
-        window.location.href = profile.role === "admin" ? "/admin.html" : "/dashboard.html";
+        window.location.href = profile.role === "admin" ? "admin.html" : "dashboard.html";
         return null;
     }
     return { session, role: profile.role };

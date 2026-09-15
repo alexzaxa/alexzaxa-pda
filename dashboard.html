@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard · AlexZaxa Solutions PDA</title>
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 <header class="site">
-    <div class="brand"><a href="/" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
     <nav><a href="#" id="logout">Log out</a></nav>
 </header>
 <main>
@@ -28,7 +28,7 @@
     </table>
 </main>
 <script type="module">
-import { supabase, requireRole, formatCents, formatDate } from "/assets/supabase-client.js";
+import { supabase, requireRole, formatCents, formatDate } from "./assets/supabase-client.js";
 
 const auth = await requireRole("restricted");
 if (!auth) throw new Error("redirecting");
@@ -36,7 +36,7 @@ if (!auth) throw new Error("redirecting");
 document.getElementById("logout").addEventListener("click", async (e) => {
     e.preventDefault();
     await supabase.auth.signOut();
-    window.location.href = "/login.html";
+    window.location.href = "login.html";
 });
 
 // RLS scopes both queries to only the stores this account has been granted.

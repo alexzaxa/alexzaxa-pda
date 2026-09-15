@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Changelog · AlexZaxa Solutions PDA</title>
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 <header class="site">
-    <div class="brand"><a href="/" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
     <nav>
-        <a href="/changelog.html">Changelog</a>
-        <a href="/login.html">Log in</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="login.html">Log in</a>
     </nav>
 </header>
 <main>
@@ -24,7 +24,7 @@
 </main>
 <footer class="site">AlexZaxa Solutions PDA</footer>
 <script type="module">
-import { supabase, formatDate } from "/assets/supabase-client.js";
+import { supabase, formatDate } from "./assets/supabase-client.js";
 
 const tbody = document.querySelector("#releases tbody");
 const { data, error } = await supabase
