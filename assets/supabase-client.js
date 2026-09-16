@@ -59,6 +59,13 @@ export function formatCents(cents) {
     return (Number(cents || 0) / 100).toLocaleString(undefined, { style: "currency", currency: "EUR" });
 }
 
+// Anything rendered via innerHTML that could contain public, unauthenticated input (e.g.
+// support_tickets, submitted with no login from help.html) must go through this first - unlike
+// admin-authored fields elsewhere (store names, etc.) where only the admin can inject anything.
+export function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
 export function formatDate(value) {
     if (!value) return "—";
     return new Date(value).toLocaleString();

@@ -10,6 +10,7 @@
 <header class="site">
     <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a> <span class="badge admin">admin</span></div>
     <nav>
+        <a href="help.html">Help</a>
         <a href="changelog.html">Changelog</a>
         <a href="#" id="logout">Log out</a>
     </nav>
@@ -75,6 +76,13 @@
         <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
     </table>
 
+    <h2>Support tickets</h2>
+    <p class="lead">Submitted from the public <a href="help.html">Help</a> page by restaurant staff (no login required on their end).</p>
+    <table id="tickets-table">
+        <thead><tr><th>Store</th><th>From</th><th>Contact</th><th>Category</th><th>Message</th><th>Status</th><th>Received</th></tr></thead>
+        <tbody><tr><td colspan="7">Loading…</td></tr></tbody>
+    </table>
+
     <h2>Income overview</h2>
     <div class="section-header">
         <p class="lead">Daily total per store, most recent first. Raw order detail is kept 15 days; daily totals are kept forever.</p>
@@ -86,7 +94,7 @@
     </table>
 </main>
 <script type="module">
-import { supabase, requireRole, formatCents, formatDate, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
+import { supabase, requireRole, formatCents, formatDate, esc, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("admin");
@@ -348,6 +356,50 @@ async function loadGrants() {
     });
 }
 
+// --- Support tickets (submitted from help.html, no login required on the sender's end) ---
+const TICKET_CATEGORY_LABEL = { technical: "Technical", how_to: "How-to", billing: "Billing", other: "Other" };
+async function loadTickets() {
+    const { data, error } = await supabase
+        .from("support_tickets")
+        .select("id, store_name, contact_name, contact_info, category, message, status, created_at")
+        .order("status", { ascending: true })
+        .order("created_at", { ascending: false });
+    const tbody = document.querySelector("#tickets-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="7">Could not load tickets.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((t) => `
+            <tr>
+                <td>${esc(t.store_name)}</td>
+                <td>${esc(t.contact_name)}</td>
+                <td>${esc(t.contact_info)}</td>
+                <td>${esc(TICKET_CATEGORY_LABEL[t.category] || t.category)}</td>
+                <td style="max-width:280px;white-space:pre-wrap">${esc(t.message)}</td>
+                <td>
+                    <select class="ticket-status" data-id="${t.id}">
+                        <option value="open" ${t.status === "open" ? "selected" : ""}>Open</option>
+                        <option value="in_progress" ${t.status === "in_progress" ? "selected" : ""}>In progress</option>
+                        <option value="resolved" ${t.status === "resolved" ? "selected" : ""}>Resolved</option>
+                    </select>
+                </td>
+                <td>${formatDate(t.created_at)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="7">No tickets yet.</td></tr>`;
+
+    tbody.querySelectorAll(".ticket-status").forEach((select) => {
+        select.addEventListener("change", async () => {
+            select.disabled = true;
+            await supabase.from("support_tickets")
+                .update({ status: select.value, updated_at: new Date().toISOString() })
+                .eq("id", select.dataset.id);
+            select.disabled = false;
+        });
+    });
+}
+
 // --- Income overview: day-by-store totals, computed in Postgres (store_daily_totals table) ---
 async function loadIncome() {
     const tbody = document.querySelector("#income-table tbody");
@@ -401,6 +453,7 @@ async function loadEverything() {
     await loadRestrictedProfiles();
     await loadGrants();
     await loadDownloadUsers();
+    await loadTickets();
 }
 
 document.getElementById("live-update").addEventListener("click", async () => {

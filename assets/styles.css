@@ -108,7 +108,7 @@ tr:last-child td { border-bottom: none; }
 .btn.secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
 .btn.danger { background: var(--danger); color: #fff; }
 
-input, select {
+input, select, textarea {
     width: 100%;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -116,7 +116,9 @@ input, select {
     color: var(--text);
     padding: 0.55rem 0.7rem;
     font-size: 0.95rem;
+    font-family: inherit;
 }
+textarea { resize: vertical; }
 
 label { display: block; font-size: 0.85rem; color: var(--text-dim); margin: 0.9rem 0 0.3rem; }
 
