@@ -109,13 +109,17 @@
         </select>
         <label for="ticket-message">Μήνυμα</label>
         <textarea id="ticket-message" required maxlength="5000" rows="5" placeholder="Περιγράψτε το πρόβλημα ή την ερώτησή σας"></textarea>
+        <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <label for="ticket-website">Website</label>
+            <input id="ticket-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
         <button class="btn" type="submit" style="margin-top:1.5rem">Αποστολή</button>
         <p class="msg" id="ticket-msg"></p>
     </form>
 </main>
 <footer class="site">AlexZaxa Solutions PDA</footer>
 <script type="module">
-import { supabase } from "./assets/supabase-client.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 
 document.getElementById("ticket-form").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -123,15 +127,29 @@ document.getElementById("ticket-form").addEventListener("submit", async (event) 
     const msg = document.getElementById("ticket-msg");
     msg.textContent = ""; msg.className = "msg";
     button.disabled = true;
-    const { error } = await supabase.from("support_tickets").insert({
-        store_name: document.getElementById("ticket-store").value.trim(),
-        contact_name: document.getElementById("ticket-name").value.trim(),
-        contact_info: document.getElementById("ticket-contact").value.trim(),
-        category: document.getElementById("ticket-category").value,
-        message: document.getElementById("ticket-message").value.trim(),
-    });
+    let response;
+    try {
+        response = await fetch(`${SUPABASE_URL}/functions/v1/submit-ticket`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "apikey": SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({
+                store_name: document.getElementById("ticket-store").value.trim(),
+                contact_name: document.getElementById("ticket-name").value.trim(),
+                contact_info: document.getElementById("ticket-contact").value.trim(),
+                category: document.getElementById("ticket-category").value,
+                message: document.getElementById("ticket-message").value.trim(),
+                website: document.getElementById("ticket-website").value,
+            }),
+        });
+    } catch {
+        response = null;
+    }
     button.disabled = false;
-    if (error) {
+    if (!response || !response.ok) {
         msg.textContent = "Κάτι πήγε στραβά, δοκιμάστε ξανά σε λίγο.";
         msg.className = "msg error";
         return;
