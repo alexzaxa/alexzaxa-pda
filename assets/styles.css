@@ -9,6 +9,7 @@
     --accent-text: #0b0d12;
     --danger: #e5605a;
     --success: #4cb782;
+    --warning: #d9a441;
     --radius: 10px;
     color-scheme: dark;
 }
@@ -200,6 +201,113 @@ form.stack { display: flex; flex-direction: column; }
     word-break: break-all;
     margin-top: 0.75rem;
 }
+
+.stat-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.75rem 0;
+}
+.stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.3rem;
+}
+.stat-tile .stat-label {
+    display: block;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    margin-bottom: 0.4rem;
+}
+.stat-tile .stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 600;
+    font-variant-numeric: proportional-nums;
+    letter-spacing: -0.02em;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+.tab-badge {
+    background: var(--danger);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.2rem 0.45rem;
+    border-radius: 999px;
+}
+.tab-panel h2:first-child { margin-top: 1.75rem; }
+
+.notif-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.75rem;
+}
+.notif-card.status-resolved { opacity: 0.75; }
+.notif-card .notif-body { flex: 1; min-width: 0; }
+.notif-card h4 { margin: 0.15rem 0 0.35rem; font-size: 0.98rem; }
+.notif-card p { margin: 0 0 0.5rem; color: var(--text); white-space: pre-wrap; }
+.notif-meta { color: var(--text-dim); font-size: 0.82rem; }
+.notif-actions select { width: auto; min-width: 150px; }
+.notif-status-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.notif-status-label .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-open { border-left-color: var(--danger); }
+.status-open .notif-status-label { color: var(--danger); }
+.status-open .dot { background: var(--danger); }
+.status-in_progress { border-left-color: var(--warning); }
+.status-in_progress .notif-status-label { color: var(--warning); }
+.status-in_progress .dot { background: var(--warning); }
+.status-resolved { border-left-color: var(--success); }
+.status-resolved .notif-status-label { color: var(--success); }
+.status-resolved .dot { background: var(--success); }
+
+.resolved-toggle { margin-top: 1.5rem; }
+.resolved-toggle summary {
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+.resolved-toggle[open] summary { margin-bottom: 1rem; }
 
 footer.site {
     text-align: center;

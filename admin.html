@@ -27,71 +27,105 @@
         Stores push data to alexzaxa.com on their own schedule (about once a minute when online) — there's no way to reach into a restaurant PC on demand. "Live update" just re-pulls whatever's already arrived here, instantly.
     </p>
 
-    <h2>New store</h2>
-    <p class="lead">Creates a store and its one-time sync secret. Copy the install command below immediately — the secret is never shown again.</p>
-    <form id="create-store-form" class="stack" style="max-width:420px">
-        <label for="store-name">Store name</label>
-        <input id="store-name" required placeholder="e.g. Xilino Coffee Bar">
-        <button class="btn" type="submit" style="margin-top:1.5rem">Create store</button>
-        <p class="msg" id="create-store-msg"></p>
-    </form>
-    <div id="new-store-secret" style="display:none">
-        <p class="msg success">Store created. Run this on the restaurant PC during install (this secret will not be shown again):</p>
-        <div class="reveal" id="install-command"></div>
+    <div class="stat-tiles">
+        <div class="stat-tile">
+            <span class="stat-label">Open tickets</span>
+            <strong class="stat-value" id="stat-open-tickets">–</strong>
+        </div>
+        <div class="stat-tile">
+            <span class="stat-label">Active stores</span>
+            <strong class="stat-value" id="stat-active-stores">–</strong>
+        </div>
+        <div class="stat-tile">
+            <span class="stat-label">Income today</span>
+            <strong class="stat-value" id="stat-income-today">–</strong>
+        </div>
     </div>
 
-    <h2>Stores</h2>
-    <table id="stores-table">
-        <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th><th></th></tr></thead>
-        <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
-    </table>
+    <nav class="tabs" role="tablist">
+        <button class="tab-btn" type="button" data-tab="notifications">Notifications <span class="tab-badge" id="notif-badge" hidden>0</span></button>
+        <button class="tab-btn" type="button" data-tab="stores">Stores</button>
+        <button class="tab-btn" type="button" data-tab="access">Access grants</button>
+        <button class="tab-btn" type="button" data-tab="downloads">Download access</button>
+        <button class="tab-btn" type="button" data-tab="income">Income</button>
+    </nav>
 
-    <h2>Access grants</h2>
-    <p class="lead">Restricted accounts see nothing until granted access to a specific store here.</p>
-    <form id="grant-form" class="stack" style="max-width:420px">
-        <label for="grant-profile">Restricted account</label>
-        <select id="grant-profile"></select>
-        <label for="grant-store">Store</label>
-        <select id="grant-store"></select>
-        <button class="btn" type="submit" style="margin-top:1.5rem">Grant access</button>
-        <p class="msg" id="grant-msg"></p>
-    </form>
-    <table id="grants-table">
-        <thead><tr><th>Account</th><th>Store</th><th>Granted</th><th></th></tr></thead>
-        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
-    </table>
+    <section class="tab-panel" data-panel="notifications">
+        <h2>Notifications</h2>
+        <p class="lead">Support tickets submitted from the public <a href="help.html">Help</a> page (no login required on their end) land here first.</p>
+        <div id="notifications-feed"></div>
+        <details class="resolved-toggle">
+            <summary id="resolved-summary">Resolved</summary>
+            <div id="resolved-feed"></div>
+        </details>
+    </section>
 
-    <h2>Download access</h2>
-    <p class="lead">Username-only accounts (no email) for people who should only see the <a href="download.html">download page</a> — not the income dashboards. You set the password directly and tell them in person; there's no invite email for these.</p>
-    <form id="create-download-user-form" class="stack" style="max-width:420px">
-        <label for="download-username">Username</label>
-        <input id="download-username" required pattern="[a-z0-9_-]{3,32}" placeholder="e.g. nikos">
-        <label for="download-password">Password (tell them this directly)</label>
-        <input id="download-password" type="text" required minlength="8" placeholder="At least 8 characters">
-        <button class="btn" type="submit" style="margin-top:1.5rem">Create download account</button>
-        <p class="msg" id="create-download-user-msg"></p>
-    </form>
-    <table id="download-users-table">
-        <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
-        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
-    </table>
+    <section class="tab-panel" data-panel="stores" hidden>
+        <h2>New store</h2>
+        <p class="lead">Creates a store and its one-time sync secret. Copy the install command below immediately — the secret is never shown again.</p>
+        <form id="create-store-form" class="stack" style="max-width:420px">
+            <label for="store-name">Store name</label>
+            <input id="store-name" required placeholder="e.g. Xilino Coffee Bar">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Create store</button>
+            <p class="msg" id="create-store-msg"></p>
+        </form>
+        <div id="new-store-secret" style="display:none">
+            <p class="msg success">Store created. Run this on the restaurant PC during install (this secret will not be shown again):</p>
+            <div class="reveal" id="install-command"></div>
+        </div>
 
-    <h2>Support tickets</h2>
-    <p class="lead">Submitted from the public <a href="help.html">Help</a> page by restaurant staff (no login required on their end).</p>
-    <table id="tickets-table">
-        <thead><tr><th>Store</th><th>From</th><th>Contact</th><th>Category</th><th>Message</th><th>Status</th><th>Received</th></tr></thead>
-        <tbody><tr><td colspan="7">Loading…</td></tr></tbody>
-    </table>
+        <h2>Stores</h2>
+        <table id="stores-table">
+            <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th><th></th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+    </section>
 
-    <h2>Income overview</h2>
-    <div class="section-header">
-        <p class="lead">Daily total per store, most recent first. Raw order detail is kept 15 days; daily totals are kept forever.</p>
-        <button class="btn secondary" id="export-excel" type="button">Export to Excel</button>
-    </div>
-    <table id="income-table">
-        <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
-        <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
-    </table>
+    <section class="tab-panel" data-panel="access" hidden>
+        <h2>Access grants</h2>
+        <p class="lead">Restricted accounts see nothing until granted access to a specific store here.</p>
+        <form id="grant-form" class="stack" style="max-width:420px">
+            <label for="grant-profile">Restricted account</label>
+            <select id="grant-profile"></select>
+            <label for="grant-store">Store</label>
+            <select id="grant-store"></select>
+            <button class="btn" type="submit" style="margin-top:1.5rem">Grant access</button>
+            <p class="msg" id="grant-msg"></p>
+        </form>
+        <table id="grants-table">
+            <thead><tr><th>Account</th><th>Store</th><th>Granted</th><th></th></tr></thead>
+            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
+    <section class="tab-panel" data-panel="downloads" hidden>
+        <h2>Download access</h2>
+        <p class="lead">Username-only accounts (no email) for people who should only see the <a href="download.html">download page</a> — not the income dashboards. You set the password directly and tell them in person; there's no invite email for these.</p>
+        <form id="create-download-user-form" class="stack" style="max-width:420px">
+            <label for="download-username">Username</label>
+            <input id="download-username" required pattern="[a-z0-9_-]{3,32}" placeholder="e.g. nikos">
+            <label for="download-password">Password (tell them this directly)</label>
+            <input id="download-password" type="text" required minlength="8" placeholder="At least 8 characters">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Create download account</button>
+            <p class="msg" id="create-download-user-msg"></p>
+        </form>
+        <table id="download-users-table">
+            <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
+            <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
+    <section class="tab-panel" data-panel="income" hidden>
+        <h2>Income overview</h2>
+        <div class="section-header">
+            <p class="lead">Daily total per store, most recent first. Raw order detail is kept 15 days; daily totals are kept forever.</p>
+            <button class="btn secondary" id="export-excel" type="button">Export to Excel</button>
+        </div>
+        <table id="income-table">
+            <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
+            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+        </table>
+    </section>
 </main>
 <script type="module">
 import { supabase, requireRole, formatCents, formatDate, esc, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
@@ -105,6 +139,18 @@ document.getElementById("logout").addEventListener("click", async (e) => {
     await supabase.auth.signOut();
     window.location.href = "login.html";
 });
+
+// --- Tabs ---
+const tabButtons = [...document.querySelectorAll(".tab-btn")];
+const tabPanels = [...document.querySelectorAll(".tab-panel")];
+function activateTab(name) {
+    const target = tabButtons.some((b) => b.dataset.tab === name) ? name : "notifications";
+    tabButtons.forEach((b) => b.classList.toggle("active", b.dataset.tab === target));
+    tabPanels.forEach((p) => { p.hidden = p.dataset.panel !== target; });
+    history.replaceState(null, "", `#${target}`);
+}
+tabButtons.forEach((b) => b.addEventListener("click", () => activateTab(b.dataset.tab)));
+activateTab(location.hash.slice(1));
 
 // --- Create store ---
 document.getElementById("create-store-form").addEventListener("submit", async (event) => {
@@ -150,6 +196,7 @@ async function loadStores() {
         return;
     }
     storesCache = data;
+    document.getElementById("stat-active-stores").textContent = data.filter((s) => s.active).length;
     tbody.innerHTML = data.length
         ? data.map((s) => `
             <tr>
@@ -356,48 +403,69 @@ async function loadGrants() {
     });
 }
 
-// --- Support tickets (submitted from help.html, no login required on the sender's end) ---
+// --- Notifications (support tickets submitted from help.html) ---
 const TICKET_CATEGORY_LABEL = { technical: "Technical", how_to: "How-to", billing: "Billing", other: "Other" };
-async function loadTickets() {
-    const { data, error } = await supabase
-        .from("support_tickets")
-        .select("id, store_name, contact_name, contact_info, category, message, status, created_at")
-        .order("status", { ascending: true })
-        .order("created_at", { ascending: false });
-    const tbody = document.querySelector("#tickets-table tbody");
-    if (error) {
-        tbody.innerHTML = `<tr><td colspan="7">Could not load tickets.</td></tr>`;
-        return;
-    }
-    tbody.innerHTML = data.length
-        ? data.map((t) => `
-            <tr>
-                <td>${esc(t.store_name)}</td>
-                <td>${esc(t.contact_name)}</td>
-                <td>${esc(t.contact_info)}</td>
-                <td>${esc(TICKET_CATEGORY_LABEL[t.category] || t.category)}</td>
-                <td style="max-width:280px;white-space:pre-wrap">${esc(t.message)}</td>
-                <td>
-                    <select class="ticket-status" data-id="${t.id}">
-                        <option value="open" ${t.status === "open" ? "selected" : ""}>Open</option>
-                        <option value="in_progress" ${t.status === "in_progress" ? "selected" : ""}>In progress</option>
-                        <option value="resolved" ${t.status === "resolved" ? "selected" : ""}>Resolved</option>
-                    </select>
-                </td>
-                <td>${formatDate(t.created_at)}</td>
-            </tr>
-        `).join("")
-        : `<tr><td colspan="7">No tickets yet.</td></tr>`;
+const STATUS_LABEL = { open: "Open", in_progress: "In progress", resolved: "Resolved" };
 
-    tbody.querySelectorAll(".ticket-status").forEach((select) => {
+function ticketCard(t) {
+    return `
+        <article class="notif-card status-${t.status}">
+            <div class="notif-body">
+                <div class="notif-status-label"><span class="dot"></span>${STATUS_LABEL[t.status] || t.status}</div>
+                <h4>${esc(t.store_name)} · ${esc(TICKET_CATEGORY_LABEL[t.category] || t.category)}</h4>
+                <p>${esc(t.message)}</p>
+                <div class="notif-meta">${esc(t.contact_name)} · ${esc(t.contact_info)} · ${formatDate(t.created_at)}</div>
+            </div>
+            <div class="notif-actions">
+                <select class="ticket-status" data-id="${t.id}">
+                    <option value="open" ${t.status === "open" ? "selected" : ""}>Open</option>
+                    <option value="in_progress" ${t.status === "in_progress" ? "selected" : ""}>In progress</option>
+                    <option value="resolved" ${t.status === "resolved" ? "selected" : ""}>Resolved</option>
+                </select>
+            </div>
+        </article>
+    `;
+}
+
+function bindTicketStatusSelects(container) {
+    container.querySelectorAll(".ticket-status").forEach((select) => {
         select.addEventListener("change", async () => {
             select.disabled = true;
             await supabase.from("support_tickets")
                 .update({ status: select.value, updated_at: new Date().toISOString() })
                 .eq("id", select.dataset.id);
-            select.disabled = false;
+            await loadTickets();
         });
     });
+}
+
+async function loadTickets() {
+    const { data, error } = await supabase
+        .from("support_tickets")
+        .select("id, store_name, contact_name, contact_info, category, message, status, created_at")
+        .order("created_at", { ascending: false });
+    const feed = document.getElementById("notifications-feed");
+    const resolvedFeed = document.getElementById("resolved-feed");
+    if (error) {
+        feed.innerHTML = `<p class="msg error">Could not load tickets.</p>`;
+        return;
+    }
+    const active = data.filter((t) => t.status !== "resolved");
+    const resolved = data.filter((t) => t.status === "resolved");
+
+    const openCount = data.filter((t) => t.status === "open").length;
+    const badge = document.getElementById("notif-badge");
+    const statTile = document.getElementById("stat-open-tickets");
+    statTile.textContent = openCount;
+    badge.textContent = active.length;
+    badge.hidden = active.length === 0;
+
+    feed.innerHTML = active.length ? active.map(ticketCard).join("") : `<p class="msg" style="color:var(--text-dim)">Nothing needs attention right now.</p>`;
+    document.getElementById("resolved-summary").textContent = `Resolved (${resolved.length})`;
+    resolvedFeed.innerHTML = resolved.map(ticketCard).join("");
+
+    bindTicketStatusSelects(feed);
+    bindTicketStatusSelects(resolvedFeed);
 }
 
 // --- Income overview: day-by-store totals, computed in Postgres (store_daily_totals table) ---
@@ -412,6 +480,9 @@ async function loadIncome() {
         tbody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
         return;
     }
+    const today = new Date().toISOString().slice(0, 10);
+    const todayTotal = data.filter((r) => r.day === today).reduce((sum, r) => sum + r.total_cents, 0);
+    document.getElementById("stat-income-today").textContent = formatCents(todayTotal);
     const nameFor = (id) => storesCache.find((s) => s.id === id)?.name ?? id;
     tbody.innerHTML = data.length
         ? data.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
