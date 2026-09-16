@@ -47,6 +47,7 @@
         <button class="tab-btn" type="button" data-tab="stores">Stores</button>
         <button class="tab-btn" type="button" data-tab="access">Access grants</button>
         <button class="tab-btn" type="button" data-tab="downloads">Download access</button>
+        <button class="tab-btn" type="button" data-tab="releases">Releases</button>
         <button class="tab-btn" type="button" data-tab="income">Income</button>
     </nav>
 
@@ -112,6 +113,27 @@
         <table id="download-users-table">
             <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
             <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
+    <section class="tab-panel" data-panel="releases" hidden>
+        <h2>Publish a release</h2>
+        <p class="lead">Upload the zip built by <code>make-release-package.ps1</code>. Re-uploading the same version overwrites it in place.</p>
+        <form id="upload-release-form" class="stack" style="max-width:480px">
+            <label for="release-version">Version</label>
+            <input id="release-version" required placeholder="e.g. 3.2.8" pattern="[0-9]+(\.[0-9]+)*" title="Digits and dots only, e.g. 3.2.8">
+            <label for="release-notes">Notes (shown on the changelog)</label>
+            <textarea id="release-notes" rows="3" placeholder="What changed in this version"></textarea>
+            <label for="release-file">Release zip</label>
+            <input id="release-file" type="file" accept=".zip" required>
+            <button class="btn" type="submit" style="margin-top:1.5rem">Upload &amp; publish</button>
+            <p class="msg" id="upload-release-msg"></p>
+        </form>
+
+        <h2>Releases</h2>
+        <table id="releases-table">
+            <thead><tr><th>Version</th><th>Published</th><th>Notes</th><th></th></tr></thead>
+            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
         </table>
     </section>
 
@@ -349,6 +371,137 @@ async function loadDownloadUsers() {
     });
 }
 
+// --- Releases (publish new zips, edit changelog notes, take old versions down) ---
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(",")[1]);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
+async function callManageRelease(payload) {
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-release`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Request failed");
+    return result;
+}
+
+document.getElementById("upload-release-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById("upload-release-msg");
+    const button = event.target.querySelector("button[type=submit]");
+    msg.textContent = ""; msg.className = "msg";
+    const version = document.getElementById("release-version").value.trim();
+    const notes = document.getElementById("release-notes").value.trim();
+    const file = document.getElementById("release-file").files[0];
+    if (!file) { msg.textContent = "Choose a zip file."; msg.className = "msg error"; return; }
+    button.disabled = true;
+    button.textContent = "Uploading…";
+    try {
+        const zip_base64 = await fileToBase64(file);
+        await callManageRelease({ action: "upload", version, notes, zip_base64 });
+        msg.textContent = `Published version ${version}.`;
+        msg.className = "msg success";
+        event.target.reset();
+        await loadReleases();
+    } catch (error) {
+        msg.textContent = error.message;
+        msg.className = "msg error";
+    } finally {
+        button.disabled = false;
+        button.textContent = "Upload & publish";
+    }
+});
+
+function releaseRow(r) {
+    return `
+        <tr>
+            <td>${esc(r.version)}</td>
+            <td>${formatDate(r.published_at)}</td>
+            <td class="notes-cell">
+                <span class="notes-display">${esc(r.notes || "—")}</span>
+                <div class="notes-edit" hidden>
+                    <textarea rows="2">${esc(r.notes || "")}</textarea>
+                    <div style="margin-top:0.5rem;display:flex;gap:0.5rem">
+                        <button class="btn secondary save-notes" type="button" data-version="${esc(r.version)}">Save</button>
+                        <button class="btn secondary cancel-notes" type="button">Cancel</button>
+                    </div>
+                </div>
+            </td>
+            <td style="white-space:nowrap">
+                <button class="btn secondary edit-notes" type="button">Edit</button>
+                <button class="btn danger delete-release" type="button" data-version="${esc(r.version)}">Delete</button>
+            </td>
+        </tr>
+    `;
+}
+
+async function loadReleases() {
+    const tbody = document.querySelector("#releases-table tbody");
+    const { data, error } = await supabase
+        .from("pda_releases")
+        .select("version, published_at, notes")
+        .order("published_at", { ascending: false });
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Could not load releases.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length ? data.map(releaseRow).join("") : `<tr><td colspan="4">No releases published yet.</td></tr>`;
+
+    tbody.querySelectorAll(".edit-notes").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const cell = btn.closest("tr").querySelector(".notes-cell");
+            cell.querySelector(".notes-display").hidden = true;
+            cell.querySelector(".notes-edit").hidden = false;
+        });
+    });
+    tbody.querySelectorAll(".cancel-notes").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const cell = btn.closest(".notes-cell");
+            cell.querySelector(".notes-display").hidden = false;
+            cell.querySelector(".notes-edit").hidden = true;
+        });
+    });
+    tbody.querySelectorAll(".save-notes").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const cell = btn.closest(".notes-cell");
+            const notes = cell.querySelector("textarea").value.trim();
+            btn.disabled = true;
+            try {
+                await callManageRelease({ action: "update", version: btn.dataset.version, notes });
+                await loadReleases();
+            } catch (error) {
+                alert(error.message);
+                btn.disabled = false;
+            }
+        });
+    });
+    tbody.querySelectorAll(".delete-release").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Delete version ${btn.dataset.version} permanently? This removes the zip too - stores can no longer download or update to it.`)) return;
+            btn.disabled = true;
+            try {
+                await callManageRelease({ action: "delete", version: btn.dataset.version });
+                await loadReleases();
+            } catch (error) {
+                alert(error.message);
+                btn.disabled = false;
+            }
+        });
+    });
+}
+
 // --- Grants ---
 document.getElementById("grant-form").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -524,6 +677,7 @@ async function loadEverything() {
     await loadRestrictedProfiles();
     await loadGrants();
     await loadDownloadUsers();
+    await loadReleases();
     await loadTickets();
 }
 

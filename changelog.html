@@ -10,22 +10,40 @@
 <header class="site">
     <div class="brand"><span class="mark">A</span><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
     <nav>
-        <a href="help.html">Help</a>
-        <a href="changelog.html">Changelog</a>
-        <a href="login.html">Log in</a>
+        <a href="help.html" data-i18n="nav_help">Help</a>
+        <a href="changelog.html" data-i18n="nav_changelog">Changelog</a>
+        <a href="login.html" data-i18n="nav_login">Log in</a>
+        <button id="lang-switch" class="lang-switch" type="button">ΕΛ</button>
     </nav>
 </header>
 <main>
-    <h1>Changelog</h1>
-    <p class="lead">Published releases, newest first.</p>
+    <h1 data-i18n="title">Changelog</h1>
+    <p class="lead" data-i18n="lead">Published releases, newest first.</p>
     <table id="releases">
-        <thead><tr><th>Version</th><th>Published</th><th>Notes</th></tr></thead>
-        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+        <thead><tr><th data-i18n="col_version">Version</th><th data-i18n="col_published">Published</th><th data-i18n="col_notes">Notes</th></tr></thead>
+        <tbody><tr><td colspan="3" data-i18n="loading">Loading…</td></tr></tbody>
     </table>
 </main>
 <footer class="site">AlexZaxa Solutions PDA</footer>
 <script type="module">
 import { supabase, formatDate } from "./assets/supabase-client.js";
+import { initLangSwitch, getLang } from "./assets/i18n.js";
+
+const STRINGS = {
+    en: {
+        nav_help: "Help", nav_changelog: "Changelog", nav_login: "Log in",
+        title: "Changelog", lead: "Published releases, newest first.",
+        col_version: "Version", col_published: "Published", col_notes: "Notes",
+        loading: "Loading…", error: "Could not load releases.", empty: "No releases published yet.",
+    },
+    el: {
+        nav_help: "Βοήθεια", nav_changelog: "Ενημερώσεις", nav_login: "Σύνδεση",
+        title: "Ενημερώσεις εκδόσεων", lead: "Δημοσιευμένες εκδόσεις, πιο πρόσφατη πρώτα.",
+        col_version: "Έκδοση", col_published: "Ημερομηνία", col_notes: "Σημειώσεις",
+        loading: "Φόρτωση…", error: "Δεν ήταν δυνατή η φόρτωση.", empty: "Δεν έχει δημοσιευτεί ακόμα καμία έκδοση.",
+    },
+};
+initLangSwitch(STRINGS);
 
 const tbody = document.querySelector("#releases tbody");
 const { data, error } = await supabase
@@ -33,10 +51,11 @@ const { data, error } = await supabase
     .select("version, published_at, notes")
     .order("published_at", { ascending: false });
 
+const s = STRINGS[getLang()];
 if (error) {
-    tbody.innerHTML = `<tr><td colspan="3">Could not load releases.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3">${s.error}</td></tr>`;
 } else if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="3">No releases published yet.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3">${s.empty}</td></tr>`;
 } else {
     tbody.innerHTML = data.map((r) => `
         <tr>

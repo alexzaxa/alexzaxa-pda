@@ -97,6 +97,21 @@ header.site nav a {
 }
 header.site nav a:hover { color: var(--text); background: var(--surface-2); text-decoration: none; }
 
+.lang-switch {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    padding: 0.3rem 0.65rem;
+    margin-left: 0.75rem;
+    cursor: pointer;
+    transition: background var(--ease), border-color var(--ease);
+}
+.lang-switch:hover { background: var(--surface-3); border-color: #3d4552; }
+
 main {
     max-width: 1000px;
     margin: 0 auto;
@@ -430,6 +445,10 @@ form.stack { display: flex; flex-direction: column; }
     padding: 1.25rem 1.5rem;
     margin-top: 1.5rem;
 }
+
+.notes-cell { max-width: 320px; }
+.notes-cell .notes-display { white-space: pre-wrap; }
+.notes-cell .notes-edit textarea { min-width: 240px; }
 
 footer.site {
     text-align: center;

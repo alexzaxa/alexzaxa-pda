@@ -10,52 +10,93 @@
 <header class="site">
     <div class="brand"><span class="mark">A</span>AlexZaxa Solutions PDA</div>
     <nav>
-        <a href="help.html">Help</a>
-        <a href="changelog.html">Changelog</a>
-        <a href="login.html">Log in</a>
+        <a href="help.html" data-i18n="nav_help">Help</a>
+        <a href="changelog.html" data-i18n="nav_changelog">Changelog</a>
+        <a href="login.html" data-i18n="nav_login">Log in</a>
+        <button id="lang-switch" class="lang-switch" type="button">ΕΛ</button>
     </nav>
 </header>
 <main>
-    <span class="eyebrow">Restaurant ordering system</span>
-    <h1>Restaurant ordering, built for the floor.</h1>
-    <p class="lead">
+    <span class="eyebrow" data-i18n="eyebrow">Restaurant ordering system</span>
+    <h1 data-i18n="hero_title">Restaurant ordering, built for the floor.</h1>
+    <p class="lead" data-i18n="hero_lead">
         A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in
         floor plan, phone/delivery orders, kitchen printing, and a manager control center — with
         self-updating software so every install stays current automatically.
     </p>
 
-    <h2>What it does</h2>
+    <h2 data-i18n="features_heading">What it does</h2>
     <div class="grid">
         <div class="card">
             <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18M9 10v10"></path></svg></span>
-            <h3>Dine-in ordering</h3>
-            <p>Waiters take orders from any phone or tablet on the restaurant Wi-Fi, split bills, and manage tables in real time.</p>
+            <h3 data-i18n="feature1_title">Dine-in ordering</h3>
+            <p data-i18n="feature1_body">Waiters take orders from any phone or tablet on the restaurant Wi-Fi, split bills, and manage tables in real time.</p>
         </div>
         <div class="card">
             <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"></rect><path d="M11 18h2"></path></svg></span>
-            <h3>Phone &amp; delivery orders</h3>
-            <p>A dedicated register desk handles phone-in orders, delivery zones, and customer history.</p>
+            <h3 data-i18n="feature2_title">Phone &amp; delivery orders</h3>
+            <p data-i18n="feature2_body">A dedicated register desk handles phone-in orders, delivery zones, and customer history.</p>
         </div>
         <div class="card">
             <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"></path><rect x="4" y="9" width="16" height="8" rx="1.5"></rect><path d="M6 17h12v4H6z"></path></svg></span>
-            <h3>Kitchen printing</h3>
-            <p>Orders route straight to the kitchen printer, with Greek-language and receipt support built in.</p>
+            <h3 data-i18n="feature3_title">Kitchen printing</h3>
+            <p data-i18n="feature3_body">Orders route straight to the kitchen printer, with Greek-language and receipt support built in.</p>
         </div>
         <div class="card">
             <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 4v4h-4"></path><path d="M20 12a8 8 0 0 1-14 5.3M4 20v-4h4"></path></svg></span>
-            <h3>Self-updating</h3>
-            <p>Every install checks for new releases automatically and installs them with one manager click — no technician visit required.</p>
+            <h3 data-i18n="feature4_title">Self-updating</h3>
+            <p data-i18n="feature4_body">Every install checks for new releases automatically and installs them with one manager click — no technician visit required.</p>
         </div>
     </div>
 
-    <h2>For store owners</h2>
+    <h2 data-i18n="owners_heading">For store owners</h2>
     <div class="callout">
-        <p class="lead" style="margin:0">
+        <p class="lead" style="margin:0" data-i18n-html="owners_body">
             If you run a store on AlexZaxa Solutions PDA, your revenue reporting is available on request —
             <a href="login.html">log in</a> to view it if you've been given access.
         </p>
     </div>
 </main>
 <footer class="site">AlexZaxa Solutions PDA</footer>
+<script type="module">
+import { initLangSwitch } from "./assets/i18n.js";
+
+initLangSwitch({
+    en: {
+        nav_help: "Help", nav_changelog: "Changelog", nav_login: "Log in",
+        eyebrow: "Restaurant ordering system",
+        hero_title: "Restaurant ordering, built for the floor.",
+        hero_lead: "A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in floor plan, phone/delivery orders, kitchen printing, and a manager control center — with self-updating software so every install stays current automatically.",
+        features_heading: "What it does",
+        feature1_title: "Dine-in ordering",
+        feature1_body: "Waiters take orders from any phone or tablet on the restaurant Wi-Fi, split bills, and manage tables in real time.",
+        feature2_title: "Phone & delivery orders",
+        feature2_body: "A dedicated register desk handles phone-in orders, delivery zones, and customer history.",
+        feature3_title: "Kitchen printing",
+        feature3_body: "Orders route straight to the kitchen printer, with Greek-language and receipt support built in.",
+        feature4_title: "Self-updating",
+        feature4_body: "Every install checks for new releases automatically and installs them with one manager click — no technician visit required.",
+        owners_heading: "For store owners",
+        owners_body: `If you run a store on AlexZaxa Solutions PDA, your revenue reporting is available on request — <a href="login.html">log in</a> to view it if you've been given access.`,
+    },
+    el: {
+        nav_help: "Βοήθεια", nav_changelog: "Ενημερώσεις", nav_login: "Σύνδεση",
+        eyebrow: "Σύστημα παραγγελιών εστιατορίου",
+        hero_title: "Παραγγελίες εστιατορίου, φτιαγμένες για τη σάλα.",
+        hero_lead: "Ένα σύστημα παραγγελιών τοπικού δικτύου για εστιατόρια: tablet σερβιτόρων, κάτοψη τραπεζιών, τηλεφωνικές/delivery παραγγελίες, εκτύπωση στην κουζίνα και κέντρο ελέγχου για τον υπεύθυνο — με λογισμικό που ενημερώνεται μόνο του.",
+        features_heading: "Τι κάνει",
+        feature1_title: "Παραγγελίες σε τραπέζι",
+        feature1_body: "Οι σερβιτόροι παίρνουν παραγγελίες από οποιοδήποτε κινητό ή tablet στο Wi-Fi του καταστήματος, μοιράζουν λογαριασμούς και διαχειρίζονται τραπέζια σε πραγματικό χρόνο.",
+        feature2_title: "Τηλεφωνικές & delivery παραγγελίες",
+        feature2_body: "Ένα ειδικό ταμείο διαχειρίζεται τηλεφωνικές παραγγελίες, ζώνες παράδοσης και ιστορικό πελατών.",
+        feature3_title: "Εκτύπωση στην κουζίνα",
+        feature3_body: "Οι παραγγελίες πηγαίνουν κατευθείαν στον εκτυπωτή της κουζίνας, με υποστήριξη ελληνικών και αποδείξεων.",
+        feature4_title: "Αυτόματες ενημερώσεις",
+        feature4_body: "Κάθε εγκατάσταση ελέγχει μόνη της για νέες εκδόσεις και τις εγκαθιστά με ένα κλικ του υπευθύνου — χωρίς επίσκεψη τεχνικού.",
+        owners_heading: "Για ιδιοκτήτες καταστημάτων",
+        owners_body: `Αν λειτουργείτε κατάστημα με το AlexZaxa Solutions PDA, τα έσοδά σας είναι διαθέσιμα κατόπιν αιτήματος — <a href="login.html">συνδεθείτε</a> για να τα δείτε αν σας έχει δοθεί πρόσβαση.`,
+    },
+});
+</script>
 </body>
 </html>

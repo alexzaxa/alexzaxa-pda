@@ -9,33 +9,37 @@
 <body>
 <header class="site">
     <div class="brand"><span class="mark">A</span><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
-    <nav><a href="help.html">Help</a><a href="changelog.html">Changelog</a></nav>
+    <nav>
+        <a href="help.html" data-i18n="nav_help">Help</a>
+        <a href="changelog.html" data-i18n="nav_changelog">Changelog</a>
+        <button id="lang-switch" class="lang-switch" type="button">ΕΛ</button>
+    </nav>
 </header>
 <main class="narrow">
     <div id="set-password-view" class="auth-card" style="display:none">
-        <h1>Set your password</h1>
-        <p class="lead" style="font-size:0.92rem">You're accepting an invite. Choose a password to finish setting up your account.</p>
+        <h1 data-i18n="set_password_title">Set your password</h1>
+        <p class="lead" style="font-size:0.92rem" data-i18n="set_password_lead">You're accepting an invite. Choose a password to finish setting up your account.</p>
         <form id="set-password-form" class="stack">
-            <label for="new-password">New password</label>
+            <label for="new-password" data-i18n="new_password_label">New password</label>
             <input id="new-password" type="password" required minlength="8" autocomplete="new-password">
-            <label for="confirm-password">Confirm password</label>
+            <label for="confirm-password" data-i18n="confirm_password_label">Confirm password</label>
             <input id="confirm-password" type="password" required minlength="8" autocomplete="new-password">
-            <button class="btn" type="submit" style="margin-top:1.5rem">Set password &amp; continue</button>
+            <button class="btn" type="submit" style="margin-top:1.5rem" data-i18n="set_password_button">Set password &amp; continue</button>
             <p class="msg" id="set-password-msg"></p>
         </form>
     </div>
 
     <div id="login-view" class="auth-card">
-        <h1>Log in</h1>
+        <h1 data-i18n="login_title">Log in</h1>
         <form id="login-form" class="stack">
-            <label for="email">Email or username</label>
+            <label for="email" data-i18n="email_label">Email or username</label>
             <input id="email" required autocomplete="username">
-            <label for="password">Password</label>
+            <label for="password" data-i18n="password_label">Password</label>
             <input id="password" type="password" required autocomplete="current-password">
-            <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
+            <button class="btn" type="submit" style="margin-top:1.5rem" data-i18n="login_button">Log in</button>
             <p class="msg" id="msg"></p>
         </form>
-        <p class="msg" style="color:var(--text-dim)">
+        <p class="msg" style="color:var(--text-dim)" data-i18n="login_help">
             Admin/dashboard accounts: use the email invite link the first time. Download accounts:
             log in directly with the username and password the admin gave you.
         </p>
@@ -43,6 +47,36 @@
 </main>
 <script type="module">
 import { supabase, roleHome, usernameToEmail } from "./assets/supabase-client.js";
+import { initLangSwitch } from "./assets/i18n.js";
+
+initLangSwitch({
+    en: {
+        nav_help: "Help", nav_changelog: "Changelog",
+        set_password_title: "Set your password",
+        set_password_lead: "You're accepting an invite. Choose a password to finish setting up your account.",
+        new_password_label: "New password",
+        confirm_password_label: "Confirm password",
+        set_password_button: "Set password & continue",
+        login_title: "Log in",
+        email_label: "Email or username",
+        password_label: "Password",
+        login_button: "Log in",
+        login_help: "Admin/dashboard accounts: use the email invite link the first time. Download accounts: log in directly with the username and password the admin gave you.",
+    },
+    el: {
+        nav_help: "Βοήθεια", nav_changelog: "Ενημερώσεις",
+        set_password_title: "Ορισμός κωδικού",
+        set_password_lead: "Αποδέχεστε μια πρόσκληση. Επιλέξτε κωδικό για να ολοκληρώσετε τον λογαριασμό σας.",
+        new_password_label: "Νέος κωδικός",
+        confirm_password_label: "Επιβεβαίωση κωδικού",
+        set_password_button: "Ορισμός κωδικού & συνέχεια",
+        login_title: "Σύνδεση",
+        email_label: "Email ή όνομα χρήστη",
+        password_label: "Κωδικός",
+        login_button: "Σύνδεση",
+        login_help: "Λογαριασμοί admin/dashboard: χρησιμοποιήστε τον σύνδεσμο πρόσκλησης μέσω email την πρώτη φορά. Λογαριασμοί download: συνδεθείτε απευθείας με το όνομα χρήστη και τον κωδικό που σας έδωσε ο admin.",
+    },
+});
 
 async function goToRoleHome() {
     const { data: { session } } = await supabase.auth.getSession();

@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /dashboard.html
+Disallow: /download.html
+Disallow: /menu-creator.html
+
+Allow: /
+Allow: /index.html
+Allow: /help.html
+Allow: /changelog.html
