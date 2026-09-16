@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <title>Admin · AlexZaxa Solutions PDA</title>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -10,6 +13,7 @@
 <header class="site">
     <div class="brand"><span class="mark">A</span><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a> <span class="badge admin">admin</span></div>
     <nav>
+        <span class="muted-note" id="signed-in-as"></span>
         <a href="help.html">Help</a>
         <a href="changelog.html">Changelog</a>
         <a href="#" id="logout">Log out</a>
@@ -20,7 +24,7 @@
         <h1>Admin</h1>
         <div>
             <button class="btn secondary" id="live-update" type="button">Live update</button>
-            <span class="msg" id="live-update-msg" style="display:inline-block;margin-left:0.5rem"></span>
+            <span class="msg" id="live-update-msg" aria-live="polite" style="display:inline-block;margin-left:0.5rem"></span>
         </div>
     </div>
     <p class="lead" style="margin-top:-0.5rem">
@@ -73,12 +77,16 @@
         <div id="new-store-secret" style="display:none">
             <p class="msg success">Store created. Run this on the restaurant PC during install (this secret will not be shown again):</p>
             <div class="reveal" id="install-command"></div>
+            <button class="btn secondary" id="copy-install-command" type="button" style="margin-top:0.75rem">Copy command</button>
         </div>
 
-        <h2>Stores</h2>
+        <div class="section-header">
+            <h2>Stores</h2>
+            <input id="store-search" style="max-width:220px" placeholder="Filter by name…" aria-label="Filter stores by name">
+        </div>
         <table id="stores-table">
-            <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th><th></th></tr></thead>
-            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+            <thead><tr><th>Name</th><th>Slug</th><th>Created</th><th>Status</th><th>Last seen</th><th></th></tr></thead>
+            <tbody><tr><td colspan="6">Loading…</td></tr></tbody>
         </table>
     </section>
 
@@ -155,6 +163,7 @@ import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("admin");
 if (!auth) throw new Error("redirecting");
+document.getElementById("signed-in-as").textContent = auth.session.user.email;
 
 document.getElementById("logout").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -165,9 +174,14 @@ document.getElementById("logout").addEventListener("click", async (e) => {
 // --- Tabs ---
 const tabButtons = [...document.querySelectorAll(".tab-btn")];
 const tabPanels = [...document.querySelectorAll(".tab-panel")];
+tabButtons.forEach((b) => b.setAttribute("role", "tab"));
 function activateTab(name) {
     const target = tabButtons.some((b) => b.dataset.tab === name) ? name : "notifications";
-    tabButtons.forEach((b) => b.classList.toggle("active", b.dataset.tab === target));
+    tabButtons.forEach((b) => {
+        const isActive = b.dataset.tab === target;
+        b.classList.toggle("active", isActive);
+        b.setAttribute("aria-selected", String(isActive));
+    });
     tabPanels.forEach((p) => { p.hidden = p.dataset.panel !== target; });
     history.replaceState(null, "", `#${target}`);
 }
@@ -205,27 +219,43 @@ document.getElementById("create-store-form").addEventListener("submit", async (e
     await loadStores();
 });
 
+document.getElementById("copy-install-command").addEventListener("click", async () => {
+    const button = document.getElementById("copy-install-command");
+    try {
+        await navigator.clipboard.writeText(document.getElementById("install-command").textContent);
+        button.textContent = "Copied!";
+    } catch {
+        button.textContent = "Could not copy - select the text manually";
+    }
+    setTimeout(() => { button.textContent = "Copy command"; }, 2000);
+});
+
 // --- Stores table + dropdowns ---
 let storesCache = [];
-async function loadStores() {
-    const { data, error } = await supabase
-        .from("stores_public")
-        .select("id, name, slug, active, created_at")
-        .order("created_at", { ascending: false });
+function timeAgo(iso) {
+    if (!iso) return "Never";
+    const minutes = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
+}
+function isRecentlySeen(iso) {
+    return Boolean(iso) && Date.now() - new Date(iso).getTime() < 3 * 60 * 1000; // checks in ~every 1 minute
+}
+function renderStoresTable() {
+    const query = document.getElementById("store-search").value.trim().toLowerCase();
+    const filtered = query ? storesCache.filter((s) => s.name.toLowerCase().includes(query)) : storesCache;
     const tbody = document.querySelector("#stores-table tbody");
-    if (error) {
-        tbody.innerHTML = `<tr><td colspan="5">Could not load stores.</td></tr>`;
-        return;
-    }
-    storesCache = data;
-    document.getElementById("stat-active-stores").textContent = data.filter((s) => s.active).length;
-    tbody.innerHTML = data.length
-        ? data.map((s) => `
+    tbody.innerHTML = filtered.length
+        ? filtered.map((s) => `
             <tr>
                 <td>${s.name}</td>
                 <td>${s.slug}</td>
                 <td>${formatDate(s.created_at)}</td>
                 <td>${s.active ? "active" : "terminated"}</td>
+                <td><span class="status-dot ${isRecentlySeen(s.last_seen_at) ? "online" : "offline"}"></span>${timeAgo(s.last_seen_at)}</td>
                 <td>
                     <div class="menu">
                         <button class="menu-trigger" type="button" aria-label="Actions">&#8942;</button>
@@ -237,8 +267,16 @@ async function loadStores() {
                 </td>
             </tr>
         `).join("")
-        : `<tr><td colspan="5">No stores yet.</td></tr>`;
+        : `<tr><td colspan="6">${storesCache.length ? "No stores match that filter." : "No stores yet."}</td></tr>`;
+    bindStoreRowActions(tbody);
+}
+document.getElementById("store-search").addEventListener("input", renderStoresTable);
 
+document.addEventListener("click", () => {
+    document.querySelectorAll(".menu-list.open").forEach((m) => m.classList.remove("open"));
+});
+
+function bindStoreRowActions(tbody) {
     tbody.querySelectorAll(".menu-trigger").forEach((trigger) => {
         trigger.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -247,9 +285,6 @@ async function loadStores() {
             document.querySelectorAll(".menu-list.open").forEach((m) => m.classList.remove("open"));
             if (!wasOpen) list.classList.add("open");
         });
-    });
-    document.addEventListener("click", () => {
-        document.querySelectorAll(".menu-list.open").forEach((m) => m.classList.remove("open"));
     });
 
     tbody.querySelectorAll(".toggle-active").forEach((btn) => {
@@ -282,6 +317,21 @@ async function loadStores() {
             await loadGrants();
         });
     });
+}
+
+async function loadStores() {
+    const { data, error } = await supabase
+        .from("stores_public")
+        .select("id, name, slug, active, created_at, last_seen_at")
+        .order("created_at", { ascending: false });
+    const tbody = document.querySelector("#stores-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="6">Could not load stores.</td></tr>`;
+        return;
+    }
+    storesCache = data;
+    document.getElementById("stat-active-stores").textContent = data.filter((s) => s.active).length;
+    renderStoresTable();
 
     const storeSelect = document.getElementById("grant-store");
     storeSelect.innerHTML = data.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");

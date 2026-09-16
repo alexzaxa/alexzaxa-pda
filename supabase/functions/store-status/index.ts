@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     const secretHash = await sha256Hex(storeSecret);
     const { data: store, error } = await adminClient
         .from("stores")
-        .select("active")
+        .select("id, active")
         .eq("secret_hash", secretHash)
         .maybeSingle();
 
@@ -41,6 +41,9 @@ Deno.serve(async (req) => {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
     }
+
+    // Best-effort - a store's active/inactive answer must still go out even if this write fails.
+    await adminClient.from("stores").update({ last_seen_at: new Date().toISOString() }).eq("id", store.id);
 
     return new Response(JSON.stringify({ active: store.active }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
