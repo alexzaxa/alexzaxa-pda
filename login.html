@@ -8,11 +8,11 @@
 </head>
 <body>
 <header class="site">
-    <div class="brand"><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
+    <div class="brand"><span class="mark">A</span><a href="index.html" style="color:inherit">AlexZaxa Solutions PDA</a></div>
     <nav><a href="help.html">Help</a><a href="changelog.html">Changelog</a></nav>
 </header>
 <main class="narrow">
-    <div id="set-password-view" style="display:none">
+    <div id="set-password-view" class="auth-card" style="display:none">
         <h1>Set your password</h1>
         <p class="lead" style="font-size:0.92rem">You're accepting an invite. Choose a password to finish setting up your account.</p>
         <form id="set-password-form" class="stack">
@@ -25,7 +25,7 @@
         </form>
     </div>
 
-    <div id="login-view">
+    <div id="login-view" class="auth-card">
         <h1>Log in</h1>
         <form id="login-form" class="stack">
             <label for="email">Email or username</label>
