@@ -181,11 +181,22 @@
 <script type="module">
 import { supabase, requireRole, formatCents, formatDate, esc, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { renderBarChart } from "./assets/chart.js";
+import { skeletonRows, setButtonLoading } from "./assets/motion.js";
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("admin");
 if (!auth) throw new Error("redirecting");
 document.getElementById("signed-in-as").textContent = auth.session.user.email;
+
+// Skeleton placeholders for the very first load only - live-update refreshes already-visible
+// tables in place instead (see loadEverything's caller), so this doesn't re-flicker on refresh.
+document.querySelector("#stores-table tbody").innerHTML = skeletonRows(6);
+document.querySelector("#grants-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3);
+document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
+document.getElementById("notifications-feed").innerHTML =
+    `<div class="skeleton-block" style="height:5.5rem;margin-bottom:0.75rem"></div><div class="skeleton-block" style="height:5.5rem"></div>`;
 
 document.getElementById("logout").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -213,8 +224,10 @@ activateTab(location.hash.slice(1));
 // --- Create store ---
 document.getElementById("create-store-form").addEventListener("submit", async (event) => {
     event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
     const msg = document.getElementById("create-store-msg");
     msg.textContent = ""; msg.className = "msg";
+    setButtonLoading(button, true, "Creating…");
     const name = document.getElementById("store-name").value.trim();
     const { data: { session } } = await supabase.auth.getSession();
     const response = await fetch(`${SUPABASE_URL}/functions/v1/create-store`, {
@@ -227,6 +240,7 @@ document.getElementById("create-store-form").addEventListener("submit", async (e
         body: JSON.stringify({ name }),
     });
     const result = await response.json();
+    setButtonLoading(button, false);
     if (!response.ok) {
         msg.textContent = result.error || "Failed to create store.";
         msg.className = "msg error";
@@ -484,8 +498,7 @@ document.getElementById("upload-release-form").addEventListener("submit", async 
     const notes = document.getElementById("release-notes").value.trim();
     const file = document.getElementById("release-file").files[0];
     if (!file) { msg.textContent = "Choose a zip file."; msg.className = "msg error"; return; }
-    button.disabled = true;
-    button.textContent = "Uploading…";
+    setButtonLoading(button, true, "Uploading…");
     try {
         const zip_base64 = await fileToBase64(file);
         await callManageRelease({ action: "upload", version, notes, zip_base64 });
@@ -497,8 +510,7 @@ document.getElementById("upload-release-form").addEventListener("submit", async 
         msg.textContent = error.message;
         msg.className = "msg error";
     } finally {
-        button.disabled = false;
-        button.textContent = "Upload & publish";
+        setButtonLoading(button, false);
     }
 });
 
@@ -778,8 +790,7 @@ async function loadVisits() {
 
 document.getElementById("export-excel").addEventListener("click", async () => {
     const button = document.getElementById("export-excel");
-    button.disabled = true;
-    button.textContent = "Exporting…";
+    setButtonLoading(button, true, "Exporting…");
     try {
         const { data, error } = await supabase
             .from("store_daily_totals")
@@ -801,8 +812,7 @@ document.getElementById("export-excel").addEventListener("click", async () => {
         XLSX.utils.book_append_sheet(workbook, sheet, "Daily income");
         XLSX.writeFile(workbook, `alexzaxa-pda-income-${new Date().toISOString().slice(0, 10)}.xlsx`);
     } finally {
-        button.disabled = false;
-        button.textContent = "Export to Excel";
+        setButtonLoading(button, false);
     }
 });
 
@@ -824,11 +834,9 @@ setInterval(loadTickets, 60000);
 document.getElementById("live-update").addEventListener("click", async () => {
     const button = document.getElementById("live-update");
     const msg = document.getElementById("live-update-msg");
-    button.disabled = true;
-    button.textContent = "Updating…";
+    setButtonLoading(button, true, "Updating…");
     await loadEverything();
-    button.disabled = false;
-    button.textContent = "Live update";
+    setButtonLoading(button, false);
     msg.textContent = `Updated ${new Date().toLocaleTimeString()}`;
 });
 

@@ -43,6 +43,7 @@
 import { supabase, formatDate } from "./assets/supabase-client.js";
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
+import { skeletonRows } from "./assets/motion.js";
 trackPageView();
 
 const STRINGS = {
@@ -62,6 +63,7 @@ const STRINGS = {
 initLangSwitch(STRINGS);
 
 const tbody = document.querySelector("#releases tbody");
+tbody.innerHTML = skeletonRows(3, 4);
 const { data, error } = await supabase
     .from("pda_releases")
     .select("version, published_at, notes")

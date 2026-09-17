@@ -50,22 +50,23 @@
 </main>
 <script type="module">
 import { supabase, roleHome, usernameToEmail } from "./assets/supabase-client.js";
-import { initLangSwitch } from "./assets/i18n.js";
+import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
+import { setButtonLoading } from "./assets/motion.js";
 trackPageView();
 
-initLangSwitch({
+const STRINGS = {
     en: {
         nav_help: "Help", nav_changelog: "Changelog",
         set_password_title: "Set your password",
         set_password_lead: "You're accepting an invite. Choose a password to finish setting up your account.",
         new_password_label: "New password",
         confirm_password_label: "Confirm password",
-        set_password_button: "Set password & continue",
+        set_password_button: "Set password & continue", setting_password_button: "Setting password…",
         login_title: "Log in",
         email_label: "Email or username",
         password_label: "Password",
-        login_button: "Log in",
+        login_button: "Log in", logging_in_button: "Logging in…",
         login_help: "Admin/dashboard accounts: use the email invite link the first time. Download accounts: log in directly with the username and password the admin gave you.",
     },
     el: {
@@ -74,14 +75,15 @@ initLangSwitch({
         set_password_lead: "Αποδέχεστε μια πρόσκληση. Επιλέξτε κωδικό για να ολοκληρώσετε τον λογαριασμό σας.",
         new_password_label: "Νέος κωδικός",
         confirm_password_label: "Επιβεβαίωση κωδικού",
-        set_password_button: "Ορισμός κωδικού & συνέχεια",
+        set_password_button: "Ορισμός κωδικού & συνέχεια", setting_password_button: "Ορισμός κωδικού…",
         login_title: "Σύνδεση",
         email_label: "Email ή όνομα χρήστη",
         password_label: "Κωδικός",
-        login_button: "Σύνδεση",
+        login_button: "Σύνδεση", logging_in_button: "Σύνδεση…",
         login_help: "Λογαριασμοί admin/dashboard: χρησιμοποιήστε τον σύνδεσμο πρόσκλησης μέσω email την πρώτη φορά. Λογαριασμοί download: συνδεθείτε απευθείας με το όνομα χρήστη και τον κωδικό που σας έδωσε ο admin.",
     },
-});
+};
+initLangSwitch(STRINGS);
 
 async function goToRoleHome() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -115,6 +117,7 @@ if (isInviteOrRecovery) {
 
     document.getElementById("set-password-form").addEventListener("submit", async (event) => {
         event.preventDefault();
+        const button = event.target.querySelector("button[type=submit]");
         const msg = document.getElementById("set-password-msg");
         msg.textContent = ""; msg.className = "msg";
         const p1 = document.getElementById("new-password").value;
@@ -124,8 +127,10 @@ if (isInviteOrRecovery) {
             msg.className = "msg error";
             return;
         }
+        setButtonLoading(button, true, STRINGS[getLang()].setting_password_button);
         const { error } = await supabase.auth.updateUser({ password: p1 });
         if (error) {
+            setButtonLoading(button, false);
             msg.textContent = error.message;
             msg.className = "msg error";
             return;
@@ -143,13 +148,16 @@ if (isInviteOrRecovery) {
 
     document.getElementById("login-form").addEventListener("submit", async (event) => {
         event.preventDefault();
+        const button = event.target.querySelector("button[type=submit]");
         const msg = document.getElementById("msg");
         msg.textContent = ""; msg.className = "msg";
         const input = document.getElementById("email").value.trim();
         const email = input.includes("@") ? input : usernameToEmail(input);
         const password = document.getElementById("password").value;
+        setButtonLoading(button, true, STRINGS[getLang()].logging_in_button);
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
+            setButtonLoading(button, false);
             msg.textContent = error.message;
             msg.className = "msg error";
             return;

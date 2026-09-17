@@ -53,10 +53,13 @@
 <script type="module">
 import { supabase, requireRole, formatCents } from "./assets/supabase-client.js";
 import { renderBarChart } from "./assets/chart.js";
+import { skeletonRows, setButtonLoading } from "./assets/motion.js";
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("restricted");
 if (!auth) throw new Error("redirecting");
+
+document.querySelector("#daily-table tbody").innerHTML = skeletonRows(4);
 
 if (auth.session.user.email === "demo@alexzaxa-pda.internal") {
     document.getElementById("demo-banner").style.display = "block";
@@ -144,11 +147,9 @@ async function loadIncome() {
 document.getElementById("live-update").addEventListener("click", async () => {
     const button = document.getElementById("live-update");
     const msg = document.getElementById("live-update-msg");
-    button.disabled = true;
-    button.textContent = "Updating…";
+    setButtonLoading(button, true, "Updating…");
     await loadIncome();
-    button.disabled = false;
-    button.textContent = "Live update";
+    setButtonLoading(button, false);
     msg.textContent = `Updated ${new Date().toLocaleTimeString()}`;
 });
 
@@ -156,8 +157,7 @@ await loadIncome();
 
 document.getElementById("export-excel").addEventListener("click", async () => {
     const button = document.getElementById("export-excel");
-    button.disabled = true;
-    button.textContent = "Exporting…";
+    setButtonLoading(button, true, "Exporting…");
     try {
         const { data, error: exportError } = await supabase
             .from("store_daily_totals")
@@ -178,8 +178,7 @@ document.getElementById("export-excel").addEventListener("click", async () => {
         XLSX.utils.book_append_sheet(workbook, sheet, "Daily income");
         XLSX.writeFile(workbook, `alexzaxa-pda-income-${new Date().toISOString().slice(0, 10)}.xlsx`);
     } finally {
-        button.disabled = false;
-        button.textContent = "Export to Excel";
+        setButtonLoading(button, false);
     }
 });
 </script>

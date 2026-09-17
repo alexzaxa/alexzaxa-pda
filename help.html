@@ -137,6 +137,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
+import { setButtonLoading } from "./assets/motion.js";
 trackPageView();
 
 const STRINGS = {
@@ -170,7 +171,7 @@ const STRINGS = {
         label_category: "Κατηγορία",
         cat_technical: "Τεχνικό πρόβλημα", cat_how_to: "Πώς γίνεται κάτι", cat_billing: "Θέμα χρέωσης / συνδρομής", cat_other: "Άλλο",
         label_message: "Μήνυμα", placeholder_message: "Περιγράψτε το πρόβλημα ή την ερώτησή σας",
-        submit_button: "Αποστολή",
+        submit_button: "Αποστολή", sending_button: "Αποστολή…",
         msg_error: "Κάτι πήγε στραβά, δοκιμάστε ξανά σε λίγο.",
         msg_success: "Το αίτημά σας καταχωρήθηκε. Θα επικοινωνήσουμε μαζί σας σύντομα.",
     },
@@ -204,7 +205,7 @@ const STRINGS = {
         label_category: "Category",
         cat_technical: "Technical problem", cat_how_to: "How do I...", cat_billing: "Billing / subscription", cat_other: "Other",
         label_message: "Message", placeholder_message: "Describe the problem or your question",
-        submit_button: "Send",
+        submit_button: "Send", sending_button: "Sending…",
         msg_error: "Something went wrong, please try again shortly.",
         msg_success: "Your request has been logged. We'll get back to you soon.",
     },
@@ -217,7 +218,7 @@ document.getElementById("ticket-form").addEventListener("submit", async (event) 
     const msg = document.getElementById("ticket-msg");
     const s = STRINGS[getLang()];
     msg.textContent = ""; msg.className = "msg";
-    button.disabled = true;
+    setButtonLoading(button, true, s.sending_button);
     let response;
     try {
         response = await fetch(`${SUPABASE_URL}/functions/v1/submit-ticket`, {
@@ -239,7 +240,7 @@ document.getElementById("ticket-form").addEventListener("submit", async (event) 
     } catch {
         response = null;
     }
-    button.disabled = false;
+    setButtonLoading(button, false);
     if (!response || !response.ok) {
         msg.textContent = s.msg_error;
         msg.className = "msg error";

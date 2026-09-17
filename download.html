@@ -38,6 +38,9 @@ document.getElementById("logout").addEventListener("click", async (e) => {
     window.location.href = "login.html";
 });
 
+document.getElementById("release-card").innerHTML =
+    `<div class="skeleton-block" style="height:6.5rem;margin-top:1.5rem"></div>`;
+
 const { data: release, error } = await supabase
     .from("pda_releases")
     .select("version, sha256, storage_path, published_at, notes")
