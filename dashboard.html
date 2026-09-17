@@ -23,12 +23,22 @@
         </div>
     </div>
     <p class="lead" id="scope-note">Showing the stores you've been given access to.</p>
+    <div class="callout" id="demo-banner" style="display:none">
+        <p class="lead" style="margin:0">
+            You're viewing a live demo with sample data. <a href="index.html#get-started">Get started with your own restaurant →</a>
+        </p>
+    </div>
 
-    <h2>Totals</h2>
-    <table id="summary-table">
-        <thead><tr><th>Store</th><th>Days synced</th><th>Total</th></tr></thead>
-        <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
-    </table>
+    <div class="stat-tiles">
+        <div class="stat-tile">
+            <span class="stat-label">Today so far</span>
+            <strong class="stat-value" id="stat-today">–</strong>
+        </div>
+    </div>
+
+    <div id="income-chart" style="margin-bottom:1.75rem"></div>
+
+    <div id="comparison-section"></div>
 
     <h2>Daily totals</h2>
     <div class="section-header">
@@ -42,10 +52,15 @@
 </main>
 <script type="module">
 import { supabase, requireRole, formatCents } from "./assets/supabase-client.js";
+import { renderBarChart } from "./assets/chart.js";
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("restricted");
 if (!auth) throw new Error("redirecting");
+
+if (auth.session.user.email === "demo@alexzaxa-pda.internal") {
+    document.getElementById("demo-banner").style.display = "block";
+}
 
 document.getElementById("logout").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -66,20 +81,31 @@ async function loadIncome() {
             "You don't have access to any store yet. Ask the admin to grant you access.";
     }
 
+    const today = new Date().toISOString().slice(0, 10);
+    const { data: todayRows } = await supabase.from("store_daily_totals").select("total_cents").eq("day", today);
+    document.getElementById("stat-today").textContent = formatCents((todayRows || []).reduce((sum, r) => sum + r.total_cents, 0));
+
     const { data: daily, error } = await supabase
         .from("store_daily_totals")
         .select("store_id, day, orders, total_cents")
         .order("day", { ascending: false })
         .limit(200);
 
-    const summaryBody = document.querySelector("#summary-table tbody");
     const dailyBody = document.querySelector("#daily-table tbody");
+    const chartContainer = document.getElementById("income-chart");
+    const comparisonSection = document.getElementById("comparison-section");
 
     if (error || !daily) {
-        summaryBody.innerHTML = `<tr><td colspan="3">Could not load income.</td></tr>`;
         dailyBody.innerHTML = `<tr><td colspan="4">Could not load income.</td></tr>`;
+        chartContainer.innerHTML = "";
+        comparisonSection.innerHTML = "";
         return;
     }
+
+    const byDay = new Map();
+    for (const row of daily) byDay.set(row.day, (byDay.get(row.day) || 0) + row.total_cents);
+    renderBarChart(chartContainer, [...byDay.entries()].map(([day, total_cents]) => ({ day, total_cents })).sort((a, b) => a.day.localeCompare(b.day)),
+        { day: (r) => r.day, value: (r) => r.total_cents, formatValue: formatCents });
 
     const byStore = new Map();
     for (const row of daily) {
@@ -88,10 +114,27 @@ async function loadIncome() {
         entry.total += row.total_cents;
         byStore.set(row.store_id, entry);
     }
-    const summaryRows = [...byStore.entries()].sort((a, b) => b[1].total - a[1].total);
-    summaryBody.innerHTML = summaryRows.length
-        ? summaryRows.map(([id, e]) => `<tr><td>${nameFor(id)}</td><td>${e.days}</td><td>${formatCents(e.total)}</td></tr>`).join("")
-        : `<tr><td colspan="3">No income yet.</td></tr>`;
+    const storeTotals = [...byStore.entries()].sort((a, b) => b[1].total - a[1].total);
+    const tile = (id, e) => `
+        <div class="stat-tile">
+            <span class="stat-label">${nameFor(id)}</span>
+            <strong class="stat-value">${formatCents(e.total)}</strong>
+            <div class="muted-note" style="display:block;margin-top:0.4rem">${e.days} day${e.days === 1 ? "" : "s"} synced</div>
+        </div>
+    `;
+    if (storeTotals.length > 1) {
+        const days = daily.map((r) => r.day).sort();
+        comparisonSection.innerHTML = `
+            <h2>Compare stores</h2>
+            <p class="lead" style="margin-top:-0.5rem">Totals from ${days[0]} to ${days[days.length - 1]}.</p>
+            <div class="stat-tiles">${storeTotals.map(([id, e]) => tile(id, e)).join("")}</div>
+        `;
+    } else if (storeTotals.length === 1) {
+        const [id, e] = storeTotals[0];
+        comparisonSection.innerHTML = `<div class="stat-tiles">${tile(id, e)}</div>`;
+    } else {
+        comparisonSection.innerHTML = "";
+    }
 
     dailyBody.innerHTML = daily.length
         ? daily.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")

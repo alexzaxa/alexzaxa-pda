@@ -64,6 +64,14 @@
         <a class="btn secondary" href="#how-it-works" style="margin-left:0.6rem" data-i18n="cta_how_it_works">See how it works</a>
     </p>
 
+    <div class="callout">
+        <div class="section-header">
+            <p class="lead" style="margin:0" data-i18n="demo_callout_body">Want to see it in action first? Explore a live dashboard with sample data — no signup required.</p>
+            <button class="btn secondary" id="view-demo" type="button" style="white-space:nowrap" data-i18n="demo_callout_button">View live demo</button>
+        </div>
+        <p class="msg" id="demo-msg"></p>
+    </div>
+
     <h2 data-i18n="features_heading">What it does</h2>
     <div class="grid">
         <div class="card">
@@ -86,6 +94,26 @@
             <h3 data-i18n="feature4_title">Self-updating</h3>
             <p data-i18n="feature4_body">Every install checks for new releases automatically and installs them with one manager click — no technician visit required.</p>
         </div>
+    </div>
+
+    <h2 data-i18n="screenshots_heading">See it in action</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <figure class="card" style="padding:0;overflow:hidden;margin:0">
+            <img src="assets/screenshots/control-center.png" alt="AlexZaxa Solutions PDA operations control center, showing tables, menu items, customers, delivery orders and reservations at a glance" loading="lazy" width="1600" height="1000" style="width:100%;display:block;border-bottom:1px solid var(--border)">
+            <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot1_caption">Operations control center — floor, delivery, staff, printers, and stock in one place.</figcaption>
+        </figure>
+        <figure class="card" style="padding:0;overflow:hidden;margin:0">
+            <img src="assets/screenshots/waiter.png" alt="Waiter view showing a live restaurant floor plan with table statuses" loading="lazy" width="1600" height="1000" style="width:100%;display:block;border-bottom:1px solid var(--border)">
+            <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot2_caption">Waiters manage tables from any phone or tablet on the restaurant Wi-Fi.</figcaption>
+        </figure>
+        <figure class="card" style="padding:0;overflow:hidden;margin:0">
+            <img src="assets/screenshots/delivery-orders.png" alt="Delivery orders workflow, independent from restaurant tables" loading="lazy" width="1600" height="570" style="width:100%;display:block;border-bottom:1px solid var(--border)">
+            <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot3_caption">A dedicated delivery workflow, independent from the restaurant's tables.</figcaption>
+        </figure>
+        <figure class="card" style="padding:0;overflow:hidden;margin:0">
+            <img src="assets/screenshots/admin-panel.png" alt="Manager admin panel with a live floor overview and today's and this week's revenue" loading="lazy" width="1600" height="1000" style="width:100%;display:block;border-bottom:1px solid var(--border)">
+            <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot4_caption">Live floor overview with today's and this week's revenue at a glance.</figcaption>
+        </figure>
     </div>
 
     <h2 id="how-it-works" data-i18n="how_heading">How it works</h2>
@@ -139,9 +167,14 @@
 <footer class="site">AlexZaxa Solutions PDA</footer>
 <script type="module">
 import { initLangSwitch, getLang } from "./assets/i18n.js";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
+import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { trackPageView } from "./assets/analytics.js";
 trackPageView();
+
+// Fixed-credential public demo account (read-only "restricted" role, scoped to a single
+// clearly-labeled fake demo store via RLS - see supabase/functions/create-demo-account).
+const DEMO_EMAIL = "demo@alexzaxa-pda.internal";
+const DEMO_PASSWORD = "Demo-Bistro-2026-View";
 
 const STRINGS = {
     en: {
@@ -151,6 +184,9 @@ const STRINGS = {
         hero_title: "Restaurant ordering, built for the floor.",
         hero_lead: "A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in floor plan, phone/delivery orders, kitchen printing, and a manager control center — with self-updating software so every install stays current automatically.",
         cta_get_started: "Get started", cta_how_it_works: "See how it works",
+        demo_callout_body: "Want to see it in action first? Explore a live dashboard with sample data — no signup required.",
+        demo_callout_button: "View live demo", demo_callout_loading: "Loading demo…",
+        demo_callout_error: "Could not load the demo right now, please try again shortly.",
         features_heading: "What it does",
         feature1_title: "Dine-in ordering",
         feature1_body: "Waiters take orders from any phone or tablet on the restaurant Wi-Fi, split bills, and manage tables in real time.",
@@ -160,6 +196,11 @@ const STRINGS = {
         feature3_body: "Orders route straight to the kitchen printer, with Greek-language and receipt support built in.",
         feature4_title: "Self-updating",
         feature4_body: "Every install checks for new releases automatically and installs them with one manager click — no technician visit required.",
+        screenshots_heading: "See it in action",
+        shot1_caption: "Operations control center — floor, delivery, staff, printers, and stock in one place.",
+        shot2_caption: "Waiters manage tables from any phone or tablet on the restaurant Wi-Fi.",
+        shot3_caption: "A dedicated delivery workflow, independent from the restaurant's tables.",
+        shot4_caption: "Live floor overview with today's and this week's revenue at a glance.",
         how_heading: "How it works",
         how1_title: "Tell us about your restaurant", how1_body: "Fill in the form below with your store name and contact details — takes under a minute.",
         how2_title: "We set your store up", how2_body: "We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.",
@@ -183,6 +224,9 @@ const STRINGS = {
         hero_title: "Παραγγελίες εστιατορίου, φτιαγμένες για τη σάλα.",
         hero_lead: "Ένα σύστημα παραγγελιών τοπικού δικτύου για εστιατόρια: tablet σερβιτόρων, κάτοψη τραπεζιών, τηλεφωνικές/delivery παραγγελίες, εκτύπωση στην κουζίνα και κέντρο ελέγχου για τον υπεύθυνο — με λογισμικό που ενημερώνεται μόνο του.",
         cta_get_started: "Ξεκινήστε", cta_how_it_works: "Δείτε πώς λειτουργεί",
+        demo_callout_body: "Θέλετε να το δείτε πρώτα σε δράση; Εξερευνήστε ένα live dashboard με δείγμα δεδομένων — χωρίς εγγραφή.",
+        demo_callout_button: "Δείτε το demo", demo_callout_loading: "Φόρτωση demo…",
+        demo_callout_error: "Δεν ήταν δυνατή η φόρτωση του demo, δοκιμάστε ξανά σε λίγο.",
         features_heading: "Τι κάνει",
         feature1_title: "Παραγγελίες σε τραπέζι",
         feature1_body: "Οι σερβιτόροι παίρνουν παραγγελίες από οποιοδήποτε κινητό ή tablet στο Wi-Fi του καταστήματος, μοιράζουν λογαριασμούς και διαχειρίζονται τραπέζια σε πραγματικό χρόνο.",
@@ -192,6 +236,11 @@ const STRINGS = {
         feature3_body: "Οι παραγγελίες πηγαίνουν κατευθείαν στον εκτυπωτή της κουζίνας, με υποστήριξη ελληνικών και αποδείξεων.",
         feature4_title: "Αυτόματες ενημερώσεις",
         feature4_body: "Κάθε εγκατάσταση ελέγχει μόνη της για νέες εκδόσεις και τις εγκαθιστά με ένα κλικ του υπευθύνου — χωρίς επίσκεψη τεχνικού.",
+        screenshots_heading: "Δείτε το σε δράση",
+        shot1_caption: "Κέντρο ελέγχου λειτουργιών — σάλα, delivery, προσωπικό, εκτυπωτές και απόθεμα σε ένα μέρος.",
+        shot2_caption: "Οι σερβιτόροι διαχειρίζονται τραπέζια από οποιοδήποτε κινητό ή tablet στο Wi-Fi του καταστήματος.",
+        shot3_caption: "Ειδικό workflow για delivery, ανεξάρτητο από τα τραπέζια του καταστήματος.",
+        shot4_caption: "Ζωντανή εικόνα της σάλας με τα έσοδα σήμερα και αυτή την εβδομάδα.",
         how_heading: "Πώς λειτουργεί",
         how1_title: "Πείτε μας για το εστιατόριό σας", how1_body: "Συμπληρώστε τη φόρμα παρακάτω με το όνομα του καταστήματος και τα στοιχεία επικοινωνίας σας — διαρκεί λιγότερο από ένα λεπτό.",
         how2_title: "Ρυθμίζουμε το κατάστημά σας", how2_body: "Δημιουργούμε το κατάστημά σας, σας καθοδηγούμε στην εγκατάσταση του PDA στον υπολογιστή του εστιατορίου και σας βοηθάμε να φτιάξετε το μενού.",
@@ -210,6 +259,23 @@ const STRINGS = {
     },
 };
 initLangSwitch(STRINGS);
+
+document.getElementById("view-demo").addEventListener("click", async () => {
+    const button = document.getElementById("view-demo");
+    const msg = document.getElementById("demo-msg");
+    const s = STRINGS[getLang()];
+    button.disabled = true;
+    msg.textContent = s.demo_callout_loading;
+    msg.className = "msg";
+    const { error } = await supabase.auth.signInWithPassword({ email: DEMO_EMAIL, password: DEMO_PASSWORD });
+    if (error) {
+        button.disabled = false;
+        msg.textContent = s.demo_callout_error;
+        msg.className = "msg error";
+        return;
+    }
+    window.location.href = "dashboard.html";
+});
 
 document.getElementById("lead-form").addEventListener("submit", async (event) => {
     event.preventDefault();
