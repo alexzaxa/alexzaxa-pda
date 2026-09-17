@@ -9,3 +9,5 @@ Allow: /
 Allow: /index.html
 Allow: /help.html
 Allow: /changelog.html
+
+Sitemap: https://alexzaxa.com/sitemap.xml

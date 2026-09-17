@@ -5,14 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AlexZaxa Solutions PDA</title>
 <meta name="description" content="A local-network ordering system for restaurants: waiter tablets, dine-in floor plan, phone/delivery orders, kitchen printing, and self-updating software.">
+<link rel="canonical" href="https://alexzaxa.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AlexZaxa Solutions PDA">
+<meta property="og:title" content="AlexZaxa Solutions PDA">
+<meta property="og:description" content="A local-network ordering system for restaurants: waiter tablets, dine-in floor plan, phone/delivery orders, kitchen printing, and self-updating software.">
+<meta property="og:url" content="https://alexzaxa.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="el_GR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AlexZaxa Solutions PDA">
+<meta name="twitter:description" content="A local-network ordering system for restaurants: waiter tablets, dine-in floor plan, phone/delivery orders, kitchen printing, and self-updating software.">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="stylesheet" href="assets/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "AlexZaxa Solutions PDA",
+      "url": "https://alexzaxa.com/",
+      "description": "Maker of AlexZaxa Solutions PDA, a local-network restaurant ordering system."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "AlexZaxa Solutions PDA",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows",
+      "description": "A local-network ordering system for restaurants: waiter tablets, dine-in floor plan, phone/delivery orders, kitchen printing, and self-updating software."
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <header class="site">
     <div class="brand"><span class="mark">A</span>AlexZaxa Solutions PDA</div>
     <nav>
+        <a href="#get-started" data-i18n="nav_get_started">Get started</a>
         <a href="help.html" data-i18n="nav_help">Help</a>
         <a href="changelog.html" data-i18n="nav_changelog">Changelog</a>
         <a href="login.html" data-i18n="nav_login">Log in</a>
@@ -26,6 +58,10 @@
         A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in
         floor plan, phone/delivery orders, kitchen printing, and a manager control center — with
         self-updating software so every install stays current automatically.
+    </p>
+    <p style="margin-top:1.5rem">
+        <a class="btn" href="#get-started" data-i18n="cta_get_started">Get started</a>
+        <a class="btn secondary" href="#how-it-works" style="margin-left:0.6rem" data-i18n="cta_how_it_works">See how it works</a>
     </p>
 
     <h2 data-i18n="features_heading">What it does</h2>
@@ -52,24 +88,69 @@
         </div>
     </div>
 
-    <h2 data-i18n="owners_heading">For store owners</h2>
+    <h2 id="how-it-works" data-i18n="how_heading">How it works</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="eyebrow" style="margin-bottom:0.3rem">1</span>
+            <h3 data-i18n="how1_title">Tell us about your restaurant</h3>
+            <p data-i18n="how1_body">Fill in the form below with your store name and contact details — takes under a minute.</p>
+        </div>
+        <div class="card">
+            <span class="eyebrow" style="margin-bottom:0.3rem">2</span>
+            <h3 data-i18n="how2_title">We set your store up</h3>
+            <p data-i18n="how2_body">We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.</p>
+        </div>
+        <div class="card">
+            <span class="eyebrow" style="margin-bottom:0.3rem">3</span>
+            <h3 data-i18n="how3_title">You're live</h3>
+            <p data-i18n="how3_body">Your staff start taking orders right away, and you get a login for your own revenue dashboard.</p>
+        </div>
+    </div>
+
+    <h2 data-i18n="owners_heading">Already a customer?</h2>
     <div class="callout">
         <p class="lead" style="margin:0" data-i18n-html="owners_body">
             If you run a store on AlexZaxa Solutions PDA, your revenue reporting is available on request —
             <a href="login.html">log in</a> to view it if you've been given access.
         </p>
     </div>
+
+    <h2 id="get-started" data-i18n="get_started_heading">Get started</h2>
+    <p class="lead" data-i18n="get_started_lead">
+        New to AlexZaxa Solutions PDA? Tell us about your restaurant and we'll get in touch.
+    </p>
+    <form id="lead-form" class="stack" style="max-width:480px">
+        <label for="lead-store" data-i18n="label_store">Restaurant name</label>
+        <input id="lead-store" required maxlength="200" data-i18n-placeholder="placeholder_store" placeholder="e.g. Xilino Coffee Bar">
+        <label for="lead-name" data-i18n="label_name">Your name</label>
+        <input id="lead-name" required maxlength="200">
+        <label for="lead-contact" data-i18n="label_contact">Email or phone</label>
+        <input id="lead-contact" required maxlength="200">
+        <label for="lead-message" data-i18n="label_message">Tell us a bit about your restaurant</label>
+        <textarea id="lead-message" required maxlength="5000" rows="4" data-i18n-placeholder="placeholder_message" placeholder="e.g. number of tables, whether you do delivery, etc."></textarea>
+        <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <label for="lead-website">Website</label>
+            <input id="lead-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn" type="submit" style="margin-top:1.5rem" data-i18n="submit_button">Send</button>
+        <p class="msg" id="lead-msg"></p>
+    </form>
 </main>
 <footer class="site">AlexZaxa Solutions PDA</footer>
 <script type="module">
-import { initLangSwitch } from "./assets/i18n.js";
+import { initLangSwitch, getLang } from "./assets/i18n.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
+import { trackPageView } from "./assets/analytics.js";
+trackPageView();
 
-initLangSwitch({
+const STRINGS = {
     en: {
+        nav_get_started: "Get started",
         nav_help: "Help", nav_changelog: "Changelog", nav_login: "Log in",
         eyebrow: "Restaurant ordering system",
         hero_title: "Restaurant ordering, built for the floor.",
         hero_lead: "A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in floor plan, phone/delivery orders, kitchen printing, and a manager control center — with self-updating software so every install stays current automatically.",
+        cta_get_started: "Get started", cta_how_it_works: "See how it works",
         features_heading: "What it does",
         feature1_title: "Dine-in ordering",
         feature1_body: "Waiters take orders from any phone or tablet on the restaurant Wi-Fi, split bills, and manage tables in real time.",
@@ -79,14 +160,29 @@ initLangSwitch({
         feature3_body: "Orders route straight to the kitchen printer, with Greek-language and receipt support built in.",
         feature4_title: "Self-updating",
         feature4_body: "Every install checks for new releases automatically and installs them with one manager click — no technician visit required.",
-        owners_heading: "For store owners",
+        how_heading: "How it works",
+        how1_title: "Tell us about your restaurant", how1_body: "Fill in the form below with your store name and contact details — takes under a minute.",
+        how2_title: "We set your store up", how2_body: "We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.",
+        how3_title: "You're live", how3_body: "Your staff start taking orders right away, and you get a login for your own revenue dashboard.",
+        owners_heading: "Already a customer?",
         owners_body: `If you run a store on AlexZaxa Solutions PDA, your revenue reporting is available on request — <a href="login.html">log in</a> to view it if you've been given access.`,
+        get_started_heading: "Get started",
+        get_started_lead: "New to AlexZaxa Solutions PDA? Tell us about your restaurant and we'll get in touch.",
+        label_store: "Restaurant name", placeholder_store: "e.g. Xilino Coffee Bar",
+        label_name: "Your name",
+        label_contact: "Email or phone",
+        label_message: "Tell us a bit about your restaurant", placeholder_message: "e.g. number of tables, whether you do delivery, etc.",
+        submit_button: "Send",
+        msg_error: "Something went wrong, please try again shortly.",
+        msg_success: "Thanks! We've got your details and will get in touch soon.",
     },
     el: {
+        nav_get_started: "Ξεκινήστε",
         nav_help: "Βοήθεια", nav_changelog: "Ενημερώσεις", nav_login: "Σύνδεση",
         eyebrow: "Σύστημα παραγγελιών εστιατορίου",
         hero_title: "Παραγγελίες εστιατορίου, φτιαγμένες για τη σάλα.",
         hero_lead: "Ένα σύστημα παραγγελιών τοπικού δικτύου για εστιατόρια: tablet σερβιτόρων, κάτοψη τραπεζιών, τηλεφωνικές/delivery παραγγελίες, εκτύπωση στην κουζίνα και κέντρο ελέγχου για τον υπεύθυνο — με λογισμικό που ενημερώνεται μόνο του.",
+        cta_get_started: "Ξεκινήστε", cta_how_it_works: "Δείτε πώς λειτουργεί",
         features_heading: "Τι κάνει",
         feature1_title: "Παραγγελίες σε τραπέζι",
         feature1_body: "Οι σερβιτόροι παίρνουν παραγγελίες από οποιοδήποτε κινητό ή tablet στο Wi-Fi του καταστήματος, μοιράζουν λογαριασμούς και διαχειρίζονται τραπέζια σε πραγματικό χρόνο.",
@@ -96,9 +192,62 @@ initLangSwitch({
         feature3_body: "Οι παραγγελίες πηγαίνουν κατευθείαν στον εκτυπωτή της κουζίνας, με υποστήριξη ελληνικών και αποδείξεων.",
         feature4_title: "Αυτόματες ενημερώσεις",
         feature4_body: "Κάθε εγκατάσταση ελέγχει μόνη της για νέες εκδόσεις και τις εγκαθιστά με ένα κλικ του υπευθύνου — χωρίς επίσκεψη τεχνικού.",
-        owners_heading: "Για ιδιοκτήτες καταστημάτων",
+        how_heading: "Πώς λειτουργεί",
+        how1_title: "Πείτε μας για το εστιατόριό σας", how1_body: "Συμπληρώστε τη φόρμα παρακάτω με το όνομα του καταστήματος και τα στοιχεία επικοινωνίας σας — διαρκεί λιγότερο από ένα λεπτό.",
+        how2_title: "Ρυθμίζουμε το κατάστημά σας", how2_body: "Δημιουργούμε το κατάστημά σας, σας καθοδηγούμε στην εγκατάσταση του PDA στον υπολογιστή του εστιατορίου και σας βοηθάμε να φτιάξετε το μενού.",
+        how3_title: "Είστε online", how3_body: "Το προσωπικό σας ξεκινά αμέσως να παίρνει παραγγελίες, και εσείς αποκτάτε σύνδεση για το δικό σας dashboard εσόδων.",
+        owners_heading: "Είστε ήδη πελάτης;",
         owners_body: `Αν λειτουργείτε κατάστημα με το AlexZaxa Solutions PDA, τα έσοδά σας είναι διαθέσιμα κατόπιν αιτήματος — <a href="login.html">συνδεθείτε</a> για να τα δείτε αν σας έχει δοθεί πρόσβαση.`,
+        get_started_heading: "Ξεκινήστε",
+        get_started_lead: "Πρώτη φορά με το AlexZaxa Solutions PDA; Πείτε μας για το εστιατόριό σας και θα επικοινωνήσουμε μαζί σας.",
+        label_store: "Όνομα εστιατορίου", placeholder_store: "π.χ. Ξύλινο Coffee Bar",
+        label_name: "Το όνομά σας",
+        label_contact: "Email ή τηλέφωνο",
+        label_message: "Πείτε μας λίγα λόγια για το εστιατόριό σας", placeholder_message: "π.χ. αριθμός τραπεζιών, αν κάνετε delivery, κλπ.",
+        submit_button: "Αποστολή",
+        msg_error: "Κάτι πήγε στραβά, δοκιμάστε ξανά σε λίγο.",
+        msg_success: "Ευχαριστούμε! Έχουμε τα στοιχεία σας και θα επικοινωνήσουμε σύντομα.",
     },
+};
+initLangSwitch(STRINGS);
+
+document.getElementById("lead-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("lead-msg");
+    const s = STRINGS[getLang()];
+    msg.textContent = ""; msg.className = "msg";
+    button.disabled = true;
+    let response;
+    try {
+        response = await fetch(`${SUPABASE_URL}/functions/v1/submit-ticket`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "apikey": SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({
+                store_name: document.getElementById("lead-store").value.trim(),
+                contact_name: document.getElementById("lead-name").value.trim(),
+                contact_info: document.getElementById("lead-contact").value.trim(),
+                category: "new_store",
+                message: document.getElementById("lead-message").value.trim(),
+                website: document.getElementById("lead-website").value,
+            }),
+        });
+    } catch {
+        response = null;
+    }
+    button.disabled = false;
+    if (!response || !response.ok) {
+        msg.textContent = s.msg_error;
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = s.msg_success;
+    msg.className = "msg success";
+    event.target.reset();
 });
 </script>
 </body>

@@ -44,6 +44,10 @@
             <span class="stat-label">Income today</span>
             <strong class="stat-value" id="stat-income-today">–</strong>
         </div>
+        <div class="stat-tile">
+            <span class="stat-label">Site visits (7d)</span>
+            <strong class="stat-value" id="stat-visits-7d">–</strong>
+        </div>
     </div>
 
     <nav class="tabs" role="tablist">
@@ -607,7 +611,7 @@ async function loadGrants() {
 }
 
 // --- Notifications (support tickets submitted from help.html) ---
-const TICKET_CATEGORY_LABEL = { technical: "Technical", how_to: "How-to", billing: "Billing", other: "Other" };
+const TICKET_CATEGORY_LABEL = { technical: "Technical", how_to: "How-to", billing: "Billing", other: "Other", new_store: "New store lead" };
 const STATUS_LABEL = { open: "Open", in_progress: "In progress", resolved: "Resolved" };
 
 function ticketCard(t) {
@@ -692,6 +696,15 @@ async function loadIncome() {
         : `<tr><td colspan="4">No income synced yet.</td></tr>`;
 }
 
+async function loadVisits() {
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { count, error } = await supabase
+        .from("page_views")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", since);
+    document.getElementById("stat-visits-7d").textContent = error ? "–" : count;
+}
+
 document.getElementById("export-excel").addEventListener("click", async () => {
     const button = document.getElementById("export-excel");
     button.disabled = true;
@@ -729,6 +742,7 @@ async function loadEverything() {
     await loadDownloadUsers();
     await loadReleases();
     await loadTickets();
+    await loadVisits();
 }
 
 document.getElementById("live-update").addEventListener("click", async () => {
