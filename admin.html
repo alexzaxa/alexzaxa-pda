@@ -95,6 +95,15 @@
     </section>
 
     <section class="tab-panel" data-panel="access" hidden>
+        <h2>Invite a user</h2>
+        <p class="lead">Sends an email invite (magic link to set a password) directly — no need to open Supabase. They land as a restricted account and show up below once invited.</p>
+        <form id="invite-user-form" class="stack" style="max-width:420px">
+            <label for="invite-email">Email</label>
+            <input id="invite-email" type="email" required placeholder="e.g. owner@theirstore.com">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Send invite</button>
+            <p class="msg" id="invite-user-msg"></p>
+        </form>
+
         <h2>Access grants</h2>
         <p class="lead">Restricted accounts see nothing until granted access to a specific store here.</p>
         <form id="grant-form" class="stack" style="max-width:420px">
@@ -253,6 +262,37 @@ document.getElementById("create-store-form").addEventListener("submit", async (e
     document.getElementById("install-command").textContent = cmd;
     document.getElementById("new-store-secret").style.display = "block";
     await loadStores();
+});
+
+// --- Invite user ---
+document.getElementById("invite-user-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("invite-user-msg");
+    msg.textContent = ""; msg.className = "msg";
+    setButtonLoading(button, true, "Sending…");
+    const email = document.getElementById("invite-email").value.trim();
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/invite-user`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ email }),
+    });
+    const result = await response.json();
+    setButtonLoading(button, false);
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to send invite.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = `Invite sent to ${result.user.email}.`;
+    msg.className = "msg success";
+    document.getElementById("invite-email").value = "";
+    await loadRestrictedProfiles();
 });
 
 document.getElementById("copy-install-command").addEventListener("click", async () => {
