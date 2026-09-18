@@ -5,6 +5,7 @@
 // phone; there is no invite email for these accounts (that's the whole point of this endpoint).
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { logAudit } from "../_shared/audit.ts";
 
 const DOWNLOAD_EMAIL_DOMAIN = "downloads.alexzaxa-pda.internal";
 
@@ -71,6 +72,7 @@ Deno.serve(async (req) => {
                 .update({ role: "download", username })
                 .eq("id", created.user.id);
             if (profileError) throw profileError;
+            await logAudit(adminClient, userData.user, "create_download_user", username);
             return new Response(JSON.stringify({ ok: true, username }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
@@ -84,8 +86,11 @@ Deno.serve(async (req) => {
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
                 });
             }
+            const { data: targetProfile } = await adminClient
+                .from("profiles").select("username").eq("id", userId).single();
             const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
             if (deleteError) throw deleteError;
+            await logAudit(adminClient, userData.user, "delete_download_user", targetProfile?.username || userId);
             return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });

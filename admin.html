@@ -58,6 +58,7 @@
         <button class="tab-btn" type="button" data-tab="users">Manage users</button>
         <button class="tab-btn" type="button" data-tab="releases">Releases</button>
         <button class="tab-btn" type="button" data-tab="income">Income</button>
+        <button class="tab-btn" type="button" data-tab="audit">Audit log</button>
     </nav>
 
     <section class="tab-panel" data-panel="notifications">
@@ -226,6 +227,15 @@
             <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
         </table>
     </section>
+
+    <section class="tab-panel" data-panel="audit" hidden>
+        <h2>Audit log</h2>
+        <p class="lead">Every delete, promotion, invite, and account creation made from this dashboard, most recent first. Read-only — nothing here can be edited or cleared from the app.</p>
+        <table id="audit-log-table">
+            <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Target</th><th>Details</th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+    </section>
 </main>
 <script type="module">
 import { supabase, requireRole, formatCents, formatDate, esc, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
@@ -243,6 +253,7 @@ document.querySelector("#stores-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#grants-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3);
 document.querySelector("#all-users-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#audit-log-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
 document.getElementById("notifications-feed").innerHTML =
@@ -425,9 +436,10 @@ function bindStoreRowActions(tbody) {
             const { count } = await supabase
                 .from("store_daily_totals").select("day", { count: "exact", head: true }).eq("store_id", btn.dataset.id);
             const warning = count
-                ? `Delete "${btn.dataset.name}" permanently? This erases its entire income history (${count} day(s) of totals, plus any recent raw records) and cannot be undone.\n\nIf you just want to stop them using it while keeping their history, use Terminate PDA instead.`
-                : `Delete "${btn.dataset.name}" permanently? This cannot be undone.`;
-            if (!confirm(warning)) return;
+                ? `Delete "${btn.dataset.name}" permanently? This erases its entire income history (${count} day(s) of totals, plus any recent raw records) and cannot be undone.\n\nIf you just want to stop them using it while keeping their history, use Terminate PDA instead.\n\nType the store name exactly to confirm:`
+                : `Delete "${btn.dataset.name}" permanently? This cannot be undone.\n\nType the store name exactly to confirm:`;
+            const typed = prompt(warning);
+            if (typed !== btn.dataset.name) { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
             const { error: deleteError } = await supabase.from("stores").delete().eq("id", btn.dataset.id);
             if (deleteError) { alert(deleteError.message); return; }
             await loadStores();
@@ -645,7 +657,8 @@ async function loadAllUsers() {
 
     tbody.querySelectorAll(".delete-user").forEach((btn) => {
         btn.addEventListener("click", async () => {
-            if (!confirm(`Permanently delete "${btn.dataset.login}"? This removes their login and any store access grants. Cannot be undone.`)) return;
+            const typed = prompt(`Permanently delete "${btn.dataset.login}"? This removes their login and any store access grants. Cannot be undone.\n\nType the login exactly to confirm:`);
+            if (typed !== btn.dataset.login) { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
             const { data: { session } } = await supabase.auth.getSession();
             const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-user`, {
                 method: "POST",
@@ -990,7 +1003,8 @@ async function loadIncome() {
 
     tbody.querySelectorAll(".delete-income").forEach((btn) => {
         btn.addEventListener("click", async () => {
-            if (!confirm(`Permanently delete the income total for ${btn.dataset.label}? This also removes any remaining detailed order rows for that day. Cannot be undone.`)) return;
+            const typed = prompt(`Permanently delete the income total for ${btn.dataset.label}? This also removes any remaining detailed order rows for that day. Cannot be undone.\n\nType DELETE to confirm:`);
+            if (typed !== "DELETE") { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
             const { data: { session } } = await supabase.auth.getSession();
             const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-income`, {
                 method: "POST",
@@ -1014,6 +1028,31 @@ async function loadIncome() {
 ["income-store-filter", "income-from", "income-to"].forEach((id) => {
     document.getElementById(id).addEventListener("change", loadIncome);
 });
+
+// --- Audit log: read-only trail of every privileged action taken from this dashboard ---
+async function loadAuditLog() {
+    const { data, error } = await supabase
+        .from("admin_audit_log")
+        .select("actor_label, action, target_label, details, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200);
+    const tbody = document.querySelector("#audit-log-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="5">Could not load the audit log.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((r) => `
+            <tr>
+                <td>${formatDate(r.created_at)}</td>
+                <td>${esc(r.actor_label)}</td>
+                <td>${esc(r.action)}</td>
+                <td>${esc(r.target_label)}</td>
+                <td>${esc(r.details)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No actions logged yet.</td></tr>`;
+}
 
 async function loadVisits() {
     const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -1061,6 +1100,7 @@ async function loadEverything() {
     await loadReleases();
     await loadTickets();
     await loadVisits();
+    await loadAuditLog();
 }
 
 // Polls just the (lightweight) tickets query so the tab title/favicon badge reflects a new

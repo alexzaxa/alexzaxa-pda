@@ -12,6 +12,7 @@
 //    from a second admin account or directly in Supabase.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { logAudit } from "../_shared/audit.ts";
 
 // Same non-deliverable placeholder domain manage-download-user and assets/supabase-client.js's
 // usernameToEmail() use - Supabase Auth needs an email-shaped identifier internally even for a
@@ -88,6 +89,7 @@ Deno.serve(async (req) => {
                 .update({ role, username })
                 .eq("id", created.user.id);
             if (profileError) throw profileError;
+            await logAudit(adminClient, userData.user, "create_username_login", username, `role=${role}`);
             return new Response(JSON.stringify({ ok: true, username, role }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
@@ -107,8 +109,11 @@ Deno.serve(async (req) => {
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
                 });
             }
+            const { data: targetProfile } = await adminClient
+                .from("profiles").select("email, username, role").eq("id", userId).single();
             const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
             if (deleteError) throw deleteError;
+            await logAudit(adminClient, userData.user, "delete_user", targetProfile?.username || targetProfile?.email || userId, `role=${targetProfile?.role ?? "unknown"}`);
             return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
@@ -125,6 +130,9 @@ Deno.serve(async (req) => {
             const { error: updateError } = await adminClient
                 .from("profiles").update({ role: "admin" }).eq("id", userId);
             if (updateError) throw updateError;
+            const { data: targetProfile } = await adminClient
+                .from("profiles").select("email, username").eq("id", userId).single();
+            await logAudit(adminClient, userData.user, "promote_to_admin", targetProfile?.username || targetProfile?.email || userId);
             return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });

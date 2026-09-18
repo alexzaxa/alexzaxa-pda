@@ -5,6 +5,7 @@
 // admin.html's "Restricted account" picker immediately, before they even open the email.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { logAudit } from "../_shared/audit.ts";
 
 Deno.serve(async (req) => {
     if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -48,6 +49,8 @@ Deno.serve(async (req) => {
         );
         const { data: invited, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(email);
         if (inviteError) throw inviteError;
+
+        await logAudit(adminClient, userData.user, "invite_user", email);
 
         return new Response(
             JSON.stringify({ ok: true, user: { id: invited.user.id, email: invited.user.email } }),

@@ -6,6 +6,7 @@
 // (store, day), so a re-load of the Income tab can't show stale detail for a total that's gone.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { logAudit } from "../_shared/audit.ts";
 
 Deno.serve(async (req) => {
     if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -61,6 +62,9 @@ Deno.serve(async (req) => {
                 .gte("closed_at", dayStart)
                 .lte("closed_at", dayEnd);
             if (rawError) throw rawError;
+
+            const { data: store } = await adminClient.from("stores").select("name").eq("id", storeId).single();
+            await logAudit(adminClient, userData.user, "delete_income_day", `${store?.name ?? storeId} / ${day}`);
 
             return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
