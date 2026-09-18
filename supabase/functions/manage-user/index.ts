@@ -1,4 +1,4 @@
-// Admin-only. Two account-management actions that don't belong in the other user-management
+// Admin-only. Account-management actions that don't belong in the other user-management
 // functions:
 //  - create_username_login: create a real login authenticated by username+password instead of
 //    an email invite - same synthetic-email trick as download accounts (see
@@ -7,6 +7,9 @@
 //  - promote: grant admin role to any existing profile. profiles has no client write RLS policy
 //    at all (see init_schema.sql) - this endpoint, backed by service_role, is intentionally the
 //    only way a role can change from the app.
+//  - delete: permanently remove a login (any role). Blocks deleting your own account so an
+//    admin can never lock themselves out from this UI - that still has to be done deliberately,
+//    from a second admin account or directly in Supabase.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
@@ -86,6 +89,27 @@ Deno.serve(async (req) => {
                 .eq("id", created.user.id);
             if (profileError) throw profileError;
             return new Response(JSON.stringify({ ok: true, username, role }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+        }
+
+        if (action === "delete") {
+            const userId = String(body?.user_id ?? "");
+            if (!userId) {
+                return new Response(JSON.stringify({ error: "user_id required" }), {
+                    status: 400,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            if (userId === userData.user.id) {
+                return new Response(JSON.stringify({ error: "You can't delete your own account here." }), {
+                    status: 400,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
+            if (deleteError) throw deleteError;
+            return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
         }

@@ -222,8 +222,8 @@
         </div>
         <div id="income-chart" style="margin-top:1.25rem"></div>
         <table id="income-table" style="margin-top:1.25rem">
-            <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
-            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+            <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th><th></th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
         </table>
     </section>
 </main>
@@ -613,7 +613,10 @@ async function loadAllUsers() {
                 <td>${esc(u.username || u.email)}</td>
                 <td>${u.role}</td>
                 <td>${formatDate(u.created_at)}</td>
-                <td>${u.role === "admin" ? "" : `<button class="btn promote-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}">Make admin</button>`}</td>
+                <td>
+                    ${u.role === "admin" ? "" : `<button class="btn promote-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}">Make admin</button>`}
+                    ${u.id === auth.session.user.id ? "" : `<button class="btn danger delete-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}" style="margin-left:0.4rem">Delete</button>`}
+                </td>
             </tr>
         `).join("")
         : `<tr><td colspan="4">No users yet.</td></tr>`;
@@ -637,6 +640,31 @@ async function loadAllUsers() {
                 return;
             }
             await loadAllUsers();
+        });
+    });
+
+    tbody.querySelectorAll(".delete-user").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Permanently delete "${btn.dataset.login}"? This removes their login and any store access grants. Cannot be undone.`)) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "delete", user_id: btn.dataset.id }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to delete.");
+                return;
+            }
+            await loadAllUsers();
+            await loadRestrictedProfiles();
+            await loadGrants();
+            await loadDownloadUsers();
         });
     });
 }
@@ -949,8 +977,38 @@ async function loadIncome() {
     renderIncomeChart([...byDay.entries()].map(([day, total_cents]) => ({ day, total_cents })).sort((a, b) => a.day.localeCompare(b.day)));
 
     tbody.innerHTML = data.length
-        ? data.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
-        : `<tr><td colspan="4">No income synced yet${storeId || from || to ? " for this filter" : ""}.</td></tr>`;
+        ? data.map((r) => `
+            <tr>
+                <td>${esc(nameFor(r.store_id))}</td>
+                <td>${r.day}</td>
+                <td>${r.orders}</td>
+                <td>${formatCents(r.total_cents)}</td>
+                <td><button class="btn danger delete-income" data-store-id="${r.store_id}" data-day="${r.day}" data-label="${esc(nameFor(r.store_id))} on ${r.day}">Delete</button></td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No income synced yet${storeId || from || to ? " for this filter" : ""}.</td></tr>`;
+
+    tbody.querySelectorAll(".delete-income").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Permanently delete the income total for ${btn.dataset.label}? This also removes any remaining detailed order rows for that day. Cannot be undone.`)) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-income`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "delete_day", store_id: btn.dataset.storeId, day: btn.dataset.day }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to delete.");
+                return;
+            }
+            await loadIncome();
+        });
+    });
 }
 
 ["income-store-filter", "income-from", "income-to"].forEach((id) => {
