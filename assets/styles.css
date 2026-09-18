@@ -175,8 +175,16 @@ table {
     font-size: 0.9rem;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    overflow: hidden;
+    /* No overflow:hidden here on purpose - it used to clip the header's square corners to match
+       the rounded border, but it also clipped the row-action dropdown menu (.menu-list, which
+       opens downward via position:absolute) whenever it belonged to the last row, since that
+       menu has nowhere to open but past the table's bottom edge. That made the last row of any
+       table using the kebab-menu pattern (e.g. Stores) impossible to act on. */
 }
+thead tr:first-child th:first-child { border-top-left-radius: var(--radius); }
+thead tr:first-child th:last-child { border-top-right-radius: var(--radius); }
+tbody tr:last-child td:first-child { border-bottom-left-radius: var(--radius); }
+tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius); }
 thead th { background: var(--surface); }
 th, td {
     text-align: left;
