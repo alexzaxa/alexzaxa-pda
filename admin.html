@@ -55,6 +55,7 @@
         <button class="tab-btn" type="button" data-tab="stores">Stores</button>
         <button class="tab-btn" type="button" data-tab="access">Access grants</button>
         <button class="tab-btn" type="button" data-tab="downloads">Download access</button>
+        <button class="tab-btn" type="button" data-tab="users">Manage users</button>
         <button class="tab-btn" type="button" data-tab="releases">Releases</button>
         <button class="tab-btn" type="button" data-tab="income">Income</button>
     </nav>
@@ -137,6 +138,45 @@
         </table>
     </section>
 
+    <section class="tab-panel" data-panel="users" hidden>
+        <h2>Create a user</h2>
+        <p class="lead">Choose how they log in. Email invite sends a magic link (same as Access grants). Username &amp; password is set directly by you — no email needed — and can create a restricted or admin account.</p>
+        <form id="create-user-form" class="stack" style="max-width:420px">
+            <label for="create-user-method">Login method</label>
+            <select id="create-user-method">
+                <option value="email">Email invite</option>
+                <option value="username">Username &amp; password</option>
+            </select>
+
+            <div id="create-user-email-fields">
+                <label for="create-user-email">Email</label>
+                <input id="create-user-email" type="email" placeholder="e.g. owner@theirstore.com">
+            </div>
+
+            <div id="create-user-username-fields" style="display:none">
+                <label for="create-user-username">Username</label>
+                <input id="create-user-username" pattern="[a-z0-9_-]{3,32}" placeholder="e.g. nikos">
+                <label for="create-user-password">Password (tell them this directly)</label>
+                <input id="create-user-password" type="text" minlength="8" placeholder="At least 8 characters">
+                <label for="create-user-role">Role</label>
+                <select id="create-user-role">
+                    <option value="restricted">Restricted (income dashboard only)</option>
+                    <option value="admin">Admin (full access)</option>
+                </select>
+            </div>
+
+            <button class="btn" type="submit" style="margin-top:1.5rem">Create user</button>
+            <p class="msg" id="create-user-msg"></p>
+        </form>
+
+        <h2>All users</h2>
+        <p class="lead">Promote any existing account to admin. There's no "demote" here on purpose — do that in Supabase directly if you ever need to walk one back.</p>
+        <table id="all-users-table">
+            <thead><tr><th>Login</th><th>Role</th><th>Created</th><th></th></tr></thead>
+            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
     <section class="tab-panel" data-panel="releases" hidden>
         <h2>Publish a release</h2>
         <p class="lead">Upload the zip built by <code>make-release-package.ps1</code>. Re-uploading the same version overwrites it in place.</p>
@@ -202,6 +242,7 @@ document.getElementById("signed-in-as").textContent = auth.session.user.email;
 document.querySelector("#stores-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#grants-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3);
+document.querySelector("#all-users-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
 document.getElementById("notifications-feed").innerHTML =
@@ -499,6 +540,103 @@ async function loadDownloadUsers() {
                 return;
             }
             await loadDownloadUsers();
+        });
+    });
+}
+
+// --- Manage users (create via email invite or username+password, promote to admin) ---
+document.getElementById("create-user-method").addEventListener("change", (event) => {
+    const isUsername = event.target.value === "username";
+    document.getElementById("create-user-email-fields").style.display = isUsername ? "none" : "";
+    document.getElementById("create-user-username-fields").style.display = isUsername ? "" : "none";
+});
+
+document.getElementById("create-user-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("create-user-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const method = document.getElementById("create-user-method").value;
+    const { data: { session } } = await supabase.auth.getSession();
+
+    let endpoint, payload;
+    if (method === "email") {
+        endpoint = "invite-user";
+        payload = { email: document.getElementById("create-user-email").value.trim() };
+    } else {
+        endpoint = "manage-user";
+        payload = {
+            action: "create_username_login",
+            username: document.getElementById("create-user-username").value.trim(),
+            password: document.getElementById("create-user-password").value,
+            role: document.getElementById("create-user-role").value,
+        };
+    }
+
+    setButtonLoading(button, true, "Creating…");
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/${endpoint}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    setButtonLoading(button, false);
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to create user.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = method === "email" ? `Invite sent to ${result.user.email}.` : `Created "${result.username}" as ${result.role}.`;
+    msg.className = "msg success";
+    document.getElementById("create-user-form").reset();
+    document.getElementById("create-user-email-fields").style.display = "";
+    document.getElementById("create-user-username-fields").style.display = "none";
+    await loadAllUsers();
+    await loadRestrictedProfiles();
+});
+
+async function loadAllUsers() {
+    const { data, error } = await supabase
+        .from("profiles").select("id, email, username, role, created_at").order("created_at", { ascending: false });
+    const tbody = document.querySelector("#all-users-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Could not load users.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((u) => `
+            <tr>
+                <td>${esc(u.username || u.email)}</td>
+                <td>${u.role}</td>
+                <td>${formatDate(u.created_at)}</td>
+                <td>${u.role === "admin" ? "" : `<button class="btn promote-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}">Make admin</button>`}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4">No users yet.</td></tr>`;
+
+    tbody.querySelectorAll(".promote-user").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Grant admin access to "${btn.dataset.login}"? They'll get full access to everything in this dashboard.`)) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "promote", user_id: btn.dataset.id }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to promote.");
+                return;
+            }
+            await loadAllUsers();
         });
     });
 }
@@ -861,6 +999,7 @@ async function loadEverything() {
     await loadRestrictedProfiles();
     await loadGrants();
     await loadDownloadUsers();
+    await loadAllUsers();
     await loadReleases();
     await loadTickets();
     await loadVisits();
