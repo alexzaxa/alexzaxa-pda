@@ -284,6 +284,11 @@ form.stack { display: flex; flex-direction: column; }
     transition: background var(--ease), border-color var(--ease);
 }
 .menu-trigger:hover { background: var(--surface-2); border-color: #3d4552; }
+.menu-trigger:focus, .menu-trigger:focus-visible {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 1px #0ea5e9;
+}
 .menu-list {
     display: none;
     position: absolute;
