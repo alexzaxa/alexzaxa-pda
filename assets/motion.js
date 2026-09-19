@@ -28,6 +28,33 @@ export function skeletonRows(colCount, rowCount = 3) {
     return Array.from({ length: rowCount }, () => `<tr>${cells}</tr>`).join("");
 }
 
+// Thin top-of-page bar shown while navigating to another page. This is a classic multi-page
+// site (full reloads, no router) so there's no "complete" event to fire on the same document -
+// the bar just animates toward 80% and stays there, visually, until the browser swaps in the
+// next page (which replaces it entirely). That's the same trick nprogress/Turbo use.
+let progressEl = null;
+export function startPageProgress() {
+    if (!progressEl) {
+        progressEl = document.createElement("div");
+        progressEl.id = "page-progress";
+        document.body.appendChild(progressEl);
+    }
+    requestAnimationFrame(() => progressEl.classList.add("active"));
+}
+
+export function initPageProgress() {
+    document.addEventListener("click", (event) => {
+        const link = event.target.closest("a[href]");
+        if (!link || event.defaultPrevented || event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (link.target === "_blank" || link.hasAttribute("download")) return;
+        const url = new URL(link.href, location.href);
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname && url.hash) return; // same-page anchor
+        startPageProgress();
+    });
+}
+
 // Toggles a button between its normal label and a spinner + loading label, disabling it either
 // way. Stashes the original label on the element itself so callers don't have to track it.
 export function setButtonLoading(button, loading, loadingText) {

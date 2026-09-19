@@ -38,12 +38,13 @@
         <tbody><tr><td colspan="3" data-i18n="loading">Loading…</td></tr></tbody>
     </table>
 </main>
-<footer class="site">AlexZaxa Solutions PDA</footer>
+<footer class="site">AlexZaxa Solutions PDA · <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> · <a href="tel:+306981868758">698 186 8758</a></footer>
 <script type="module">
 import { supabase, formatDate } from "./assets/supabase-client.js";
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
-import { skeletonRows } from "./assets/motion.js";
+import { skeletonRows, initPageProgress } from "./assets/motion.js";
+initPageProgress();
 trackPageView();
 
 const STRINGS = {

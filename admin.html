@@ -181,7 +181,8 @@
 <script type="module">
 import { supabase, requireRole, formatCents, formatDate, esc, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { renderBarChart } from "./assets/chart.js";
-import { skeletonRows, setButtonLoading } from "./assets/motion.js";
+import { skeletonRows, setButtonLoading, initPageProgress } from "./assets/motion.js";
+initPageProgress();
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 const auth = await requireRole("admin");

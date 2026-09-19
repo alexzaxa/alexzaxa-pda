@@ -99,21 +99,41 @@
     <h2 data-i18n="screenshots_heading">See it in action</h2>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
         <figure class="card reveal-up" style="padding:0;overflow:hidden;margin:0">
-            <img src="assets/screenshots/control-center.png" alt="AlexZaxa Solutions PDA operations control center, showing tables, menu items, customers, delivery orders and reservations at a glance" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
+            <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing tables, menu items, customers, delivery orders and reservations at a glance" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
             <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot1_caption">Operations control center — floor, delivery, staff, printers, and stock in one place.</figcaption>
         </figure>
         <figure class="card reveal-up" style="padding:0;overflow:hidden;margin:0">
-            <img src="assets/screenshots/waiter.png" alt="Waiter view showing a live restaurant floor plan with table statuses" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
+            <img src="assets/screenshots/waiter.webp" alt="Waiter view showing a live restaurant floor plan with table statuses" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
             <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot2_caption">Waiters manage tables from any phone or tablet on the restaurant Wi-Fi.</figcaption>
         </figure>
         <figure class="card reveal-up" style="padding:0;overflow:hidden;margin:0">
-            <img src="assets/screenshots/delivery-orders.png" alt="Delivery orders workflow, independent from restaurant tables" loading="lazy" width="1600" height="570" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
+            <img src="assets/screenshots/delivery-orders.webp" alt="Delivery orders workflow, independent from restaurant tables" loading="lazy" width="1600" height="570" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
             <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot3_caption">A dedicated delivery workflow, independent from the restaurant's tables.</figcaption>
         </figure>
         <figure class="card reveal-up" style="padding:0;overflow:hidden;margin:0">
-            <img src="assets/screenshots/admin-panel.png" alt="Manager admin panel with a live floor overview and today's and this week's revenue" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
+            <img src="assets/screenshots/admin-panel.webp" alt="Manager admin panel with a live floor overview and today's and this week's revenue" loading="lazy" width="1600" height="1000" style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)">
             <figcaption style="padding:0.9rem 1.1rem;color:var(--text-dim);font-size:0.88rem" data-i18n="shot4_caption">Live floor overview with today's and this week's revenue at a glance.</figcaption>
         </figure>
+    </div>
+
+    <h2 data-i18n="trust_heading">Why restaurants choose us</h2>
+    <div class="grid">
+        <div class="card reveal-up">
+            <h3 data-i18n="trust1_title">No cloud dependency</h3>
+            <p data-i18n="trust1_body">Runs entirely on your restaurant's own local network. No internet outage takes your floor down.</p>
+        </div>
+        <div class="card reveal-up">
+            <h3 data-i18n="trust2_title">No technician visits</h3>
+            <p data-i18n="trust2_body">Updates install themselves with one manager click — no callout, no downtime waiting for someone to show up.</p>
+        </div>
+        <div class="card reveal-up">
+            <h3 data-i18n="trust3_title">Built for Greek restaurants</h3>
+            <p data-i18n="trust3_body">Greek-language receipts and kitchen printing out of the box, not bolted on as an afterthought.</p>
+        </div>
+        <div class="card reveal-up">
+            <h3 data-i18n="trust4_title">Try before you commit</h3>
+            <p data-i18n="trust4_body">Explore a live demo dashboard with sample data — no signup, no sales call required first.</p>
+        </div>
     </div>
 
     <h2 id="how-it-works" data-i18n="how_heading">How it works</h2>
@@ -164,12 +184,13 @@
         <p class="msg" id="lead-msg"></p>
     </form>
 </main>
-<footer class="site">AlexZaxa Solutions PDA</footer>
+<footer class="site">AlexZaxa Solutions PDA · <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> · <a href="tel:+306981868758">698 186 8758</a></footer>
 <script type="module">
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { trackPageView } from "./assets/analytics.js";
-import { initScrollReveal, setButtonLoading } from "./assets/motion.js";
+import { initScrollReveal, setButtonLoading, initPageProgress } from "./assets/motion.js";
+initPageProgress();
 trackPageView();
 initScrollReveal();
 
@@ -203,6 +224,15 @@ const STRINGS = {
         shot2_caption: "Waiters manage tables from any phone or tablet on the restaurant Wi-Fi.",
         shot3_caption: "A dedicated delivery workflow, independent from the restaurant's tables.",
         shot4_caption: "Live floor overview with today's and this week's revenue at a glance.",
+        trust_heading: "Why restaurants choose us",
+        trust1_title: "No cloud dependency",
+        trust1_body: "Runs entirely on your restaurant's own local network. No internet outage takes your floor down.",
+        trust2_title: "No technician visits",
+        trust2_body: "Updates install themselves with one manager click — no callout, no downtime waiting for someone to show up.",
+        trust3_title: "Built for Greek restaurants",
+        trust3_body: "Greek-language receipts and kitchen printing out of the box, not bolted on as an afterthought.",
+        trust4_title: "Try before you commit",
+        trust4_body: "Explore a live demo dashboard with sample data — no signup, no sales call required first.",
         how_heading: "How it works",
         how1_title: "Tell us about your restaurant", how1_body: "Fill in the form below with your store name and contact details — takes under a minute.",
         how2_title: "We set your store up", how2_body: "We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.",
@@ -243,6 +273,15 @@ const STRINGS = {
         shot2_caption: "Οι σερβιτόροι διαχειρίζονται τραπέζια από οποιοδήποτε κινητό ή tablet στο Wi-Fi του καταστήματος.",
         shot3_caption: "Ειδικό workflow για delivery, ανεξάρτητο από τα τραπέζια του καταστήματος.",
         shot4_caption: "Ζωντανή εικόνα της σάλας με τα έσοδα σήμερα και αυτή την εβδομάδα.",
+        trust_heading: "Γιατί μας επιλέγουν τα εστιατόρια",
+        trust1_title: "Χωρίς εξάρτηση από cloud",
+        trust1_body: "Λειτουργεί εξ ολοκλήρου στο τοπικό δίκτυο του καταστήματός σας. Μια διακοπή internet δεν σταματά τη σάλα σας.",
+        trust2_title: "Χωρίς επισκέψεις τεχνικού",
+        trust2_body: "Οι ενημερώσεις εγκαθίστανται μόνες τους με ένα κλικ του υπευθύνου — χωρίς κλήση τεχνικού, χωρίς αναμονή.",
+        trust3_title: "Φτιαγμένο για ελληνικά εστιατόρια",
+        trust3_body: "Αποδείξεις και εκτύπωση κουζίνας στα ελληνικά εξ αρχής, όχι σαν πρόσθετο.",
+        trust4_title: "Δοκιμάστε το πριν δεσμευτείτε",
+        trust4_body: "Εξερευνήστε ένα ζωντανό demo dashboard με δείγμα δεδομένων — χωρίς εγγραφή, χωρίς τηλεφώνημα πωλήσεων πρώτα.",
         how_heading: "Πώς λειτουργεί",
         how1_title: "Πείτε μας για το εστιατόριό σας", how1_body: "Συμπληρώστε τη φόρμα παρακάτω με το όνομα του καταστήματος και τα στοιχεία επικοινωνίας σας — διαρκεί λιγότερο από ένα λεπτό.",
         how2_title: "Ρυθμίζουμε το κατάστημά σας", how2_body: "Δημιουργούμε το κατάστημά σας, σας καθοδηγούμε στην εγκατάσταση του PDA στον υπολογιστή του εστιατορίου και σας βοηθάμε να φτιάξετε το μενού.",

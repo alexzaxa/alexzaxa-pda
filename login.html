@@ -52,7 +52,8 @@
 import { supabase, roleHome, usernameToEmail } from "./assets/supabase-client.js";
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
-import { setButtonLoading } from "./assets/motion.js";
+import { setButtonLoading, initPageProgress } from "./assets/motion.js";
+initPageProgress();
 trackPageView();
 
 const STRINGS = {
