@@ -33,10 +33,9 @@
 <main>
     <h1 data-i18n="title">Changelog</h1>
     <p class="lead" data-i18n="lead">Published releases, newest first.</p>
-    <table id="releases">
-        <thead><tr><th data-i18n="col_version">Version</th><th data-i18n="col_published">Published</th><th data-i18n="col_notes">Notes</th></tr></thead>
-        <tbody><tr><td colspan="3" data-i18n="loading">Loading…</td></tr></tbody>
-    </table>
+    <div class="release-list" id="releases">
+        <p class="msg" data-i18n="loading">Loading…</p>
+    </div>
 </main>
 <footer class="site">
     <div class="footer-brand">AlexZaxa Solutions PDA</div>
@@ -46,7 +45,7 @@
 import { supabase, formatDate } from "./assets/supabase-client.js";
 import { initLangSwitch, getLang } from "./assets/i18n.js";
 import { trackPageView } from "./assets/analytics.js";
-import { skeletonRows, initPageProgress } from "./assets/motion.js";
+import { initPageProgress } from "./assets/motion.js";
 initPageProgress();
 trackPageView();
 
@@ -54,20 +53,23 @@ const STRINGS = {
     en: {
         nav_help: "Help", nav_changelog: "Changelog", nav_login: "Log in",
         title: "Changelog", lead: "Published releases, newest first.",
-        col_version: "Version", col_published: "Published", col_notes: "Notes",
         loading: "Loading…", error: "Could not load releases.", empty: "No releases published yet.",
     },
     el: {
         nav_help: "Βοήθεια", nav_changelog: "Ενημερώσεις", nav_login: "Σύνδεση",
         title: "Ενημερώσεις εκδόσεων", lead: "Δημοσιευμένες εκδόσεις, πιο πρόσφατη πρώτα.",
-        col_version: "Έκδοση", col_published: "Ημερομηνία", col_notes: "Σημειώσεις",
         loading: "Φόρτωση…", error: "Δεν ήταν δυνατή η φόρτωση.", empty: "Δεν έχει δημοσιευτεί ακόμα καμία έκδοση.",
     },
 };
 initLangSwitch(STRINGS);
 
-const tbody = document.querySelector("#releases tbody");
-tbody.innerHTML = skeletonRows(3, 4);
+const list = document.getElementById("releases");
+list.innerHTML = Array.from({ length: 3 }, () => `
+    <div class="release-row">
+        <div class="release-meta"><span class="skeleton-text" style="max-width:70px"></span><span class="skeleton-text" style="max-width:100px"></span></div>
+        <span class="skeleton-text"></span>
+    </div>
+`).join("");
 const { data, error } = await supabase
     .from("pda_releases")
     .select("version, published_at, notes")
@@ -75,16 +77,18 @@ const { data, error } = await supabase
 
 const s = STRINGS[getLang()];
 if (error) {
-    tbody.innerHTML = `<tr><td colspan="3">${s.error}</td></tr>`;
+    list.innerHTML = `<p class="msg error">${s.error}</p>`;
 } else if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="3">${s.empty}</td></tr>`;
+    list.innerHTML = `<p class="msg">${s.empty}</p>`;
 } else {
-    tbody.innerHTML = data.map((r) => `
-        <tr>
-            <td>${r.version}</td>
-            <td>${formatDate(r.published_at)}</td>
-            <td>${r.notes ?? "—"}</td>
-        </tr>
+    list.innerHTML = data.map((r) => `
+        <div class="release-row">
+            <div class="release-meta">
+                <span class="release-version">${r.version}</span>
+                <span class="release-date">${formatDate(r.published_at)}</span>
+            </div>
+            <p class="release-notes">${r.notes ?? "—"}</p>
+        </div>
     `).join("");
 }
 </script>

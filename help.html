@@ -35,14 +35,22 @@
         βρίσκετε απάντηση εδώ, στείλτε μας αίτημα στο τέλος της σελίδας.
     </p>
 
-    <h2 data-i18n="login_heading">Σύνδεση στο PDA</h2>
+    <nav class="quick-nav" aria-label="Quick links">
+        <a href="#login" data-i18n="nav_qlogin">Login</a>
+        <a href="#waiters" data-i18n="nav_qwaiters">Waiters</a>
+        <a href="#register" data-i18n="nav_qregister">Register / phone</a>
+        <a href="#faq" data-i18n="nav_qfaq">FAQ</a>
+        <a href="#contact" data-i18n="nav_qcontact">Contact</a>
+    </nav>
+
+    <h2 id="login" data-i18n="login_heading">Σύνδεση στο PDA</h2>
     <p class="lead" data-i18n="login_body">
         Ανοίξτε τη διεύθυνση που σας έδωσε ο υπεύθυνος του καταστήματος από το κινητό ή το tablet
         σας, ενώ είστε συνδεδεμένοι στο Wi-Fi του καταστήματος. Συνδεθείτε με το όνομα χρήστη και
         τον κωδικό που σας έχει δώσει ο υπεύθυνος.
     </p>
 
-    <h2 data-i18n="waiter_heading">Για Σερβιτόρους</h2>
+    <h2 id="waiters" data-i18n="waiter_heading">Για Σερβιτόρους</h2>
     <div class="grid">
         <div class="card">
             <h3 data-i18n="w1_title">Άνοιγμα τραπεζιού</h3>
@@ -74,7 +82,7 @@
         </div>
     </div>
 
-    <h2 data-i18n="register_heading">Για Ταμείο / Τηλεφωνικές παραγγελίες</h2>
+    <h2 id="register" data-i18n="register_heading">Για Ταμείο / Τηλεφωνικές παραγγελίες</h2>
     <div class="grid">
         <div class="card">
             <h3 data-i18n="r1_title">Νέα παραγγελία</h3>
@@ -86,27 +94,27 @@
         </div>
     </div>
 
-    <h2 data-i18n="faq_heading">Συχνές ερωτήσεις</h2>
-    <div class="grid">
-        <div class="card">
-            <h3 data-i18n="f1_title">Δεν βλέπω κανένα τραπέζι / δεν συνδέεται</h3>
+    <h2 id="faq" data-i18n="faq_heading">Συχνές ερωτήσεις</h2>
+    <div class="faq-list">
+        <details class="faq-item">
+            <summary data-i18n="f1_title">Δεν βλέπω κανένα τραπέζι / δεν συνδέεται</summary>
             <p data-i18n="f1_body">Βεβαιωθείτε ότι είστε συνδεδεμένοι στο Wi-Fi του καταστήματος και ότι χρησιμοποιείτε τη σωστή διεύθυνση. Ρωτήστε τον υπεύθυνο αν επιμένει.</p>
-        </div>
-        <div class="card">
-            <h3 data-i18n="f2_title">Ξέχασα τον κωδικό μου</h3>
+        </details>
+        <details class="faq-item">
+            <summary data-i18n="f2_title">Ξέχασα τον κωδικό μου</summary>
             <p data-i18n="f2_body">Μόνο ο υπεύθυνος/ιδιοκτήτης του καταστήματος μπορεί να σας δώσει νέο κωδικό.</p>
-        </div>
-        <div class="card">
-            <h3 data-i18n="f3_title">Ο εκτυπωτής δεν τυπώνει</h3>
+        </details>
+        <details class="faq-item">
+            <summary data-i18n="f3_title">Ο εκτυπωτής δεν τυπώνει</summary>
             <p data-i18n="f3_body">Ελέγξτε ότι ο εκτυπωτής έχει ρεύμα και χαρτί. Αν συνεχίζει το πρόβλημα, ενημερώστε τον υπεύθυνο.</p>
-        </div>
-        <div class="card">
-            <h3 data-i18n="f4_title">Λείπει ένα προϊόν από το μενού</h3>
+        </details>
+        <details class="faq-item">
+            <summary data-i18n="f4_title">Λείπει ένα προϊόν από το μενού</summary>
             <p data-i18n="f4_body">Το μενού το διαχειρίζεται ο υπεύθυνος του καταστήματος — ενημερώστε τον για προσθήκες/αλλαγές.</p>
-        </div>
+        </details>
     </div>
 
-    <h2 data-i18n="contact_heading">Επικοινωνία / Υποστήριξη</h2>
+    <h2 id="contact" data-i18n="contact_heading">Επικοινωνία / Υποστήριξη</h2>
     <p class="lead" data-i18n="contact_lead">Δεν βρήκατε απάντηση; Στείλτε μας το ερώτημά σας και θα επικοινωνήσουμε μαζί σας.</p>
     <form id="ticket-form" class="stack" style="max-width:480px">
         <label for="ticket-store" data-i18n="label_store">Όνομα καταστήματος</label>
@@ -147,6 +155,7 @@ trackPageView();
 const STRINGS = {
     el: {
         nav_home: "Αρχική",
+        nav_qlogin: "Σύνδεση", nav_qwaiters: "Σερβιτόροι", nav_qregister: "Ταμείο / τηλέφωνο", nav_qfaq: "Ερωτήσεις", nav_qcontact: "Επικοινωνία",
         title: "Βοήθεια χρήσης PDA",
         intro: "Οδηγίες χρήσης του PDA για το προσωπικό του καταστήματος. Αν κάτι δεν λειτουργεί ή δεν βρίσκετε απάντηση εδώ, στείλτε μας αίτημα στο τέλος της σελίδας.",
         login_heading: "Σύνδεση στο PDA",
@@ -181,6 +190,7 @@ const STRINGS = {
     },
     en: {
         nav_home: "Home",
+        nav_qlogin: "Login", nav_qwaiters: "Waiters", nav_qregister: "Register / phone", nav_qfaq: "FAQ", nav_qcontact: "Contact",
         title: "PDA help",
         intro: "How to use the PDA, for restaurant staff. If something isn't working or you can't find an answer here, send us a request at the bottom of the page.",
         login_heading: "Logging into the PDA",
