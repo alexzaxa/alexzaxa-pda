@@ -218,6 +218,9 @@ p.lead { color: var(--text-dim); font-size: 1.08rem; max-width: 640px; line-heig
 .feature-row.reverse .feature-shot { order: 1; }
 .feature-copy h2 { margin-top: 0; }
 .feature-copy p.lead { max-width: none; }
+.story-demo-link { margin: 1.4rem 0 0; }
+.story-demo-link a { font-weight: 590; }
+.story-demo-note { margin: 0.35rem 0 0; color: var(--text-dim); font-size: 0.82rem; }
 
 @media (max-width: 760px) {
     .feature-row { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3.5rem; }
