@@ -1,16 +1,26 @@
-// Admin-only. Creates or deletes a "download" account: username + password only, no email.
-// Supabase Auth still needs an email-shaped identifier internally, so one is derived
-// deterministically from the username (see DOWNLOAD_EMAIL_DOMAIN) - it is never real or
-// deliverable. The admin sets the password directly here and tells the person in person/by
-// phone; there is no invite email for these accounts (that's the whole point of this endpoint).
+// Admin-only. Account-management actions that don't belong in the other user-management
+// functions:
+//  - create_username_login: create a real login authenticated by username+password instead of
+//    an email invite - same synthetic-email trick as download accounts (see
+//    manage-download-user), just usable for 'restricted' or 'admin' roles too, not just
+//    'download'.
+//  - promote: grant admin role to any existing profile. profiles has no client write RLS policy
+//    at all (see init_schema.sql) - this endpoint, backed by service_role, is intentionally the
+//    only way a role can change from the app.
+//  - delete: permanently remove a login (any role). Blocks deleting your own account so an
+//    admin can never lock themselves out from this UI - that still has to be done deliberately,
+//    from a second admin account or directly in Supabase.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 import { logAudit } from "../_shared/audit.ts";
 
-const DOWNLOAD_EMAIL_DOMAIN = "downloads.alexzaxa-pda.internal";
+// Same non-deliverable placeholder domain manage-download-user and assets/supabase-client.js's
+// usernameToEmail() use - Supabase Auth needs an email-shaped identifier internally even for a
+// username-only login.
+const USERNAME_EMAIL_DOMAIN = "downloads.alexzaxa-pda.internal";
 
 function usernameToEmail(username: string): string {
-    return `${username.toLowerCase()}@${DOWNLOAD_EMAIL_DOMAIN}`;
+    return `${username.toLowerCase()}@${USERNAME_EMAIL_DOMAIN}`;
 }
 
 Deno.serve(async (req) => {
@@ -30,9 +40,9 @@ Deno.serve(async (req) => {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
         }
-        const { data: profile } = await callerClient
+        const { data: callerProfile } = await callerClient
             .from("profiles").select("role").eq("id", userData.user.id).single();
-        if (profile?.role !== "admin") {
+        if (callerProfile?.role !== "admin") {
             return new Response(JSON.stringify({ error: "Admin access required" }), {
                 status: 403,
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -40,15 +50,16 @@ Deno.serve(async (req) => {
         }
 
         const body = await req.json();
-        const action = String(body?.action ?? "create");
+        const action = String(body?.action ?? "");
         const adminClient = createClient(
             Deno.env.get("SUPABASE_URL")!,
             Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
         );
 
-        if (action === "create") {
+        if (action === "create_username_login") {
             const username = String(body?.username ?? "").trim().toLowerCase();
             const password = String(body?.password ?? "");
+            const role = String(body?.role ?? "restricted");
             if (!/^[a-z0-9_-]{3,32}$/.test(username)) {
                 return new Response(JSON.stringify({ error: "Username must be 3-32 characters: letters, numbers, - or _ only" }), {
                     status: 400,
@@ -61,6 +72,12 @@ Deno.serve(async (req) => {
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
                 });
             }
+            if (!["admin", "restricted"].includes(role)) {
+                return new Response(JSON.stringify({ error: "role must be 'admin' or 'restricted'" }), {
+                    status: 400,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
             const { data: created, error: createError } = await adminClient.auth.admin.createUser({
                 email: usernameToEmail(username),
                 password,
@@ -69,11 +86,11 @@ Deno.serve(async (req) => {
             if (createError) throw createError;
             const { error: profileError } = await adminClient
                 .from("profiles")
-                .update({ role: "download", username })
+                .update({ role, username })
                 .eq("id", created.user.id);
             if (profileError) throw profileError;
-            await logAudit(adminClient, userData.user, "create_download_user", username);
-            return new Response(JSON.stringify({ ok: true, username }), {
+            await logAudit(adminClient, userData.user, "create_username_login", username, `role=${role}`);
+            return new Response(JSON.stringify({ ok: true, username, role }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
         }
@@ -86,11 +103,36 @@ Deno.serve(async (req) => {
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
                 });
             }
+            if (userId === userData.user.id) {
+                return new Response(JSON.stringify({ error: "You can't delete your own account here." }), {
+                    status: 400,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
             const { data: targetProfile } = await adminClient
-                .from("profiles").select("username").eq("id", userId).single();
+                .from("profiles").select("email, username, role").eq("id", userId).single();
             const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
             if (deleteError) throw deleteError;
-            await logAudit(adminClient, userData.user, "delete_download_user", targetProfile?.username || userId);
+            await logAudit(adminClient, userData.user, "delete_user", targetProfile?.username || targetProfile?.email || userId, `role=${targetProfile?.role ?? "unknown"}`);
+            return new Response(JSON.stringify({ ok: true }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+        }
+
+        if (action === "promote") {
+            const userId = String(body?.user_id ?? "");
+            if (!userId) {
+                return new Response(JSON.stringify({ error: "user_id required" }), {
+                    status: 400,
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
+            }
+            const { error: updateError } = await adminClient
+                .from("profiles").update({ role: "admin" }).eq("id", userId);
+            if (updateError) throw updateError;
+            const { data: targetProfile } = await adminClient
+                .from("profiles").select("email, username").eq("id", userId).single();
+            await logAudit(adminClient, userData.user, "promote_to_admin", targetProfile?.username || targetProfile?.email || userId);
             return new Response(JSON.stringify({ ok: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
             });

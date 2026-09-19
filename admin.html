@@ -55,8 +55,10 @@
         <button class="tab-btn" type="button" data-tab="stores">Stores</button>
         <button class="tab-btn" type="button" data-tab="access">Access grants</button>
         <button class="tab-btn" type="button" data-tab="downloads">Download access</button>
+        <button class="tab-btn" type="button" data-tab="users">Manage users</button>
         <button class="tab-btn" type="button" data-tab="releases">Releases</button>
         <button class="tab-btn" type="button" data-tab="income">Income</button>
+        <button class="tab-btn" type="button" data-tab="audit">Audit log</button>
     </nav>
 
     <section class="tab-panel" data-panel="notifications">
@@ -95,6 +97,15 @@
     </section>
 
     <section class="tab-panel" data-panel="access" hidden>
+        <h2>Invite a user</h2>
+        <p class="lead">Sends an email invite (magic link to set a password) directly — no need to open Supabase. They land as a restricted account and show up below once invited.</p>
+        <form id="invite-user-form" class="stack" style="max-width:420px">
+            <label for="invite-email">Email</label>
+            <input id="invite-email" type="email" required placeholder="e.g. owner@theirstore.com">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Send invite</button>
+            <p class="msg" id="invite-user-msg"></p>
+        </form>
+
         <h2>Access grants</h2>
         <p class="lead">Restricted accounts see nothing until granted access to a specific store here.</p>
         <form id="grant-form" class="stack" style="max-width:420px">
@@ -125,6 +136,45 @@
         <table id="download-users-table">
             <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
             <tbody><tr><td colspan="3">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
+    <section class="tab-panel" data-panel="users" hidden>
+        <h2>Create a user</h2>
+        <p class="lead">Choose how they log in. Email invite sends a magic link (same as Access grants). Username &amp; password is set directly by you — no email needed — and can create a restricted or admin account.</p>
+        <form id="create-user-form" class="stack" style="max-width:420px">
+            <label for="create-user-method">Login method</label>
+            <select id="create-user-method">
+                <option value="email">Email invite</option>
+                <option value="username">Username &amp; password</option>
+            </select>
+
+            <div id="create-user-email-fields">
+                <label for="create-user-email">Email</label>
+                <input id="create-user-email" type="email" placeholder="e.g. owner@theirstore.com">
+            </div>
+
+            <div id="create-user-username-fields" style="display:none">
+                <label for="create-user-username">Username</label>
+                <input id="create-user-username" pattern="[a-z0-9_-]{3,32}" placeholder="e.g. nikos">
+                <label for="create-user-password">Password (tell them this directly)</label>
+                <input id="create-user-password" type="text" minlength="8" placeholder="At least 8 characters">
+                <label for="create-user-role">Role</label>
+                <select id="create-user-role">
+                    <option value="restricted">Restricted (income dashboard only)</option>
+                    <option value="admin">Admin (full access)</option>
+                </select>
+            </div>
+
+            <button class="btn" type="submit" style="margin-top:1.5rem">Create user</button>
+            <p class="msg" id="create-user-msg"></p>
+        </form>
+
+        <h2>All users</h2>
+        <p class="lead">Promote any existing account to admin. There's no "demote" here on purpose — do that in Supabase directly if you ever need to walk one back.</p>
+        <table id="all-users-table">
+            <thead><tr><th>Login</th><th>Role</th><th>Created</th><th></th></tr></thead>
+            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
         </table>
     </section>
 
@@ -173,8 +223,17 @@
         </div>
         <div id="income-chart" style="margin-top:1.25rem"></div>
         <table id="income-table" style="margin-top:1.25rem">
-            <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th></tr></thead>
-            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+            <thead><tr><th>Store</th><th>Day</th><th>Orders</th><th>Total</th><th></th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
+    <section class="tab-panel" data-panel="audit" hidden>
+        <h2>Audit log</h2>
+        <p class="lead">Every delete, promotion, invite, and account creation made from this dashboard, most recent first. Read-only — nothing here can be edited or cleared from the app.</p>
+        <table id="audit-log-table">
+            <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Target</th><th>Details</th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
         </table>
     </section>
 </main>
@@ -194,6 +253,8 @@ document.getElementById("signed-in-as").textContent = auth.session.user.email;
 document.querySelector("#stores-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#grants-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3);
+document.querySelector("#all-users-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#audit-log-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
 document.getElementById("notifications-feed").innerHTML =
@@ -254,6 +315,37 @@ document.getElementById("create-store-form").addEventListener("submit", async (e
     document.getElementById("install-command").textContent = cmd;
     document.getElementById("new-store-secret").style.display = "block";
     await loadStores();
+});
+
+// --- Invite user ---
+document.getElementById("invite-user-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("invite-user-msg");
+    msg.textContent = ""; msg.className = "msg";
+    setButtonLoading(button, true, "Sending…");
+    const email = document.getElementById("invite-email").value.trim();
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/invite-user`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ email }),
+    });
+    const result = await response.json();
+    setButtonLoading(button, false);
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to send invite.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = `Invite sent to ${result.user.email}.`;
+    msg.className = "msg success";
+    document.getElementById("invite-email").value = "";
+    await loadRestrictedProfiles();
 });
 
 document.getElementById("copy-install-command").addEventListener("click", async () => {
@@ -345,9 +437,10 @@ function bindStoreRowActions(tbody) {
             const { count } = await supabase
                 .from("store_daily_totals").select("day", { count: "exact", head: true }).eq("store_id", btn.dataset.id);
             const warning = count
-                ? `Delete "${btn.dataset.name}" permanently? This erases its entire income history (${count} day(s) of totals, plus any recent raw records) and cannot be undone.\n\nIf you just want to stop them using it while keeping their history, use Terminate PDA instead.`
-                : `Delete "${btn.dataset.name}" permanently? This cannot be undone.`;
-            if (!confirm(warning)) return;
+                ? `Delete "${btn.dataset.name}" permanently? This erases its entire income history (${count} day(s) of totals, plus any recent raw records) and cannot be undone.\n\nIf you just want to stop them using it while keeping their history, use Terminate PDA instead.\n\nType the store name exactly to confirm:`
+                : `Delete "${btn.dataset.name}" permanently? This cannot be undone.\n\nType the store name exactly to confirm:`;
+            const typed = prompt(warning);
+            if (typed !== btn.dataset.name) { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
             const { error: deleteError } = await supabase.from("stores").delete().eq("id", btn.dataset.id);
             if (deleteError) { alert(deleteError.message); return; }
             await loadStores();
@@ -459,6 +552,132 @@ async function loadDownloadUsers() {
                 alert(result.error || "Failed to revoke.");
                 return;
             }
+            await loadDownloadUsers();
+        });
+    });
+}
+
+// --- Manage users (create via email invite or username+password, promote to admin) ---
+document.getElementById("create-user-method").addEventListener("change", (event) => {
+    const isUsername = event.target.value === "username";
+    document.getElementById("create-user-email-fields").style.display = isUsername ? "none" : "";
+    document.getElementById("create-user-username-fields").style.display = isUsername ? "" : "none";
+});
+
+document.getElementById("create-user-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("create-user-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const method = document.getElementById("create-user-method").value;
+    const { data: { session } } = await supabase.auth.getSession();
+
+    let endpoint, payload;
+    if (method === "email") {
+        endpoint = "invite-user";
+        payload = { email: document.getElementById("create-user-email").value.trim() };
+    } else {
+        endpoint = "manage-user";
+        payload = {
+            action: "create_username_login",
+            username: document.getElementById("create-user-username").value.trim(),
+            password: document.getElementById("create-user-password").value,
+            role: document.getElementById("create-user-role").value,
+        };
+    }
+
+    setButtonLoading(button, true, "Creating…");
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/${endpoint}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    setButtonLoading(button, false);
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to create user.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = method === "email" ? `Invite sent to ${result.user.email}.` : `Created "${result.username}" as ${result.role}.`;
+    msg.className = "msg success";
+    document.getElementById("create-user-form").reset();
+    document.getElementById("create-user-email-fields").style.display = "";
+    document.getElementById("create-user-username-fields").style.display = "none";
+    await loadAllUsers();
+    await loadRestrictedProfiles();
+});
+
+async function loadAllUsers() {
+    const { data, error } = await supabase
+        .from("profiles").select("id, email, username, role, created_at").order("created_at", { ascending: false });
+    const tbody = document.querySelector("#all-users-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Could not load users.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((u) => `
+            <tr>
+                <td>${esc(u.username || u.email)}</td>
+                <td>${u.role}</td>
+                <td>${formatDate(u.created_at)}</td>
+                <td>
+                    ${u.role === "admin" ? "" : `<button class="btn promote-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}">Make admin</button>`}
+                    ${u.id === auth.session.user.id ? "" : `<button class="btn danger delete-user" data-id="${u.id}" data-login="${esc(u.username || u.email)}" style="margin-left:0.4rem">Delete</button>`}
+                </td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4">No users yet.</td></tr>`;
+
+    tbody.querySelectorAll(".promote-user").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Grant admin access to "${btn.dataset.login}"? They'll get full access to everything in this dashboard.`)) return;
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "promote", user_id: btn.dataset.id }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to promote.");
+                return;
+            }
+            await loadAllUsers();
+        });
+    });
+
+    tbody.querySelectorAll(".delete-user").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const typed = prompt(`Permanently delete "${btn.dataset.login}"? This removes their login and any store access grants. Cannot be undone.\n\nType the login exactly to confirm:`);
+            if (typed !== btn.dataset.login) { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "delete", user_id: btn.dataset.id }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to delete.");
+                return;
+            }
+            await loadAllUsers();
+            await loadRestrictedProfiles();
+            await loadGrants();
             await loadDownloadUsers();
         });
     });
@@ -772,13 +991,69 @@ async function loadIncome() {
     renderIncomeChart([...byDay.entries()].map(([day, total_cents]) => ({ day, total_cents })).sort((a, b) => a.day.localeCompare(b.day)));
 
     tbody.innerHTML = data.length
-        ? data.map((r) => `<tr><td>${nameFor(r.store_id)}</td><td>${r.day}</td><td>${r.orders}</td><td>${formatCents(r.total_cents)}</td></tr>`).join("")
-        : `<tr><td colspan="4">No income synced yet${storeId || from || to ? " for this filter" : ""}.</td></tr>`;
+        ? data.map((r) => `
+            <tr>
+                <td>${esc(nameFor(r.store_id))}</td>
+                <td>${r.day}</td>
+                <td>${r.orders}</td>
+                <td>${formatCents(r.total_cents)}</td>
+                <td><button class="btn danger delete-income" data-store-id="${r.store_id}" data-day="${r.day}" data-label="${esc(nameFor(r.store_id))} on ${r.day}">Delete</button></td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No income synced yet${storeId || from || to ? " for this filter" : ""}.</td></tr>`;
+
+    tbody.querySelectorAll(".delete-income").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const typed = prompt(`Permanently delete the income total for ${btn.dataset.label}? This also removes any remaining detailed order rows for that day. Cannot be undone.\n\nType DELETE to confirm:`);
+            if (typed !== "DELETE") { if (typed !== null) alert("Didn't match - nothing deleted."); return; }
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/manage-income`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action: "delete_day", store_id: btn.dataset.storeId, day: btn.dataset.day }),
+            });
+            if (!response.ok) {
+                const result = await response.json();
+                alert(result.error || "Failed to delete.");
+                return;
+            }
+            await loadIncome();
+        });
+    });
 }
 
 ["income-store-filter", "income-from", "income-to"].forEach((id) => {
     document.getElementById(id).addEventListener("change", loadIncome);
 });
+
+// --- Audit log: read-only trail of every privileged action taken from this dashboard ---
+async function loadAuditLog() {
+    const { data, error } = await supabase
+        .from("admin_audit_log")
+        .select("actor_label, action, target_label, details, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200);
+    const tbody = document.querySelector("#audit-log-table tbody");
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="5">Could not load the audit log.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length
+        ? data.map((r) => `
+            <tr>
+                <td>${formatDate(r.created_at)}</td>
+                <td>${esc(r.actor_label)}</td>
+                <td>${esc(r.action)}</td>
+                <td>${esc(r.target_label)}</td>
+                <td>${esc(r.details)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No actions logged yet.</td></tr>`;
+}
 
 async function loadVisits() {
     const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -822,9 +1097,11 @@ async function loadEverything() {
     await loadRestrictedProfiles();
     await loadGrants();
     await loadDownloadUsers();
+    await loadAllUsers();
     await loadReleases();
     await loadTickets();
     await loadVisits();
+    await loadAuditLog();
 }
 
 // Polls just the (lightweight) tickets query so the tab title/favicon badge reflects a new

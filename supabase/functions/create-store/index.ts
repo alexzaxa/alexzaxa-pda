@@ -4,6 +4,7 @@
 // which is what lets us verify they're actually an admin before doing anything privileged.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { logAudit } from "../_shared/audit.ts";
 
 async function sha256Hex(value: string): Promise<string> {
     const bytes = new TextEncoder().encode(value);
@@ -82,6 +83,8 @@ Deno.serve(async (req) => {
             .select("id, name, slug, created_at")
             .single();
         if (insertError) throw insertError;
+
+        await logAudit(adminClient, userData.user, "create_store", store.name);
 
         return new Response(
             JSON.stringify({ store, secret }),

@@ -27,6 +27,8 @@ jobs:
           mkdir _site
           cp index.html changelog.html login.html admin.html dashboard.html download.html menu-creator.html help.html 404.html robots.txt sitemap.xml _site/
           cp -r assets _site/assets
+          mkdir -p _site/.well-known
+          cp .well-known/security.txt _site/.well-known/security.txt
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
