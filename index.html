@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AlexZaxa Solutions PDA">
 <meta name="twitter:description" content="A local-network ordering system for restaurants: waiter tablets, dine-in floor plan, phone/delivery orders, kitchen printing, and self-updating software.">
-<meta name="theme-color" content="#1c1c1e">
+<meta name="theme-color" content="#16171b">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="stylesheet" href="assets/styles.css">
 <script type="application/ld+json">
@@ -52,7 +52,6 @@
     </nav>
 </header>
 <main>
-    <span class="eyebrow reveal-up" data-i18n="eyebrow">Restaurant ordering system</span>
     <h1 class="reveal-up" data-i18n="hero_title">Restaurant ordering, built for the floor.</h1>
     <p class="lead reveal-up" data-i18n="hero_lead">
         A local-network ordering system for restaurants: phone-first waiter tablets, a dine-in
@@ -61,7 +60,7 @@
     </p>
     <p class="reveal-up hero-cta">
         <a class="btn" href="#get-started" data-i18n="cta_get_started">Get started</a>
-        <a class="btn secondary" href="#how-it-works" data-i18n="cta_how_it_works">See how it works</a>
+        <a class="link-btn" href="#how-it-works" data-i18n="cta_how_it_works">See how it works</a>
     </p>
     <p class="reveal-up hero-demo-link">
         <button type="button" id="view-demo" class="link-btn" data-i18n="demo_link">Prefer to look around first? Explore a live demo with sample data — no signup →</button>
@@ -76,7 +75,7 @@
         <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing tables, menu items, customers, delivery orders and reservations at a glance" loading="lazy" width="1600" height="1000">
     </figure>
 
-    <section class="feature-row reveal-up">
+    <section class="feature-row">
         <div class="feature-copy">
             <h2 data-i18n="story1_heading">Built for the floor</h2>
             <p class="lead" data-i18n="story1_body">Waiters take orders from any phone or tablet already on the restaurant's Wi-Fi — no dedicated hardware to buy. Split bills, move tables, and merge orders in real time. The moment an order goes in, it's already printing at the kitchen or bar, in Greek if that's what your kitchen reads.</p>
@@ -89,7 +88,7 @@
         </figure>
     </section>
 
-    <section class="feature-row reverse reveal-up">
+    <section class="feature-row reverse">
         <div class="feature-copy">
             <h2 data-i18n="story2_heading">Delivery doesn't wait for a free table</h2>
             <p class="lead" data-i18n="story2_body">Phone and delivery orders run through their own dedicated desk, completely separate from the floor — a call comes in, a courier's out the door, and none of it competes with what's happening at table 12. Customer history and delivery zones are remembered automatically.</p>
@@ -100,7 +99,7 @@
         </figure>
     </section>
 
-    <section class="feature-row reveal-up">
+    <section class="feature-row">
         <div class="feature-copy">
             <h2 data-i18n="story3_heading">Always the current version, without a technician</h2>
             <p class="lead" data-i18n="story3_body">Every install checks for new releases on its own and installs them with one manager click. No callout, no waiting for a visit. The same control center shows today's and this week's revenue at a glance, the moment you open it.</p>
@@ -112,24 +111,20 @@
     </section>
 
     <h2 data-i18n="trust_heading">Why restaurants choose us</h2>
-    <div class="grid">
-        <div class="card plain reveal-up">
-            <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    <div class="trust-list">
+        <div class="trust-item">
             <h3 data-i18n="trust1_title">No cloud dependency</h3>
             <p data-i18n="trust1_body">Runs entirely on your restaurant's own local network. No internet outage takes your floor down.</p>
         </div>
-        <div class="card plain reveal-up">
-            <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div class="trust-item">
             <h3 data-i18n="trust2_title">No technician visits</h3>
             <p data-i18n="trust2_body">Updates install themselves with one manager click — no callout, no downtime waiting for someone to show up.</p>
         </div>
-        <div class="card plain reveal-up">
-            <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div class="trust-item">
             <h3 data-i18n="trust3_title">Built for Greek restaurants</h3>
             <p data-i18n="trust3_body">Greek-language receipts and kitchen printing out of the box, not bolted on as an afterthought.</p>
         </div>
-        <div class="card plain reveal-up">
-            <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div class="trust-item">
             <h3 data-i18n="trust4_title">Try before you commit</h3>
             <p data-i18n="trust4_body">Explore a live demo dashboard with sample data — no signup, no sales call required first.</p>
         </div>
@@ -137,41 +132,57 @@
 
     <h2 data-i18n="pricing_heading">Pricing</h2>
     <p class="lead" data-i18n="pricing_lead">Two ways to get started — own the software outright, or pay monthly with no upfront cost.</p>
-    <div class="grid">
-        <div class="card reveal-up">
+    <div class="receipt-row">
+        <div class="receipt">
+            <div class="receipt-kind" data-i18n="receipt_kind_onetime">One-time</div>
             <h3 data-i18n="pricing1_title">Buy the software</h3>
-            <p class="price-tag">&euro;1,000 <span data-i18n="pricing1_unit">one-time</span></p>
-            <p data-i18n="pricing1_body">First month of support is free. After that, &euro;100/month keeps you on the latest version with support included. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.</p>
+            <p class="receipt-total">&euro;1,000 <span data-i18n="pricing1_unit">one-time</span></p>
+            <div class="receipt-lines">
+                <p><span data-i18n="pricing1_line1_label">Software license</span><span data-i18n="pricing1_line1_value">&euro;1,000</span></p>
+                <p><span data-i18n="pricing1_line2_label">Support, from month 2</span><span data-i18n="pricing1_line2_value">&euro;100/mo</span></p>
+            </div>
+            <p class="receipt-note" data-i18n="pricing1_body">First month of support is free. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.</p>
         </div>
-        <div class="card reveal-up">
+        <div class="receipt">
+            <div class="receipt-kind" data-i18n="receipt_kind_monthly">Monthly</div>
             <h3 data-i18n="pricing2_title">Pay monthly</h3>
-            <p class="price-tag">&euro;200 <span data-i18n="pricing2_unit">/month</span></p>
-            <p data-i18n="pricing2_body">No upfront software cost. You provide your own PC, screen, and printer; &euro;200/month (3-month minimum) covers the software and ongoing support.</p>
+            <p class="receipt-total">&euro;200 <span data-i18n="pricing2_unit">/month</span></p>
+            <div class="receipt-lines">
+                <p><span data-i18n="pricing2_line1_label">Software + support</span><span data-i18n="pricing2_line1_value">&euro;200/mo</span></p>
+                <p><span data-i18n="pricing2_line2_label">Minimum term</span><span data-i18n="pricing2_line2_value">3 months</span></p>
+            </div>
+            <p class="receipt-note" data-i18n="pricing2_body">No upfront software cost. You provide your own PC, screen, and printer.</p>
         </div>
     </div>
-    <p class="lead" style="margin-top:1.5rem" data-i18n="pricing_note">Not sure which fits your restaurant? Tell us in the form below and we'll help you decide.</p>
+    <p class="lead" style="margin-top:1.75rem" data-i18n="pricing_note">Not sure which fits your restaurant? Tell us in the form below and we'll help you decide.</p>
 
     <h2 id="how-it-works" data-i18n="how_heading">How it works</h2>
-    <div class="grid">
-        <div class="card plain reveal-up">
-            <span class="eyebrow" style="margin-bottom:0.3rem">1</span>
-            <h3 data-i18n="how1_title">Tell us about your restaurant</h3>
-            <p data-i18n="how1_body">Fill in the form below with your store name and contact details — takes under a minute.</p>
+    <div class="steps">
+        <div class="step">
+            <span class="step-number">1</span>
+            <div>
+                <h3 data-i18n="how1_title">Tell us about your restaurant</h3>
+                <p data-i18n="how1_body">Fill in the form below with your store name and contact details — takes under a minute.</p>
+            </div>
         </div>
-        <div class="card plain reveal-up">
-            <span class="eyebrow" style="margin-bottom:0.3rem">2</span>
-            <h3 data-i18n="how2_title">We set your store up</h3>
-            <p data-i18n="how2_body">We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.</p>
+        <div class="step">
+            <span class="step-number">2</span>
+            <div>
+                <h3 data-i18n="how2_title">We set your store up</h3>
+                <p data-i18n="how2_body">We create your store, walk you through installing the PDA on your restaurant's PC, and help you build your menu.</p>
+            </div>
         </div>
-        <div class="card plain reveal-up">
-            <span class="eyebrow" style="margin-bottom:0.3rem">3</span>
-            <h3 data-i18n="how3_title">You're live</h3>
-            <p data-i18n="how3_body">Your staff start taking orders right away, and you get a login for your own revenue dashboard.</p>
+        <div class="step">
+            <span class="step-number">3</span>
+            <div>
+                <h3 data-i18n="how3_title">You're live</h3>
+                <p data-i18n="how3_body">Your staff start taking orders right away, and you get a login for your own revenue dashboard.</p>
+            </div>
         </div>
     </div>
 
     <h2 data-i18n="owners_heading">Already a customer?</h2>
-    <div class="callout reveal-up">
+    <div class="callout">
         <p class="lead" style="margin:0" data-i18n-html="owners_body">
             If you run a store on AlexZaxa Solutions PDA, your revenue reporting is available on request —
             <a href="login.html">log in</a> to view it if you've been given access.
@@ -182,7 +193,7 @@
     <p class="lead" data-i18n="get_started_lead">
         New to AlexZaxa Solutions PDA? Tell us about your restaurant and we'll get in touch.
     </p>
-    <form id="lead-form" class="stack reveal-up" style="max-width:480px">
+    <form id="lead-form" class="stack" style="max-width:480px">
         <label for="lead-store" data-i18n="label_store">Restaurant name</label>
         <input id="lead-store" required maxlength="200" data-i18n-placeholder="placeholder_store" placeholder="e.g. Xilino Coffee Bar">
         <label for="lead-name" data-i18n="label_name">Your name</label>
@@ -248,10 +259,15 @@ const STRINGS = {
         trust4_body: "Explore a live demo dashboard with sample data — no signup, no sales call required first.",
         pricing_heading: "Pricing",
         pricing_lead: "Two ways to get started — own the software outright, or pay monthly with no upfront cost.",
+        receipt_kind_onetime: "One-time", receipt_kind_monthly: "Monthly",
         pricing1_title: "Buy the software", pricing1_unit: "one-time",
-        pricing1_body: "First month of support is free. After that, €100/month keeps you on the latest version with support included. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.",
+        pricing1_line1_label: "Software license", pricing1_line1_value: "€1,000",
+        pricing1_line2_label: "Support, from month 2", pricing1_line2_value: "€100/mo",
+        pricing1_body: "First month of support is free. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.",
         pricing2_title: "Pay monthly", pricing2_unit: "/month",
-        pricing2_body: "No upfront software cost. You provide your own PC, screen, and printer; €200/month (3-month minimum) covers the software and ongoing support.",
+        pricing2_line1_label: "Software + support", pricing2_line1_value: "€200/mo",
+        pricing2_line2_label: "Minimum term", pricing2_line2_value: "3 months",
+        pricing2_body: "No upfront software cost. You provide your own PC, screen, and printer.",
         pricing_note: "Not sure which fits your restaurant? Tell us in the form below and we'll help you decide.",
         how_heading: "How it works",
         how1_title: "Tell us about your restaurant", how1_body: "Fill in the form below with your store name and contact details — takes under a minute.",
@@ -299,10 +315,15 @@ const STRINGS = {
         trust4_body: "Εξερευνήστε ένα ζωντανό demo dashboard με δείγμα δεδομένων — χωρίς εγγραφή, χωρίς τηλεφώνημα πωλήσεων πρώτα.",
         pricing_heading: "Τιμές",
         pricing_lead: "Δύο τρόποι για να ξεκινήσετε — αγοράστε το λογισμικό εξ ολοκλήρου, ή πληρώστε μηνιαία χωρίς αρχικό κόστος.",
+        receipt_kind_onetime: "Εφάπαξ", receipt_kind_monthly: "Μηνιαία",
         pricing1_title: "Αγορά λογισμικού", pricing1_unit: "εφάπαξ",
-        pricing1_body: "Ο πρώτος μήνας υποστήριξης είναι δωρεάν. Μετά, 100€/μήνα σας κρατά στην τελευταία έκδοση με υποστήριξη. Ο εξοπλισμός (υπολογιστής, οθόνη, εκτυπωτής) δεν περιλαμβάνεται — ρωτήστε μας αν θέλετε βοήθεια να τον βρείτε.",
+        pricing1_line1_label: "Άδεια λογισμικού", pricing1_line1_value: "1.000€",
+        pricing1_line2_label: "Υποστήριξη, από τον 2ο μήνα", pricing1_line2_value: "100€/μήνα",
+        pricing1_body: "Ο πρώτος μήνας υποστήριξης είναι δωρεάν. Ο εξοπλισμός (υπολογιστής, οθόνη, εκτυπωτής) δεν περιλαμβάνεται — ρωτήστε μας αν θέλετε βοήθεια να τον βρείτε.",
         pricing2_title: "Μηνιαία συνδρομή", pricing2_unit: "/μήνα",
-        pricing2_body: "Χωρίς αρχικό κόστος λογισμικού. Παρέχετε τον δικό σας υπολογιστή, οθόνη και εκτυπωτή· 200€/μήνα (ελάχιστη διάρκεια 3 μηνών) καλύπτει το λογισμικό και τη συνεχή υποστήριξη.",
+        pricing2_line1_label: "Λογισμικό + υποστήριξη", pricing2_line1_value: "200€/μήνα",
+        pricing2_line2_label: "Ελάχιστη διάρκεια", pricing2_line2_value: "3 μήνες",
+        pricing2_body: "Χωρίς αρχικό κόστος λογισμικού. Παρέχετε τον δικό σας υπολογιστή, οθόνη και εκτυπωτή.",
         pricing_note: "Δεν είστε σίγουροι ποιο ταιριάζει στο εστιατόριό σας; Πείτε μας στη φόρμα παρακάτω και θα σας βοηθήσουμε να αποφασίσετε.",
         how_heading: "Πώς λειτουργεί",
         how1_title: "Πείτε μας για το εστιατόριό σας", how1_body: "Συμπληρώστε τη φόρμα παρακάτω με το όνομα του καταστήματος και τα στοιχεία επικοινωνίας σας — διαρκεί λιγότερο από ένα λεπτό.",
