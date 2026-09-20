@@ -15,7 +15,7 @@ function setLang(lang) {
     localStorage.setItem(STORAGE_KEY, lang);
 }
 
-function applyTranslations(dict, lang) {
+export function applyTranslations(dict, lang) {
     document.documentElement.lang = lang;
     const strings = dict[lang] || {};
     if (strings.__title) document.title = strings.__title;

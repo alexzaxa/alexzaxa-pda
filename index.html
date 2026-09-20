@@ -130,31 +130,57 @@
         </div>
     </div>
 
-    <h2 data-i18n="pricing_heading">Pricing</h2>
-    <p class="lead" data-i18n="pricing_lead">Two ways to get started — own the software outright, or pay monthly with no upfront cost.</p>
-    <div class="receipt-row">
-        <div class="receipt">
-            <div class="receipt-kind" data-i18n="receipt_kind_onetime">One-time</div>
-            <h3 data-i18n="pricing1_title">Buy the software</h3>
-            <p class="receipt-total">&euro;1,000 <span data-i18n="pricing1_unit">one-time</span></p>
-            <div class="receipt-lines">
-                <p><span data-i18n="pricing1_line1_label">Software license</span><span data-i18n="pricing1_line1_value">&euro;1,000</span></p>
-                <p><span data-i18n="pricing1_line2_label">Support, from month 2</span><span data-i18n="pricing1_line2_value">&euro;100/mo</span></p>
-            </div>
-            <p class="receipt-note" data-i18n="pricing1_body">First month of support is free. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.</p>
-        </div>
-        <div class="receipt">
-            <div class="receipt-kind" data-i18n="receipt_kind_monthly">Monthly</div>
-            <h3 data-i18n="pricing2_title">Pay monthly</h3>
-            <p class="receipt-total">&euro;200 <span data-i18n="pricing2_unit">/month</span></p>
-            <div class="receipt-lines">
-                <p><span data-i18n="pricing2_line1_label">Software + support</span><span data-i18n="pricing2_line1_value">&euro;200/mo</span></p>
-                <p><span data-i18n="pricing2_line2_label">Minimum term</span><span data-i18n="pricing2_line2_value">3 months</span></p>
-            </div>
-            <p class="receipt-note" data-i18n="pricing2_body">No upfront software cost. You provide your own PC, screen, and printer.</p>
-        </div>
+    <div id="pricing-admin-bar" class="pricing-admin-bar" hidden>
+        <span id="pricing-hidden-badge" class="badge" hidden>Hidden from visitors</span>
+        <button type="button" id="pricing-edit-toggle" class="btn secondary">Edit pricing</button>
     </div>
-    <p class="lead" style="margin-top:1.75rem" data-i18n="pricing_note">Not sure which fits your restaurant? Tell us in the form below and we'll help you decide.</p>
+    <section id="pricing-section">
+        <h2 data-i18n="pricing_heading">Pricing</h2>
+        <p class="lead" data-i18n="pricing_lead">Two ways to get started — own the software outright, or pay monthly with no upfront cost.</p>
+        <div class="receipt-row">
+            <div class="receipt">
+                <div class="receipt-kind" data-i18n="receipt_kind_onetime">One-time</div>
+                <h3 data-i18n="pricing1_title">Buy the software</h3>
+                <p class="receipt-total"><span id="pricing1-total-amount">&euro;1,000</span> <span data-i18n="pricing1_unit">one-time</span></p>
+                <div class="receipt-lines">
+                    <p><span data-i18n="pricing1_line1_label">Software license</span><span data-i18n="pricing1_line1_value">&euro;1,000</span></p>
+                    <p><span data-i18n="pricing1_line2_label">Support, from month 2</span><span data-i18n="pricing1_line2_value">&euro;100/mo</span></p>
+                </div>
+                <p class="receipt-note" data-i18n="pricing1_body">First month of support is free. Hardware (PC, screen, printer) isn't included — ask us if you'd like help sourcing it.</p>
+            </div>
+            <div class="receipt">
+                <div class="receipt-kind" data-i18n="receipt_kind_monthly">Monthly</div>
+                <h3 data-i18n="pricing2_title">Pay monthly</h3>
+                <p class="receipt-total"><span id="pricing2-total-amount">&euro;200</span> <span data-i18n="pricing2_unit">/month</span></p>
+                <div class="receipt-lines">
+                    <p><span data-i18n="pricing2_line1_label">Software + support</span><span data-i18n="pricing2_line1_value">&euro;200/mo</span></p>
+                    <p><span data-i18n="pricing2_line2_label">Minimum term</span><span data-i18n="pricing2_line2_value">3 months</span></p>
+                </div>
+                <p class="receipt-note" data-i18n="pricing2_body">No upfront software cost. You provide your own PC, screen, and printer.</p>
+            </div>
+        </div>
+        <p class="lead" style="margin-top:1.75rem" data-i18n="pricing_note">Not sure which fits your restaurant? Tell us in the form below and we'll help you decide.</p>
+    </section>
+
+    <form id="pricing-edit-panel" class="stack pricing-edit-panel" hidden>
+        <h2 style="margin-top:0">Edit pricing</h2>
+        <label for="pricing-visible" class="pricing-visible-row">
+            <input type="checkbox" id="pricing-visible" style="width:auto">
+            Show the Pricing section on the site
+        </label>
+        <div class="pricing-edit-grid">
+            <label for="pricing-plan1-total">Plan 1 price (shown large)</label>
+            <input id="pricing-plan1-total">
+            <label for="pricing-plan2-total">Plan 2 price (shown large)</label>
+            <input id="pricing-plan2-total">
+        </div>
+        <div id="pricing-edit-fields"></div>
+        <div class="ticket-reply-row" style="margin-top:0.5rem">
+            <button class="btn" type="submit">Save changes</button>
+            <button class="btn secondary" type="button" id="pricing-edit-cancel">Cancel</button>
+            <span class="msg" id="pricing-edit-msg"></span>
+        </div>
+    </form>
 
     <h2 id="how-it-works" data-i18n="how_heading">How it works</h2>
     <div class="steps">
@@ -215,7 +241,7 @@
     <div class="footer-contact"><a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a><a href="tel:+306981868758">698 186 8758</a></div>
 </footer>
 <script type="module">
-import { initLangSwitch, getLang } from "./assets/i18n.js";
+import { initLangSwitch, getLang, applyTranslations } from "./assets/i18n.js";
 import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 import { trackPageView } from "./assets/analytics.js";
 import { initScrollReveal, setButtonLoading, initPageProgress } from "./assets/motion.js";
@@ -342,7 +368,131 @@ const STRINGS = {
         msg_success: "Ευχαριστούμε! Έχουμε τα στοιχεία σας και θα επικοινωνήσουμε σύντομα.",
     },
 };
+
+// --- Pricing: publicly readable from site_pricing (singleton row), admin-editable right here
+// on the homepage instead of through admin.html, since that's where the admin actually looks
+// at the live page. Fetched after the initial initLangSwitch() call below, not before it, so a
+// visitor never waits on two extra round trips (session check + row fetch) just to see the page
+// render - the shipped STRINGS defaults paint immediately, and this only overwrites them if the
+// admin has actually saved different pricing text at some point.
+const PRICING_FIELDS = [
+    { key: "pricing1_title", label: "Plan 1 title" },
+    { key: "receipt_kind_onetime", label: "Plan 1 badge (e.g. “One-time”)" },
+    { key: "pricing1_unit", label: "Plan 1 price suffix" },
+    { key: "pricing1_line1_label", label: "Plan 1, line 1 label" },
+    { key: "pricing1_line1_value", label: "Plan 1, line 1 value" },
+    { key: "pricing1_line2_label", label: "Plan 1, line 2 label" },
+    { key: "pricing1_line2_value", label: "Plan 1, line 2 value" },
+    { key: "pricing1_body", label: "Plan 1 note", area: true },
+    { key: "pricing2_title", label: "Plan 2 title" },
+    { key: "receipt_kind_monthly", label: "Plan 2 badge (e.g. “Monthly”)" },
+    { key: "pricing2_unit", label: "Plan 2 price suffix" },
+    { key: "pricing2_line1_label", label: "Plan 2, line 1 label" },
+    { key: "pricing2_line1_value", label: "Plan 2, line 1 value" },
+    { key: "pricing2_line2_label", label: "Plan 2, line 2 label" },
+    { key: "pricing2_line2_value", label: "Plan 2, line 2 value" },
+    { key: "pricing2_body", label: "Plan 2 note", area: true },
+];
+
+let pricingRow = null;
+let isAdminUser = false;
+
 initLangSwitch(STRINGS);
+document.getElementById("pricing1-total-amount").textContent = "€1,000";
+document.getElementById("pricing2-total-amount").textContent = "€200";
+
+(async () => {
+    const { data: { session: pricingSession } } = await supabase.auth.getSession();
+    if (pricingSession) {
+        const { data: pricingProfile } = await supabase
+            .from("profiles").select("role").eq("id", pricingSession.user.id).single();
+        isAdminUser = pricingProfile?.role === "admin";
+    }
+    const { data: pricingData } = await supabase.from("site_pricing").select("*").eq("id", 1).single();
+    if (pricingData) {
+        pricingRow = pricingData;
+        Object.assign(STRINGS.en, pricingData.content?.en || {});
+        Object.assign(STRINGS.el, pricingData.content?.el || {});
+        applyTranslations(STRINGS, getLang());
+        document.getElementById("pricing1-total-amount").textContent = pricingData.plan1_total;
+        document.getElementById("pricing2-total-amount").textContent = pricingData.plan2_total;
+    }
+    document.getElementById("pricing-section").hidden = !!pricingRow && !pricingRow.visible && !isAdminUser;
+
+    if (isAdminUser) {
+        const adminBar = document.getElementById("pricing-admin-bar");
+        const hiddenBadge = document.getElementById("pricing-hidden-badge");
+        const editPanel = document.getElementById("pricing-edit-panel");
+        adminBar.hidden = false;
+        hiddenBadge.hidden = !pricingRow || pricingRow.visible;
+
+        document.getElementById("pricing-edit-fields").innerHTML = ["en", "el"].map((lang) => `
+            <h3 style="margin:${lang === "en" ? "0" : "1.75rem"} 0 0.5rem">${lang === "en" ? "English" : "Greek"}</h3>
+            ${PRICING_FIELDS.map((f) => `
+                <label for="pf-${lang}-${f.key}">${f.label}</label>
+                ${f.area
+                    ? `<textarea id="pf-${lang}-${f.key}" rows="2"></textarea>`
+                    : `<input id="pf-${lang}-${f.key}">`}
+            `).join("")}
+        `).join("");
+
+        const fillPricingEditForm = () => {
+            document.getElementById("pricing-visible").checked = pricingRow ? pricingRow.visible : true;
+            document.getElementById("pricing-plan1-total").value = pricingRow?.plan1_total || "";
+            document.getElementById("pricing-plan2-total").value = pricingRow?.plan2_total || "";
+            for (const lang of ["en", "el"]) {
+                for (const f of PRICING_FIELDS) {
+                    document.getElementById(`pf-${lang}-${f.key}`).value = pricingRow?.content?.[lang]?.[f.key] || "";
+                }
+            }
+        };
+
+        document.getElementById("pricing-edit-toggle").addEventListener("click", () => {
+            fillPricingEditForm();
+            editPanel.hidden = false;
+            editPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        document.getElementById("pricing-edit-cancel").addEventListener("click", () => {
+            editPanel.hidden = true;
+        });
+        editPanel.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const button = event.target.querySelector("button[type=submit]");
+            const msg = document.getElementById("pricing-edit-msg");
+            msg.textContent = ""; msg.className = "msg";
+            setButtonLoading(button, true, "Saving…");
+
+            const content = { en: {}, el: {} };
+            for (const lang of ["en", "el"]) {
+                for (const f of PRICING_FIELDS) {
+                    content[lang][f.key] = document.getElementById(`pf-${lang}-${f.key}`).value;
+                }
+            }
+            const { data, error } = await supabase.from("site_pricing").update({
+                visible: document.getElementById("pricing-visible").checked,
+                plan1_total: document.getElementById("pricing-plan1-total").value.trim(),
+                plan2_total: document.getElementById("pricing-plan2-total").value.trim(),
+                content,
+                updated_at: new Date().toISOString(),
+            }).eq("id", 1).select().single();
+
+            setButtonLoading(button, false);
+            if (error) {
+                msg.textContent = "Could not save changes.";
+                msg.className = "msg error";
+                return;
+            }
+            pricingRow = data;
+            Object.assign(STRINGS.en, data.content?.en || {});
+            Object.assign(STRINGS.el, data.content?.el || {});
+            applyTranslations(STRINGS, getLang());
+            document.getElementById("pricing1-total-amount").textContent = data.plan1_total;
+            document.getElementById("pricing2-total-amount").textContent = data.plan2_total;
+            hiddenBadge.hidden = data.visible;
+            editPanel.hidden = true;
+        });
+    }
+})();
 
 document.getElementById("view-demo").addEventListener("click", async () => {
     const button = document.getElementById("view-demo");
