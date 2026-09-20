@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="AlexZaxa Solutions">
+  <rect width="512" height="512" fill="#181d25"/>
+  <g fill="none" stroke="#eb761c" stroke-width="21" stroke-linecap="square" stroke-linejoin="miter">
+    <!-- Interlocked A / Z monogram based on the supplied AlexZaxa Solutions mark -->
+    <path d="M87 334 L246 64 L399 334"/>
+    <path d="M151 239 H323"/>
+    <path d="M286 111 H425 L281 334 H421"/>
+    <path d="M246 64 L289 139"/>
+  </g>
+  <text x="256" y="413" text-anchor="middle" fill="#eb761c" font-family="DejaVu Sans, Arial, sans-serif" font-size="48" font-weight="900" letter-spacing="1.2">ALEXZAXA</text>
+  <text x="256" y="464" text-anchor="middle" fill="#eb761c" font-family="DejaVu Sans, Arial, sans-serif" font-size="40" font-weight="900" letter-spacing="3">SOLUTIONS</text>
+</svg>

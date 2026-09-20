@@ -90,6 +90,13 @@ header.site .brand .mark {
     font-weight: 700;
     box-shadow: var(--shadow-sm);
 }
+header.site .brand .brand-logo {
+    display: block;
+    height: 2.5rem;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
 
 header.site nav { display: flex; align-items: center; gap: 0.2rem; }
 header.site nav a {
