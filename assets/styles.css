@@ -194,6 +194,16 @@ main {
 }
 
 main.narrow { max-width: 460px; padding-top: 5.5rem; }
+main.legal { max-width: 720px; }
+main.legal p { color: var(--text-dim); }
+main.legal code {
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    background: var(--surface-2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--text);
+}
 
 h1 {
     font-family: var(--font-display);
