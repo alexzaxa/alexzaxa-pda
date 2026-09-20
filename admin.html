@@ -896,6 +896,19 @@ function ticketCard(t) {
                 <h4>${esc(t.store_name)} · ${esc(TICKET_CATEGORY_LABEL[t.category] || t.category)}</h4>
                 <p>${esc(t.message)}</p>
                 <div class="notif-meta">${esc(t.contact_name)} · ${esc(t.contact_info)} · ${formatDate(t.created_at)}</div>
+                ${t.admin_reply ? `
+                    <div class="notif-reply-sent">
+                        <div class="notif-reply-sent-label">Your reply · ${t.reply_email_sent_at ? "emailed to " + esc(t.contact_info) : "saved only, no email on file"} · ${formatDate(t.admin_reply_at)}</div>
+                        <p>${esc(t.admin_reply)}</p>
+                    </div>
+                ` : ""}
+                <form class="ticket-reply-form" data-id="${t.id}">
+                    <textarea rows="2" placeholder="${t.admin_reply ? "Send a follow-up…" : "Write a reply…"}" maxlength="5000"></textarea>
+                    <div class="ticket-reply-row">
+                        <button class="btn secondary" type="submit">${t.admin_reply ? "Send follow-up" : "Send reply"}</button>
+                        <span class="msg"></span>
+                    </div>
+                </form>
             </div>
             <div class="notif-actions">
                 <select class="ticket-status" data-id="${t.id}">
@@ -920,10 +933,48 @@ function bindTicketStatusSelects(container) {
     });
 }
 
+function bindTicketReplyForms(container) {
+    container.querySelectorAll(".ticket-reply-form").forEach((form) => {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const textarea = form.querySelector("textarea");
+            const button = form.querySelector("button[type=submit]");
+            const msg = form.querySelector(".msg");
+            const message = textarea.value.trim();
+            if (!message) return;
+            msg.textContent = ""; msg.className = "msg";
+            setButtonLoading(button, true, "Sending…");
+            const { data: { session } } = await supabase.auth.getSession();
+            let response;
+            try {
+                response = await fetch(`${SUPABASE_URL}/functions/v1/reply-ticket`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${session.access_token}`,
+                        "apikey": SUPABASE_ANON_KEY,
+                    },
+                    body: JSON.stringify({ ticket_id: form.dataset.id, message }),
+                });
+            } catch {
+                response = null;
+            }
+            setButtonLoading(button, false);
+            const result = response ? await response.json().catch(() => ({})) : {};
+            if (!response || !response.ok) {
+                msg.textContent = result.error || "Failed to send reply.";
+                msg.className = "msg error";
+                return;
+            }
+            await loadTickets();
+        });
+    });
+}
+
 async function loadTickets() {
     const { data, error } = await supabase
         .from("support_tickets")
-        .select("id, store_name, contact_name, contact_info, category, message, status, created_at")
+        .select("id, store_name, contact_name, contact_info, category, message, status, created_at, admin_reply, admin_reply_at, reply_email_sent_at")
         .order("created_at", { ascending: false });
     const feed = document.getElementById("notifications-feed");
     const resolvedFeed = document.getElementById("resolved-feed");
@@ -948,6 +999,8 @@ async function loadTickets() {
 
     bindTicketStatusSelects(feed);
     bindTicketStatusSelects(resolvedFeed);
+    bindTicketReplyForms(feed);
+    bindTicketReplyForms(resolvedFeed);
 }
 
 // --- Income overview: day-by-store totals, computed in Postgres (store_daily_totals table) ---
