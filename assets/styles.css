@@ -311,18 +311,25 @@ p.lead { color: var(--text-dim); font-size: 1.08rem; max-width: 640px; line-heig
     .receipt-row { grid-template-columns: 1fr; gap: 2.75rem; }
 }
 .receipt {
+    position: relative;
     background: var(--paper);
     color: var(--ink-on-paper);
     padding: 2.4rem 1.9rem 1.9rem;
-    -webkit-mask-image: radial-gradient(circle 7px at 14px 0, transparent 7px, black 7.5px);
-    -webkit-mask-repeat: repeat-x;
-    -webkit-mask-position: top left;
-    -webkit-mask-size: 28px 14px;
-    mask-image: radial-gradient(circle 7px at 14px 0, transparent 7px, black 7.5px);
-    mask-repeat: repeat-x;
-    mask-position: top left;
-    mask-size: 28px 14px;
     box-shadow: var(--shadow-lg);
+}
+/* The torn top edge: a row of page-background-colored dots painted over the paper, right at
+   the card's top border - reads as punched perforation without any real masking (which, tried
+   first, ended up cutting through the entire card instead of just this strip - background-image
+   dots in the surrounding page color are a much less fragile way to fake the same bite). */
+.receipt::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 14px;
+    background-image: radial-gradient(circle 7px at 14px 0, var(--bg) 7px, transparent 7.5px);
+    background-repeat: repeat-x;
+    background-position: top left;
+    background-size: 28px 14px;
 }
 .receipt-kind {
     font-size: 0.78rem;
