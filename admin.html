@@ -57,6 +57,7 @@
         <button class="tab-btn" type="button" data-tab="downloads">Download access</button>
         <button class="tab-btn" type="button" data-tab="users">Manage users</button>
         <button class="tab-btn" type="button" data-tab="releases">Releases</button>
+        <button class="tab-btn" type="button" data-tab="licenses">License keys</button>
         <button class="tab-btn" type="button" data-tab="income">Income</button>
         <button class="tab-btn" type="button" data-tab="audit">Audit log</button>
     </nav>
@@ -199,6 +200,31 @@
         </table>
     </section>
 
+    <section class="tab-panel" data-panel="licenses" hidden>
+        <h2>Issue a license key</h2>
+        <p class="lead">Signed offline-verifiable activation key for the PDA app. Restaurant PCs paste it into the activation screen on first run — it is checked entirely locally against the public key baked into the app, no network call required.</p>
+        <form id="issue-license-form" class="stack" style="max-width:420px">
+            <label for="license-days">Expires after (days)</label>
+            <input id="license-days" type="number" min="0" step="1" value="0" required>
+            <p class="muted-note" style="margin:0.25rem 0 0">0 = never expires.</p>
+            <label for="license-note">Note (which store/customer this is for)</label>
+            <input id="license-note" placeholder="e.g. Taverna Ilios">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Generate key</button>
+            <p class="msg" id="issue-license-msg"></p>
+        </form>
+        <div id="new-license-key" style="display:none">
+            <p class="msg success">Key generated. Send this to the customer — it can also be copied again later from the table below.</p>
+            <div class="reveal" id="license-key-value"></div>
+            <button class="btn secondary" id="copy-license-key" type="button" style="margin-top:0.75rem">Copy key</button>
+        </div>
+
+        <h2>Issued keys</h2>
+        <table id="license-keys-table">
+            <thead><tr><th>License ID</th><th>Note</th><th>Expires</th><th>Issued</th><th>Key</th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+    </section>
+
     <section class="tab-panel" data-panel="income" hidden>
         <h2>Income overview</h2>
         <div class="section-header">
@@ -256,6 +282,7 @@ document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3
 document.querySelector("#all-users-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#audit-log-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#license-keys-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
 document.getElementById("notifications-feed").innerHTML =
     `<div class="skeleton-block" style="height:5.5rem;margin-bottom:0.75rem"></div><div class="skeleton-block" style="height:5.5rem"></div>`;
@@ -316,6 +343,79 @@ document.getElementById("create-store-form").addEventListener("submit", async (e
     document.getElementById("new-store-secret").style.display = "block";
     await loadStores();
 });
+
+// --- License keys ---
+document.getElementById("issue-license-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector("button[type=submit]");
+    const msg = document.getElementById("issue-license-msg");
+    msg.textContent = ""; msg.className = "msg";
+    const days = Number(document.getElementById("license-days").value);
+    const note = document.getElementById("license-note").value.trim();
+    setButtonLoading(button, true, "Generating…");
+    const { data: { session } } = await supabase.auth.getSession();
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/generate-license-key`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({ days, note: note || null }),
+    });
+    const result = await response.json();
+    setButtonLoading(button, false);
+    if (!response.ok) {
+        msg.textContent = result.error || "Failed to generate key.";
+        msg.className = "msg error";
+        return;
+    }
+    msg.textContent = `Generated key for license ${result.license_id}.`;
+    msg.className = "msg success";
+    document.getElementById("license-note").value = "";
+    document.getElementById("license-key-value").textContent = result.key;
+    document.getElementById("new-license-key").style.display = "block";
+    await loadLicenseKeys();
+});
+
+document.getElementById("copy-license-key").addEventListener("click", async () => {
+    const button = document.getElementById("copy-license-key");
+    try {
+        await navigator.clipboard.writeText(document.getElementById("license-key-value").textContent);
+        button.textContent = "Copied!";
+    } catch {
+        button.textContent = "Could not copy - select the text manually";
+    }
+    setTimeout(() => { button.textContent = "Copy key"; }, 2000);
+});
+
+async function loadLicenseKeys() {
+    const tbody = document.querySelector("#license-keys-table tbody");
+    const { data, error } = await supabase
+        .from("license_keys")
+        .select("license_id, key, expires_at, note, created_at")
+        .order("created_at", { ascending: false });
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="5">Could not load license keys.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = data.length ? data.map((k) => `
+        <tr>
+            <td>${esc(k.license_id)}</td>
+            <td>${esc(k.note || "—")}</td>
+            <td>${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : "Never"}</td>
+            <td>${formatDate(k.created_at)}</td>
+            <td><button class="btn secondary copy-issued-key" type="button" data-key="${esc(k.key)}">Copy</button></td>
+        </tr>
+    `).join("") : `<tr><td colspan="5">No license keys issued yet.</td></tr>`;
+    tbody.querySelectorAll(".copy-issued-key").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(btn.dataset.key);
+            btn.textContent = "Copied!";
+            setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+        });
+    });
+}
 
 // --- Invite user ---
 document.getElementById("invite-user-form").addEventListener("submit", async (event) => {
@@ -1152,6 +1252,7 @@ async function loadEverything() {
     await loadDownloadUsers();
     await loadAllUsers();
     await loadReleases();
+    await loadLicenseKeys();
     await loadTickets();
     await loadVisits();
     await loadAuditLog();
