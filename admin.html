@@ -219,9 +219,10 @@
         </div>
 
         <h2>Issued keys</h2>
+        <p class="lead">Each key is locked to the first computer that activates it (a hashed machine ID, checked once online at activation). "Release" clears that lock so the same key can be activated on a different computer - use it after a legitimate hardware swap.</p>
         <table id="license-keys-table">
-            <thead><tr><th>License ID</th><th>Note</th><th>Expires</th><th>Issued</th><th>Key</th></tr></thead>
-            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
+            <thead><tr><th>License ID</th><th>Note</th><th>Expires</th><th>Issued</th><th>Activated</th><th></th></tr></thead>
+            <tbody><tr><td colspan="6">Loading…</td></tr></tbody>
         </table>
     </section>
 
@@ -282,7 +283,7 @@ document.querySelector("#download-users-table tbody").innerHTML = skeletonRows(3
 document.querySelector("#all-users-table tbody").innerHTML = skeletonRows(4);
 document.querySelector("#audit-log-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#releases-table tbody").innerHTML = skeletonRows(4);
-document.querySelector("#license-keys-table tbody").innerHTML = skeletonRows(4);
+document.querySelector("#license-keys-table tbody").innerHTML = skeletonRows(6);
 document.querySelector("#income-table tbody").innerHTML = skeletonRows(4);
 document.getElementById("notifications-feed").innerHTML =
     `<div class="skeleton-block" style="height:5.5rem;margin-bottom:0.75rem"></div><div class="skeleton-block" style="height:5.5rem"></div>`;
@@ -393,10 +394,10 @@ async function loadLicenseKeys() {
     const tbody = document.querySelector("#license-keys-table tbody");
     const { data, error } = await supabase
         .from("license_keys")
-        .select("id, license_id, key, expires_at, note, created_at")
+        .select("id, license_id, key, expires_at, note, created_at, machine_fingerprint, activated_at")
         .order("created_at", { ascending: false });
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="5">Could not load license keys.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6">Could not load license keys.</td></tr>`;
         return;
     }
     tbody.innerHTML = data.length ? data.map((k) => `
@@ -405,12 +406,14 @@ async function loadLicenseKeys() {
             <td>${esc(k.note || "—")}</td>
             <td>${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : "Never"}</td>
             <td>${formatDate(k.created_at)}</td>
+            <td>${k.activated_at ? formatDate(k.activated_at) : "Not yet"}</td>
             <td style="white-space:nowrap">
                 <button class="btn secondary copy-issued-key" type="button" data-key="${esc(k.key)}">Copy</button>
+                ${k.machine_fingerprint ? `<button class="btn secondary release-license-key" type="button" data-id="${k.id}" data-license-id="${esc(k.license_id)}">Release</button>` : ""}
                 <button class="btn danger delete-license-key" type="button" data-id="${k.id}" data-license-id="${esc(k.license_id)}">Delete</button>
             </td>
         </tr>
-    `).join("") : `<tr><td colspan="5">No license keys issued yet.</td></tr>`;
+    `).join("") : `<tr><td colspan="6">No license keys issued yet.</td></tr>`;
     tbody.querySelectorAll(".copy-issued-key").forEach((btn) => {
         btn.addEventListener("click", async () => {
             await navigator.clipboard.writeText(btn.dataset.key);
@@ -418,9 +421,25 @@ async function loadLicenseKeys() {
             setTimeout(() => { btn.textContent = "Copy"; }, 2000);
         });
     });
+    tbody.querySelectorAll(".release-license-key").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Release license ${btn.dataset.licenseId} from its current computer? It can then be activated on a different computer - only do this for a legitimate reason (e.g. the customer replaced their PC).`)) return;
+            btn.disabled = true;
+            const { error } = await supabase
+                .from("license_keys")
+                .update({ machine_fingerprint: null, activated_at: null })
+                .eq("id", btn.dataset.id);
+            if (error) {
+                alert(error.message);
+                btn.disabled = false;
+                return;
+            }
+            await loadLicenseKeys();
+        });
+    });
     tbody.querySelectorAll(".delete-license-key").forEach((btn) => {
         btn.addEventListener("click", async () => {
-            if (!confirm(`Delete license ${btn.dataset.licenseId} from this list? The key itself keeps working if already activated anywhere - this only removes your record of having issued it.`)) return;
+            if (!confirm(`Delete license ${btn.dataset.licenseId} from this list? If it's already activated somewhere, that install keeps working (it never checks back in). If it hasn't been activated yet, this also revokes it - it can no longer be activated anywhere.`)) return;
             btn.disabled = true;
             const { error } = await supabase.from("license_keys").delete().eq("id", btn.dataset.id);
             if (error) {
