@@ -393,7 +393,7 @@ async function loadLicenseKeys() {
     const tbody = document.querySelector("#license-keys-table tbody");
     const { data, error } = await supabase
         .from("license_keys")
-        .select("license_id, key, expires_at, note, created_at")
+        .select("id, license_id, key, expires_at, note, created_at")
         .order("created_at", { ascending: false });
     if (error) {
         tbody.innerHTML = `<tr><td colspan="5">Could not load license keys.</td></tr>`;
@@ -405,7 +405,10 @@ async function loadLicenseKeys() {
             <td>${esc(k.note || "—")}</td>
             <td>${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : "Never"}</td>
             <td>${formatDate(k.created_at)}</td>
-            <td><button class="btn secondary copy-issued-key" type="button" data-key="${esc(k.key)}">Copy</button></td>
+            <td style="white-space:nowrap">
+                <button class="btn secondary copy-issued-key" type="button" data-key="${esc(k.key)}">Copy</button>
+                <button class="btn danger delete-license-key" type="button" data-id="${k.id}" data-license-id="${esc(k.license_id)}">Delete</button>
+            </td>
         </tr>
     `).join("") : `<tr><td colspan="5">No license keys issued yet.</td></tr>`;
     tbody.querySelectorAll(".copy-issued-key").forEach((btn) => {
@@ -413,6 +416,19 @@ async function loadLicenseKeys() {
             await navigator.clipboard.writeText(btn.dataset.key);
             btn.textContent = "Copied!";
             setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+        });
+    });
+    tbody.querySelectorAll(".delete-license-key").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            if (!confirm(`Delete license ${btn.dataset.licenseId} from this list? The key itself keeps working if already activated anywhere - this only removes your record of having issued it.`)) return;
+            btn.disabled = true;
+            const { error } = await supabase.from("license_keys").delete().eq("id", btn.dataset.id);
+            if (error) {
+                alert(error.message);
+                btn.disabled = false;
+                return;
+            }
+            await loadLicenseKeys();
         });
     });
 }
