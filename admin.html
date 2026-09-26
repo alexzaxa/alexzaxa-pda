@@ -181,22 +181,25 @@
 
     <section class="tab-panel" data-panel="releases" hidden>
         <h2>Publish a release</h2>
-        <p class="lead">Upload the zip built by <code>make-release-package.ps1</code>. Re-uploading the same version overwrites it in place.</p>
+        <p class="lead">Upload the zip built by <code>make-release-package.ps1</code>, the Setup.exe built by <code>installer.iss</code>, or both. Re-uploading the same version overwrites it in place; uploading just one file for an already-published version leaves the other channel untouched.</p>
         <form id="upload-release-form" class="stack" style="max-width:480px">
             <label for="release-version">Version</label>
             <input id="release-version" required placeholder="e.g. 3.2.8" pattern="[0-9]+(\.[0-9]+)*" title="Digits and dots only, e.g. 3.2.8">
             <label for="release-notes">Notes (shown on the changelog)</label>
             <textarea id="release-notes" rows="3" placeholder="What changed in this version"></textarea>
             <label for="release-file">Release zip</label>
-            <input id="release-file" type="file" accept=".zip" required>
+            <input id="release-file" type="file" accept=".zip">
+            <label for="release-installer">Setup.exe (optional)</label>
+            <input id="release-installer" type="file" accept=".exe">
+            <p class="muted-note" style="margin:0.25rem 0 0">At least one of zip or Setup.exe is required.</p>
             <button class="btn" type="submit" style="margin-top:1.5rem">Upload &amp; publish</button>
             <p class="msg" id="upload-release-msg"></p>
         </form>
 
         <h2>Releases</h2>
         <table id="releases-table">
-            <thead><tr><th>Version</th><th>Published</th><th>Notes</th><th></th></tr></thead>
-            <tbody><tr><td colspan="4">Loading…</td></tr></tbody>
+            <thead><tr><th>Version</th><th>Published</th><th>Notes</th><th>Installer</th><th></th></tr></thead>
+            <tbody><tr><td colspan="5">Loading…</td></tr></tbody>
         </table>
     </section>
 
@@ -852,11 +855,13 @@ document.getElementById("upload-release-form").addEventListener("submit", async 
     const version = document.getElementById("release-version").value.trim();
     const notes = document.getElementById("release-notes").value.trim();
     const file = document.getElementById("release-file").files[0];
-    if (!file) { msg.textContent = "Choose a zip file."; msg.className = "msg error"; return; }
+    const installerFile = document.getElementById("release-installer").files[0];
+    if (!file && !installerFile) { msg.textContent = "Choose a zip and/or a Setup.exe."; msg.className = "msg error"; return; }
     setButtonLoading(button, true, "Uploading…");
     try {
-        const zip_base64 = await fileToBase64(file);
-        await callManageRelease({ action: "upload", version, notes, zip_base64 });
+        const zip_base64 = file ? await fileToBase64(file) : undefined;
+        const exe_base64 = installerFile ? await fileToBase64(installerFile) : undefined;
+        await callManageRelease({ action: "upload", version, notes, zip_base64, exe_base64 });
         msg.textContent = `Published version ${version}.`;
         msg.className = "msg success";
         event.target.reset();
@@ -884,6 +889,7 @@ function releaseRow(r) {
                     </div>
                 </div>
             </td>
+            <td>${r.installer_storage_path ? "Yes" : "—"}</td>
             <td style="white-space:nowrap">
                 <button class="btn secondary edit-notes" type="button">Edit</button>
                 <button class="btn danger delete-release" type="button" data-version="${esc(r.version)}">Delete</button>
@@ -896,13 +902,13 @@ async function loadReleases() {
     const tbody = document.querySelector("#releases-table tbody");
     const { data, error } = await supabase
         .from("pda_releases")
-        .select("version, published_at, notes")
+        .select("version, published_at, notes, installer_storage_path")
         .order("published_at", { ascending: false });
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="4">Could not load releases.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5">Could not load releases.</td></tr>`;
         return;
     }
-    tbody.innerHTML = data.length ? data.map(releaseRow).join("") : `<tr><td colspan="4">No releases published yet.</td></tr>`;
+    tbody.innerHTML = data.length ? data.map(releaseRow).join("") : `<tr><td colspan="5">No releases published yet.</td></tr>`;
 
     tbody.querySelectorAll(".edit-notes").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -934,7 +940,7 @@ async function loadReleases() {
     });
     tbody.querySelectorAll(".delete-release").forEach((btn) => {
         btn.addEventListener("click", async () => {
-            if (!confirm(`Delete version ${btn.dataset.version} permanently? This removes the zip too - stores can no longer download or update to it.`)) return;
+            if (!confirm(`Delete version ${btn.dataset.version} permanently? This removes the zip and Setup.exe too - stores can no longer download or update to it.`)) return;
             btn.disabled = true;
             try {
                 await callManageRelease({ action: "delete", version: btn.dataset.version });
