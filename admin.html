@@ -412,6 +412,7 @@ async function loadLicenseKeys() {
             <td>${k.activated_at ? formatDate(k.activated_at) : "Not yet"}</td>
             <td style="white-space:nowrap">
                 <button class="btn secondary copy-issued-key" type="button" data-key="${esc(k.key)}">Copy</button>
+                <button class="btn secondary renew-license-key" type="button" data-note="${esc(k.note || "")}" data-license-id="${esc(k.license_id)}">Renew</button>
                 ${k.machine_fingerprint ? `<button class="btn secondary release-license-key" type="button" data-id="${k.id}" data-license-id="${esc(k.license_id)}">Release</button>` : ""}
                 <button class="btn danger delete-license-key" type="button" data-id="${k.id}" data-license-id="${esc(k.license_id)}">Delete</button>
             </td>
@@ -422,6 +423,17 @@ async function loadLicenseKeys() {
             await navigator.clipboard.writeText(btn.dataset.key);
             btn.textContent = "Copied!";
             setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+        });
+    });
+    tbody.querySelectorAll(".renew-license-key").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document.getElementById("license-note").value = btn.dataset.note;
+            document.getElementById("license-days").value = "0";
+            document.getElementById("issue-license-form").scrollIntoView({ behavior: "smooth", block: "start" });
+            document.getElementById("license-days").focus();
+            const msg = document.getElementById("issue-license-msg");
+            msg.textContent = `Renewing ${btn.dataset.licenseId}: pick the new duration below, generate, then send the new key to the customer - their old key keeps working until they paste this one in.`;
+            msg.className = "msg";
         });
     });
     tbody.querySelectorAll(".release-license-key").forEach((btn) => {
