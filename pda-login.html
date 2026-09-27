@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approve PDA login · AlexZaxa Solutions PDA</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1c1c1e">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site">
+    <div class="brand"><a href="index.html"><img src="assets/brand/alexzaxa-pda-logo.svg" alt="AlexZaxa Solutions PDA" class="brand-logo"></a></div>
+</header>
+<main class="narrow">
+    <div id="error-view" class="auth-card" style="display:none">
+        <h1>Can't approve this login</h1>
+        <p class="msg error" id="error-msg"></p>
+    </div>
+
+    <div id="login-view" class="auth-card" style="display:none">
+        <h1>Sign in to approve</h1>
+        <p class="msg" style="color:var(--text-dim)">Sign in with the AlexZaxa Solutions account to approve this PDA login.</p>
+        <form id="login-form" class="stack">
+            <label for="email">Email</label>
+            <input id="email" type="email" required autocomplete="username">
+            <label for="password">Password</label>
+            <input id="password" type="password" required autocomplete="current-password">
+            <button class="btn" type="submit" style="margin-top:1.5rem">Log in</button>
+            <p class="msg" id="login-msg"></p>
+        </form>
+    </div>
+
+    <div id="confirm-view" class="auth-card" style="display:none">
+        <h1>Approve admin login?</h1>
+        <p class="msg" style="color:var(--text-dim)">A PDA install is waiting to log in as its local admin account.</p>
+        <div class="callout">
+            <p style="margin:0"><strong>Store:</strong> <span id="confirm-store"></span></p>
+            <p style="margin:0.4rem 0 0"><strong>License:</strong> <span id="confirm-license"></span></p>
+        </div>
+        <button class="btn" type="button" id="approve-btn" style="margin-top:1.5rem">Approve login</button>
+        <p class="msg" id="confirm-msg"></p>
+    </div>
+
+    <div id="done-view" class="auth-card" style="display:none">
+        <h1>Approved</h1>
+        <p class="msg success">The PDA has been signed in. You can close this page.</p>
+    </div>
+</main>
+<script type="module">
+import { supabase } from "./assets/supabase-client.js";
+import { trackPageView } from "./assets/analytics.js";
+import { setButtonLoading, initPageProgress } from "./assets/motion.js";
+initPageProgress();
+trackPageView();
+
+const errorView = document.getElementById("error-view");
+const loginView = document.getElementById("login-view");
+const confirmView = document.getElementById("confirm-view");
+const doneView = document.getElementById("done-view");
+
+function showError(message) {
+    [loginView, confirmView, doneView].forEach((v) => (v.style.display = "none"));
+    document.getElementById("error-msg").textContent = message;
+    errorView.style.display = "block";
+}
+
+const token = new URLSearchParams(window.location.search).get("token");
+if (!token) {
+    showError("This link is missing its login code. Ask the PDA to show a fresh QR code and scan that one.");
+} else {
+    const lookup = await fetch(
+        `https://fuzbuvmpfriprinypbaz.supabase.co/functions/v1/pda-login-lookup?token=${encodeURIComponent(token)}`,
+        { headers: { apikey: "sb_publishable_eN3ucl-a94U_CjBNnmLuUQ_72HkCJkR" } },
+    ).then((r) => r.json());
+
+    if (lookup.error) {
+        showError(lookup.error);
+    } else {
+        document.getElementById("confirm-store").textContent = lookup.store_name || "(unnamed)";
+        document.getElementById("confirm-license").textContent = lookup.license_id;
+
+        async function showConfirmIfSignedIn() {
+            const { data } = await supabase.auth.getSession();
+            if (data.session) {
+                loginView.style.display = "none";
+                confirmView.style.display = "block";
+                return true;
+            }
+            return false;
+        }
+
+        if (!(await showConfirmIfSignedIn())) {
+            loginView.style.display = "block";
+        }
+
+        document.getElementById("login-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const button = event.target.querySelector("button[type=submit]");
+            const msg = document.getElementById("login-msg");
+            msg.textContent = ""; msg.className = "msg";
+            setButtonLoading(button, true, "Logging in…");
+            const { error } = await supabase.auth.signInWithPassword({
+                email: document.getElementById("email").value.trim(),
+                password: document.getElementById("password").value,
+            });
+            if (error) {
+                setButtonLoading(button, false);
+                msg.textContent = error.message;
+                msg.className = "msg error";
+                return;
+            }
+            await showConfirmIfSignedIn();
+        });
+
+        document.getElementById("approve-btn").addEventListener("click", async (event) => {
+            const button = event.target;
+            const msg = document.getElementById("confirm-msg");
+            msg.textContent = ""; msg.className = "msg";
+            setButtonLoading(button, true, "Approving…");
+            const { data: { session } } = await supabase.auth.getSession();
+            const response = await fetch("https://fuzbuvmpfriprinypbaz.supabase.co/functions/v1/pda-login-approve", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    apikey: "sb_publishable_eN3ucl-a94U_CjBNnmLuUQ_72HkCJkR",
+                    Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({ token }),
+            }).then((r) => r.json());
+            if (response.error) {
+                setButtonLoading(button, false);
+                msg.textContent = response.error;
+                msg.className = "msg error";
+                return;
+            }
+            confirmView.style.display = "none";
+            doneView.style.display = "block";
+        });
+    }
+}
+</script>
+</body>
+</html>
