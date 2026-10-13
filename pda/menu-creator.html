@@ -95,7 +95,7 @@ if (!auth) throw new Error("redirecting");
 document.getElementById("logout").addEventListener("click", async (e) => {
     e.preventDefault();
     await supabase.auth.signOut();
-    window.location.href = "login.html";
+    window.location.href = "/login.html";
 });
 
 const STORAGE_KEY = "alexzaxa-pda-menu-draft";

@@ -21,15 +21,15 @@ export function usernameToEmail(username) {
     return `${username.toLowerCase()}@${DOWNLOAD_EMAIL_DOMAIN}`;
 }
 
-const ROLE_HOME = { admin: "admin.html", restricted: "dashboard.html", download: "pda/download.html" };
+const ROLE_HOME = { admin: "/admin.html", restricted: "/dashboard.html", download: "/pda/download.html" };
 export function roleHome(role) {
-    return ROLE_HOME[role] || "login.html";
+    return ROLE_HOME[role] || "/login.html";
 }
 
 export async function requireSession() {
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return null;
     }
     return data.session;
@@ -45,7 +45,7 @@ export async function requireRole(allowedRoles) {
         .eq("id", session.user.id)
         .single();
     if (error || !profile) {
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return null;
     }
     if (roles.length && !roles.includes(profile.role)) {
