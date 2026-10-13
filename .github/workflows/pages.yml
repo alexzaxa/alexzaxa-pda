@@ -25,7 +25,9 @@ jobs:
       - name: Assemble site (only the public frontend, not supabase/ or scripts/)
         run: |
           mkdir _site
-          cp index.html changelog.html login.html admin.html dashboard.html download.html menu-creator.html help.html 404.html robots.txt sitemap.xml _site/
+          cp index.html login.html admin.html dashboard.html pda-login.html 404.html robots.txt sitemap.xml _redirects _site/
+          mkdir -p _site/pda
+          cp pda/index.html pda/changelog.html pda/download.html pda/menu-creator.html pda/help.html pda/terms.html _site/pda/
           cp -r assets _site/assets
           mkdir -p _site/.well-known
           cp .well-known/security.txt _site/.well-known/security.txt

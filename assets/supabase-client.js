@@ -21,7 +21,7 @@ export function usernameToEmail(username) {
     return `${username.toLowerCase()}@${DOWNLOAD_EMAIL_DOMAIN}`;
 }
 
-const ROLE_HOME = { admin: "admin.html", restricted: "dashboard.html", download: "download.html" };
+const ROLE_HOME = { admin: "admin.html", restricted: "dashboard.html", download: "pda/download.html" };
 export function roleHome(role) {
     return ROLE_HOME[role] || "login.html";
 }

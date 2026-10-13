@@ -1,13 +1,15 @@
 User-agent: *
 Disallow: /admin.html
 Disallow: /login.html
+Disallow: /pda-login.html
 Disallow: /dashboard.html
-Disallow: /download.html
-Disallow: /menu-creator.html
+Disallow: /pda/download.html
+Disallow: /pda/menu-creator.html
 
 Allow: /
-Allow: /index.html
-Allow: /help.html
-Allow: /changelog.html
+Allow: /pda/
+Allow: /pda/index.html
+Allow: /pda/help.html
+Allow: /pda/changelog.html
 
 Sitemap: https://alexzaxa.com/sitemap.xml
