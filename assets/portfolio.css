@@ -772,6 +772,17 @@ a:hover { text-decoration-color: currentColor; }
     padding: 5px 13px;
 }
 
+.go {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 0.92rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 1px;
+}
+
+.go:hover { border-color: var(--text); }
+
 @media (max-width: 520px) {
     .about-grid { grid-template-columns: 1fr; }
 }
