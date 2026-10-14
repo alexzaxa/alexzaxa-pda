@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AlexZaxa — things I've built and what state they're actually in</title>
-<meta name="description" content="AlexZaxa's portfolio: a restaurant ordering system in production, a voice relay built but unproven, a paper-gated trading bot, and ongoing security research.">
+<meta name="description" content="AlexZaxa's portfolio: a restaurant ordering system in production, the small tools that operate it, a paper-gated trading bot, and ongoing security research.">
 <link rel="canonical" href="https://alexzaxa.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AlexZaxa">
@@ -17,11 +17,13 @@
 </head>
 <body>
 
-<header class="site-header">
-    <div class="wrap">
+<header class="site-header" id="site-header">
+    <div class="wrap-wide">
         <div class="mark"><span class="dot" aria-hidden="true"></span>AlexZaxa</div>
         <nav class="site-nav">
             <a href="#work">Work</a>
+            <a href="#how-i-work">How I work</a>
+            <a href="#about">About</a>
             <a href="#contact">Contact</a>
         </nav>
     </div>
@@ -31,7 +33,7 @@
     <section class="hero">
         <div class="wrap">
             <p>I build the kind of software that has to keep running after I stop looking at it.</p>
-            <p class="sub">Restaurant floors, voice servers, a trading bot that isn't allowed near real money yet, and whatever a bug bounty's scope allows this week. What follows is a straight account of each one — not a highlight reel, a status report.</p>
+            <p class="sub">A restaurant ordering system in production, the small tools that keep it licensed/updated/watched, a trading bot that isn't allowed near real money yet, and ongoing security research. What follows is a straight account of each one — not a highlight reel, a status report.</p>
         </div>
     </section>
 
@@ -40,374 +42,340 @@
             <div class="board-grid">
                 <div class="board-tile tile--live">
                     <p class="name">AlexZaxa Solutions</p>
-                    <p class="stat">every 60s</p>
-                    <p class="caption">income + kill-switch sync interval</p>
-                </div>
-                <div class="board-tile tile--built">
-                    <p class="name">LiteVoice</p>
-                    <p class="stat">0 calls</p>
-                    <p class="caption">client and relay written, no live call carried yet</p>
-                </div>
-                <div class="board-tile tile--planned">
-                    <p class="name">Trading bot</p>
-                    <p class="stat">paper only</p>
-                    <p class="caption">no live trading until each gate clears</p>
-                </div>
-                <div class="board-tile tile--active">
-                    <p class="name">Security research</p>
-                    <p class="stat">4 domains</p>
-                    <p class="caption">in scope under the program's rules</p>
+                    <p class="stat">live</p>
+                    <p class="caption">in production, running real restaurants</p>
                 </div>
                 <div class="board-tile tile--live">
-                    <p class="name">Skopos</p>
-                    <p class="stat">0 violations</p>
-                    <p class="caption">requests blocked before they'd break scope</p>
-                </div>
-                <div class="board-tile tile--built">
-                    <p class="name">Kleidi</p>
-                    <p class="stat">1 product</p>
-                    <p class="caption">extracted from the PDA, not reused yet</p>
-                </div>
-                <div class="board-tile tile--live">
-                    <p class="name">Fylakas</p>
-                    <p class="stat">3 systems</p>
-                    <p class="caption">watched, alerts the moment one goes quiet</p>
+                    <p class="name">Kill switch</p>
+                    <p class="stat">60s</p>
+                    <p class="caption">income + status sync interval</p>
                 </div>
                 <div class="board-tile tile--live">
                     <p class="name">Anemos</p>
                     <p class="stat">signed</p>
                     <p class="caption">every release, before it reaches an install</p>
                 </div>
-                <div class="board-tile tile--built">
-                    <p class="name">Dokimi</p>
-                    <p class="stat">0 strategies</p>
-                    <p class="caption">backtested and trusted so far</p>
-                </div>
-                <div class="board-tile tile--planned">
-                    <p class="name">Apothema</p>
-                    <p class="stat">idea</p>
-                    <p class="caption">needs more stores running the PDA first</p>
-                </div>
-                <div class="board-tile tile--planned">
-                    <p class="name">Nomos</p>
-                    <p class="stat">4 rule sets</p>
-                    <p class="caption">scattered across projects, not yet unified</p>
+                <div class="board-tile tile--live">
+                    <p class="name">Fylakas</p>
+                    <p class="stat">3 systems</p>
+                    <p class="caption">watched around the clock</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="log" id="work">
-        <div class="wrap">
+    <section class="work-controls" id="work">
+        <div class="wrap-wide" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; width:100%;">
+            <div class="legend" aria-hidden="true">
+                <span class="item"><span class="swatch is-live"></span>live, in production</span>
+                <span class="item"><span class="swatch is-built"></span>built, not yet proven</span>
+                <span class="item"><span class="swatch is-planned"></span>planned, not started</span>
+                <span class="item"><span class="swatch is-active"></span>active engagement</span>
+            </div>
+            <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter projects by status">
+                <button type="button" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" data-filter="live" aria-pressed="false">Live</button>
+                <button type="button" data-filter="built" aria-pressed="false">Built</button>
+                <button type="button" data-filter="planned" aria-pressed="false">Planned</button>
+            </div>
+        </div>
+    </section>
 
-            <article class="entry entry--live has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>AlexZaxa Solutions</h2>
-                        <span class="status is-live"><span class="swatch"></span>live, in production</span>
-                    </div>
-                    <p class="lede">A restaurant can run its entire floor on it without ever touching the cloud.</p>
-                    <p>A local-network ordering system — waiter tablets, a dine-in floor plan, phone and delivery orders, kitchen printing, and software that updates itself. It's licensed per install and watched over by an admin dashboard that reports income across every store running it. Some installs stop paying; for those, there's a kill switch that actually works.</p>
-                    <ul class="facts">
-                        <li>Admin dashboard with income reporting across every licensed store, built on Supabase</li>
-                        <li>Offline-verified license keys, each one bound to the machine that first activates it</li>
-                        <li>A real remote kill switch — terminate a store and its install goes dark within a minute</li>
-                    </ul>
-                    <a class="go" href="/pda/">View the product</a>
-                </div>
-                <div class="entry-visual">
-                    <img class="shot" src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="640" height="420">
-                </div>
-            </article>
-
-            <article class="entry entry--built has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>LiteVoice</h2>
-                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
-                    </div>
-                    <p class="lede">A voice channel that doesn't need everything else Discord comes with.</p>
-                    <p>A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. The code is written end to end; it hasn't carried a real call yet, so I'm calling it built rather than finished.</p>
-                    <ul class="facts">
-                        <li>C# desktop client paired with a dedicated Ubuntu relay server</li>
-                        <li>Next milestone is a real multi-person call, not another unit test</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: two clients connected through a relay server">
-                        <rect x="8" y="35" width="76" height="40" rx="7" fill="none" stroke="#8b92a1" stroke-width="1.4"/>
-                        <text x="46" y="59" text-anchor="middle" font-size="12" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Client</text>
-                        <rect x="212" y="35" width="76" height="40" rx="7" fill="none" stroke="#8b92a1" stroke-width="1.4"/>
-                        <text x="250" y="59" text-anchor="middle" font-size="12" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Client</text>
-                        <rect x="112" y="27" width="76" height="56" rx="7" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.6"/>
-                        <text x="150" y="52" text-anchor="middle" font-size="12" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Relay</text>
-                        <text x="150" y="67" text-anchor="middle" font-size="10" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">Ubuntu</text>
-                        <line x1="84" y1="55" x2="112" y2="55" stroke="#5b6170" stroke-width="1.4"/>
-                        <line x1="188" y1="55" x2="212" y2="55" stroke="#5b6170" stroke-width="1.4"/>
-                    </svg>
-                </div>
-            </article>
-
-            <article class="entry entry--planned has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Trading bot</h2>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
-                    </div>
-                    <p class="lede">The part I've actually finished is deciding how it's allowed to fail.</p>
-                    <p>A crypto trading bot that starts on paper money and stays there until it earns its way onto a real exchange. Before writing the strategy, I wrote the phased plan and the safety gates — what it's allowed to do, what it isn't, and what has to go right before each phase unlocks the next one. No execution code yet; the constraints came first on purpose.</p>
-                    <ul class="facts">
-                        <li>Phased rollout: paper trading first, live trading only after it clears each gate</li>
-                        <li>Risk limits and kill conditions specified before any strategy code</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: paper trading gated before live trading, gate currently closed">
-                        <rect x="8" y="35" width="92" height="40" rx="7" fill="rgba(136,145,163,0.14)" stroke="#8891a3" stroke-width="1.6"/>
-                        <text x="54" y="59" text-anchor="middle" font-size="11.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Paper trading</text>
-                        <rect x="200" y="35" width="92" height="40" rx="7" fill="none" stroke="#5b6170" stroke-width="1.2" stroke-dasharray="3 3"/>
-                        <text x="246" y="59" text-anchor="middle" font-size="11.5" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Live trading</text>
-                        <line x1="100" y1="55" x2="138" y2="55" stroke="#5b6170" stroke-width="1.4"/>
-                        <rect x="138" y="42" width="10" height="26" rx="2" fill="#8891a3"/>
-                        <rect x="152" y="42" width="10" height="26" rx="2" fill="#8891a3"/>
-                        <line x1="162" y1="55" x2="200" y2="55" stroke="#5b6170" stroke-width="1.4"/>
-                        <text x="150" y="92" text-anchor="middle" font-size="10" fill="#8891a3" font-family="-apple-system,Segoe UI,sans-serif">gate closed</text>
-                    </svg>
-                </div>
-            </article>
-
-            <article class="entry entry--active has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Security research</h2>
-                        <span class="status is-active"><span class="swatch"></span>active engagement</span>
-                    </div>
-                    <p class="lede">Scope first, every time — a program's rules are the only permission that counts.</p>
-                    <p>Enrolled in 1win's official bug bounty program, working inside its published scope and rate limits. There's no feature to point at here, by design — the work is finding real issues in someone else's systems without becoming one.</p>
-                    <ul class="facts">
-                        <li>Working under an official program's defined scope and request limits</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 120" role="img" aria-label="Diagram: four domains inside the bounty program's defined scope">
-                        <rect x="6" y="10" width="288" height="104" rx="8" fill="none" stroke="#9a93e8" stroke-width="1.6" stroke-dasharray="4 3"/>
-                        <text x="18" y="26" font-size="10" fill="#9a93e8" font-family="-apple-system,Segoe UI,sans-serif">program scope</text>
-                        <g font-family="-apple-system,Segoe UI,sans-serif" font-size="11" fill="#eceef2">
-                            <rect x="22" y="38" width="112" height="28" rx="6" fill="rgba(154,147,232,0.12)" stroke="#9a93e8" stroke-width="1.2"/>
-                            <text x="78" y="56" text-anchor="middle">1win.com</text>
-                            <rect x="166" y="38" width="112" height="28" rx="6" fill="rgba(154,147,232,0.12)" stroke="#9a93e8" stroke-width="1.2"/>
-                            <text x="222" y="56" text-anchor="middle">1w.run</text>
-                            <rect x="22" y="76" width="112" height="28" rx="6" fill="rgba(154,147,232,0.12)" stroke="#9a93e8" stroke-width="1.2"/>
-                            <text x="78" y="94" text-anchor="middle">1w.cash</text>
-                            <rect x="166" y="76" width="112" height="28" rx="6" fill="rgba(154,147,232,0.12)" stroke="#9a93e8" stroke-width="1.2"/>
-                            <text x="222" y="94" text-anchor="middle">forum</text>
+    <section class="system-map">
+        <div class="wrap-wide">
+            <div class="tier-label" style="padding-top:8px;">
+                <h2>How the pieces connect</h2>
+                <span class="tier-note">hover a node</span>
+            </div>
+            <div class="map-card">
+                <svg class="map-svg" id="system-map-svg" viewBox="0 0 640 400" role="img" aria-label="System map: Fylakas watches the PDA, Anemos updates it, Kleidi licenses it, Fylakas also watches Skopos, Nomos would unify rules across the PDA, Skopos and the trading bot, and Dokimi feeds the trading bot">
+                    <g class="map-edges">
+                        <line class="map-edge" data-from="pda" data-to="fylakas" x1="210" y1="220" x2="210" y2="85" stroke="#4fc29b" stroke-width="1.4"/>
+                        <line class="map-edge" data-from="pda" data-to="anemos" x1="210" y1="220" x2="375" y2="128" stroke="#4fc29b" stroke-width="1.4"/>
+                        <line class="map-edge" data-from="pda" data-to="kleidi" x1="210" y1="220" x2="375" y2="312" stroke="#d4ab4a" stroke-width="1.4"/>
+                        <line class="map-edge" data-from="fylakas" data-to="skopos" x1="210" y1="85" x2="95" y2="155" stroke="#4fc29b" stroke-width="1.4"/>
+                        <line class="map-edge" data-from="nomos" data-to="pda" x1="335" y1="222" x2="243" y2="220" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
+                        <line class="map-edge" data-from="nomos" data-to="skopos" x1="335" y1="222" x2="95" y2="158" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
+                        <line class="map-edge" data-from="nomos" data-to="tradingbot" x1="335" y1="222" x2="505" y2="258" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
+                        <line class="map-edge" data-from="tradingbot" data-to="dokimi" x1="520" y1="250" x2="520" y2="112" stroke="#d4ab4a" stroke-width="1.4"/>
+                    </g>
+                    <g class="map-nodes" font-family="-apple-system,Segoe UI,sans-serif">
+                        <g class="map-node" data-id="pda" tabindex="0">
+                            <circle cx="210" cy="220" r="30" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="2"/>
+                            <text x="210" y="217" text-anchor="middle" font-size="11" fill="#eceef2">AlexZaxa </text>
+                            <text x="210" y="230" text-anchor="middle" font-size="11" fill="#eceef2">Solutions </text>
                         </g>
-                    </svg>
-                </div>
-            </article>
+                        <g class="map-node" data-id="fylakas" tabindex="0">
+                            <circle cx="210" cy="70" r="16" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="1.6"/>
+                            <text x="210" y="46" text-anchor="middle" font-size="11" fill="#8b92a1">Fylakas </text>
+                        </g>
+                        <g class="map-node" data-id="anemos" tabindex="0">
+                            <circle cx="380" cy="120" r="16" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="1.6"/>
+                            <text x="380" y="96" text-anchor="middle" font-size="11" fill="#8b92a1">Anemos </text>
+                        </g>
+                        <g class="map-node" data-id="kleidi" tabindex="0">
+                            <circle cx="380" cy="320" r="16" fill="rgba(212,171,74,0.14)" stroke="#d4ab4a" stroke-width="1.6"/>
+                            <text x="380" y="344" text-anchor="middle" font-size="11" fill="#8b92a1">Kleidi </text>
+                        </g>
+                        <g class="map-node" data-id="skopos" tabindex="0">
+                            <circle cx="90" cy="150" r="16" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="1.6"/>
+                            <text x="90" y="126" text-anchor="middle" font-size="11" fill="#8b92a1">Skopos </text>
+                        </g>
+                        <g class="map-node" data-id="nomos" tabindex="0">
+                            <circle cx="335" cy="222" r="13" fill="none" stroke="#8891a3" stroke-width="1.6" stroke-dasharray="3 2"/>
+                            <text x="335" y="246" text-anchor="middle" font-size="11" fill="#8b92a1">Nomos </text>
+                        </g>
+                        <g class="map-node" data-id="tradingbot" tabindex="0">
+                            <circle cx="520" cy="258" r="17" fill="none" stroke="#8891a3" stroke-width="1.6" stroke-dasharray="3 2"/>
+                            <text x="520" y="284" text-anchor="middle" font-size="11" fill="#8b92a1">Trading bot </text>
+                        </g>
+                        <g class="map-node" data-id="dokimi" tabindex="0">
+                            <circle cx="520" cy="100" r="15" fill="rgba(212,171,74,0.14)" stroke="#d4ab4a" stroke-width="1.6"/>
+                            <text x="520" y="78" text-anchor="middle" font-size="11" fill="#8b92a1">Dokimi </text>
+                        </g>
+                    </g>
+                </svg>
+                <p class="map-hint">Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three</p>
+            </div>
+        </div>
+    </section>
 
-            <article class="entry entry--live has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Skopos</h2>
-                        <span class="status is-live"><span class="swatch"></span>live, in production</span>
+    <section class="featured" data-status="live">
+        <div class="wrap-wide">
+            <div class="tier-label">
+                <h2>Featured</h2>
+            </div>
+            <article class="featured-card">
+                <div class="featured-eyebrow">
+                    <span class="status is-live"><span class="swatch"></span>live, in production</span>
+                </div>
+                <h2>AlexZaxa Solutions</h2>
+                <p class="lede">A restaurant can run its entire floor on it without ever touching the cloud.</p>
+
+                <div class="featured-grid">
+                    <div class="featured-block">
+                        <h3>The problem</h3>
+                        <p>Most restaurant ordering systems assume a reliable internet connection and a monthly cloud bill a small place can't always justify. Staff need something that works on the Wi-Fi that's already there, keeps running when the internet doesn't, and doesn't need a technician visit for routine updates.</p>
                     </div>
-                    <p class="lede">The bounty's scope document is the only thing allowed to say yes.</p>
-                    <p>A small request gatekeeper I built for the 1win engagement: every outbound request gets checked against the program's published domains and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent for this second, the request never goes out — it's less to carry in my head than remembering the rules correctly every time.</p>
+                    <div class="featured-block">
+                        <h3>How it works</h3>
+                        <p>Waiter tablets, a dine-in floor plan, phone and delivery orders, and kitchen printing all run on the restaurant's local network. An admin dashboard reports income across every licensed store, software updates itself in the background, and a remote kill switch handles installs that stop paying.</p>
+                    </div>
+                </div>
+
+                <ul class="facts">
+                    <li>Admin dashboard with income reporting across every licensed store, built on Supabase</li>
+                    <li>Offline-verified license keys, each one bound to the machine that first activates it</li>
+                    <li>A real remote kill switch — terminate a store and its install goes dark within a minute</li>
+                    <li>Self-updating software — every install signs and pulls its own releases, no site visit</li>
+                </ul>
+
+                <div class="featured-shots">
+                    <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="1600" height="1000">
+                    <img src="assets/screenshots/waiter.webp" alt="AlexZaxa Solutions PDA waiter view, showing the dine-in floor plan and table status" loading="lazy" width="1600" height="1000">
+                </div>
+
+                <a class="go" href="/pda/">View the product</a>
+            </article>
+        </div>
+    </section>
+
+    <section class="built-tier" data-status="live built">
+        <div class="wrap-wide">
+            <div class="tier-label">
+                <h2>Built, in production</h2>
+                <span class="tier-note">the tools that operate the featured system</span>
+            </div>
+            <div class="card-grid">
+
+                <article class="card entry--live" data-status="live">
+                    <div class="card-head">
+                        <h3>Skopos</h3>
+                        <span class="status is-live"><span class="swatch"></span>live</span>
+                    </div>
+                    <p class="gloss">Σκοπός · the scope</p>
+                    <p class="lede">The program's scope document is the only thing allowed to say yes.</p>
+                    <p class="body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
                     <ul class="facts">
-                        <li>Checks every outbound request against the program's scope before it's sent</li>
-                        <li>Enforces the 5 requests/second limit locally, not just by discipline</li>
+                        <li>Checks every outbound request against program scope before it's sent</li>
+                        <li>Enforces the program's rate limit locally, not just by discipline</li>
                     </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: an outbound request checked against scope and rate limit before being sent or dropped">
-                        <rect x="8" y="38" width="80" height="34" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.4"/>
-                        <text x="48" y="59" text-anchor="middle" font-size="11.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Request</text>
-                        <polygon points="90,55 112,33 190,33 212,55 190,77 112,77" fill="rgba(79,194,155,0.1)" stroke="#4fc29b" stroke-width="1.4"/>
-                        <text x="151" y="51" text-anchor="middle" font-size="9.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">scope +</text>
-                        <text x="151" y="63" text-anchor="middle" font-size="9.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">rate check</text>
-                        <line x1="212" y1="55" x2="228" y2="34" stroke="#4fc29b" stroke-width="1.3"/>
-                        <line x1="212" y1="55" x2="228" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                        <rect x="228" y="20" width="64" height="28" rx="6" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.3"/>
-                        <text x="260" y="38" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">sent</text>
-                        <rect x="228" y="62" width="64" height="28" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                        <text x="260" y="80" text-anchor="middle" font-size="11" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">dropped</text>
-                    </svg>
-                </div>
-            </article>
-
-            <article class="entry entry--built has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Kleidi</h2>
-                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
+                    <div class="card-visual">
+                        <div class="terminal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
+                            <div class="ln"><span class="prompt">12:04:02 →</span> GET api.target.example/v2/users?id=118</div>
+                            <div class="ln"><span class="ok">12:04:02 ✓ in scope, under limit — sent</span></div>
+                            <div class="ln"><span class="prompt">12:04:03 →</span> GET not-the-target.example/admin</div>
+                            <div class="ln"><span class="drop">12:04:03 ✗ not in scope — blocked before it left</span></div>
+                        </div>
                     </div>
-                    <p class="lede">The PDA's license system, with the restaurant software peeled off.</p>
-                    <p>AlexZaxa Solutions issues offline-verified license keys bound to the machine that activates them — that logic used to live inside the PDA codebase alone. Kleidi is the same signing and verification scheme, pulled out into its own small library, so the next thing I license doesn't start from zero. It hasn't licensed anything but the PDA yet.</p>
+                </article>
+
+                <article class="card entry--live" data-status="live">
+                    <div class="card-head">
+                        <h3>Fylakas</h3>
+                        <span class="status is-live"><span class="swatch"></span>live</span>
+                    </div>
+                    <p class="gloss">Φύλακας · the watchman</p>
+                    <p class="lede">The thing that notices when something else goes quiet.</p>
+                    <p class="body">A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.</p>
                     <ul class="facts">
-                        <li>Same offline verification and machine-binding scheme the PDA runs in production</li>
-                        <li>Not yet wired into a second product</li>
+                        <li>Watches every live system here, PDA included</li>
+                        <li>Alerts on silence, not just on error</li>
                     </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
-                        <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
-                        <text x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key</text>
-                        <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
-                        <text x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID</text>
-                        <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                        <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                        <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                        <rect x="136" y="78" width="28" height="20" rx="3" fill="rgba(212,171,74,0.16)" stroke="#d4ab4a" stroke-width="1.4"/>
-                    </svg>
-                </div>
-            </article>
-
-            <article class="entry entry--live has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Fylakas</h2>
-                        <span class="status is-live"><span class="swatch"></span>live, in production</span>
+                    <div class="card-visual">
+                        <div class="terminal" role="img" aria-label="Terminal log: Fylakas receiving heartbeats then alerting on a missed one">
+                            <div class="ln"><span class="ok">03:14:51 ok — PDA heartbeat received</span></div>
+                            <div class="ln"><span class="ok">03:16:51 ok — PDA heartbeat received</span></div>
+                            <div class="ln"><span class="warn">03:18:51 warn — no heartbeat in 120s</span></div>
+                            <div class="ln"><span class="drop">03:18:51 alert sent</span></div>
+                        </div>
                     </div>
-                    <p class="lede">The thing that notices when one of the things above goes quiet.</p>
-                    <p>A small watchman that pings every system on this page that's actually live and tells me the moment one stops answering — a store's PDA going dark, a relay dropping, Skopos itself falling over. It's the least interesting project here, and the one I'd miss first if it broke.</p>
-                    <ul class="facts">
-                        <li>Watches every live system on this page, PDA included</li>
-                        <li>Alerts on silence, not just on error — a hang looks the same as a crash to it</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: Fylakas watching the PDA, Skopos, and LiteVoice systems">
-                        <line x1="150" y1="62" x2="40" y2="28" stroke="#5b6170" stroke-width="1.3"/>
-                        <line x1="150" y1="62" x2="260" y2="28" stroke="#5b6170" stroke-width="1.3"/>
-                        <line x1="150" y1="62" x2="150" y2="110" stroke="#5b6170" stroke-width="1.3"/>
-                        <circle cx="150" cy="62" r="16" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.5"/>
-                        <text x="150" y="66" text-anchor="middle" font-size="9" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Fylakas</text>
-                        <circle cx="40" cy="28" r="5" fill="#4fc29b"/>
-                        <text x="40" y="16" text-anchor="middle" font-size="10" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">PDA</text>
-                        <circle cx="260" cy="28" r="5" fill="#4fc29b"/>
-                        <text x="260" y="16" text-anchor="middle" font-size="10" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">Skopos</text>
-                        <circle cx="150" cy="110" r="5" fill="#d4ab4a"/>
-                        <text x="150" y="124" text-anchor="middle" font-size="10" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">LiteVoice</text>
-                    </svg>
-                </div>
-            </article>
+                </article>
 
-            <article class="entry entry--live has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Anemos</h2>
-                        <span class="status is-live"><span class="swatch"></span>live, in production</span>
+                <article class="card entry--live" data-status="live">
+                    <div class="card-head">
+                        <h3>Anemos</h3>
+                        <span class="status is-live"><span class="swatch"></span>live</span>
                     </div>
+                    <p class="gloss">Άνεμος · the wind</p>
                     <p class="lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
-                    <p>The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down and swap over on its own schedule. It's the kill switch's mirror image — instead of shutting an install down, it's what keeps every one of them current without a site visit.</p>
+                    <p class="body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.</p>
                     <ul class="facts">
                         <li>Signs every release before it's allowed to reach an install</li>
                         <li>Runs on the same schedule as the income sync, no separate agent</li>
                     </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: a signed release pushed out to three installs">
-                        <rect x="118" y="10" width="64" height="28" rx="6" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
-                        <text x="150" y="28" text-anchor="middle" font-size="10.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Release</text>
-                        <line x1="150" y1="38" x2="150" y2="54" stroke="#4fc29b" stroke-width="1.4"/>
-                        <circle cx="150" cy="62" r="13" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
-                        <path d="M145,62 l3.5,4 l7,-8" fill="none" stroke="#4fc29b" stroke-width="1.6"/>
-                        <line x1="150" y1="75" x2="40" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                        <line x1="150" y1="75" x2="150" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                        <line x1="150" y1="75" x2="260" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                        <circle cx="40" cy="110" r="5" fill="#8b92a1"/>
-                        <circle cx="150" cy="110" r="5" fill="#8b92a1"/>
-                        <circle cx="260" cy="110" r="5" fill="#8b92a1"/>
-                        <text x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">installs in the field</text>
-                    </svg>
-                </div>
-            </article>
+                    <div class="card-visual">
+                        <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: a signed release pushed out to three installs">
+                            <rect x="118" y="10" width="64" height="28" rx="6" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
+                            <text aria-hidden="true" x="150" y="28" text-anchor="middle" font-size="10.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Release </text>
+                            <line x1="150" y1="38" x2="150" y2="54" stroke="#4fc29b" stroke-width="1.4"/>
+                            <circle cx="150" cy="62" r="13" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
+                            <path d="M145,62 l3.5,4 l7,-8" fill="none" stroke="#4fc29b" stroke-width="1.6"/>
+                            <line x1="150" y1="75" x2="40" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <line x1="150" y1="75" x2="150" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <line x1="150" y1="75" x2="260" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <circle cx="40" cy="110" r="5" fill="#8b92a1"/>
+                            <circle cx="150" cy="110" r="5" fill="#8b92a1"/>
+                            <circle cx="260" cy="110" r="5" fill="#8b92a1"/>
+                            <text aria-hidden="true" x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">installs in the field </text>
+                        </svg>
+                    </div>
+                </article>
 
-            <article class="entry entry--built has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Dokimi</h2>
+                <article class="card entry--built" data-status="built">
+                    <div class="card-head">
+                        <h3>Kleidi</h3>
                         <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
                     </div>
+                    <p class="gloss">Κλειδί · the key</p>
+                    <p class="lede">The PDA's license system, with the restaurant software peeled off.</p>
+                    <p class="body">AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.</p>
+                    <ul class="facts">
+                        <li>Same offline verification and machine-binding scheme the PDA runs in production</li>
+                        <li>Not yet wired into a second product</li>
+                    </ul>
+                    <div class="card-visual">
+                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
+                            <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
+                            <text aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key </text>
+                            <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
+                            <text aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID </text>
+                            <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
+                            <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
+                            <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
+                            <rect x="136" y="78" width="28" height="20" rx="3" fill="rgba(212,171,74,0.16)" stroke="#d4ab4a" stroke-width="1.4"/>
+                        </svg>
+                    </div>
+                </article>
+
+                <article class="card entry--built" data-status="built">
+                    <div class="card-head">
+                        <h3>LiteVoice</h3>
+                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
+                    </div>
+                    <p class="lede">A voice channel that doesn't need everything else Discord comes with.</p>
+                    <p class="body">A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.</p>
+                    <ul class="facts">
+                        <li>C# desktop client paired with a dedicated Ubuntu relay server</li>
+                        <li>Next milestone is a real multi-person call, not another unit test</li>
+                    </ul>
+                    <div class="card-visual">
+                        <div class="ui-mock" role="img" aria-label="LiteVoice room mockup: three people in a voice room, one muted, relay connected">
+                            <div class="bar"><span>#general-voice</span><span>Relay: connected</span></div>
+                            <div class="room">
+                                <div class="who"><span class="avatar">A</span>Alex</div>
+                                <div class="who"><span class="avatar">M</span>Maria</div>
+                                <div class="who is-muted"><span class="avatar">N</span>Nikos</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card entry--built" data-status="built">
+                    <div class="card-head">
+                        <h3>Dokimi</h3>
+                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
+                    </div>
+                    <p class="gloss">Δοκιμή · the trial</p>
                     <p class="lede">Every strategy loses on history before it's allowed near paper money.</p>
-                    <p>A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. It's written and it runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
+                    <p class="body">A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
                     <ul class="facts">
                         <li>Replays historical price data against a strategy before paper trading starts</li>
                         <li>Outputs the same risk metrics the live gates will eventually check</li>
                     </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
-                        <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                        <text x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices</text>
-                        <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
-                        <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                        <text x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading</text>
-                        <text x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper)</text>
-                    </svg>
-                </div>
-            </article>
-
-            <article class="entry entry--planned has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Apothema</h2>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
+                    <div class="card-visual">
+                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
+                            <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
+                            <text aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices </text>
+                            <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
+                            <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
+                            <text aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading </text>
+                            <text aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper) </text>
+                        </svg>
                     </div>
-                    <p class="lede">The PDA already knows what a store sold today; this would be what it's about to run out of.</p>
-                    <p>An idea more than a project so far: use the order history the PDA already collects to flag ingredients a restaurant is likely to run low on, instead of waiting for the kitchen to notice. It needs real sales data to be worth building — which is exactly what AlexZaxa Solutions has been quietly accumulating.</p>
-                    <ul class="facts">
-                        <li>Would read from the same daily-totals data the income dashboard already uses</li>
-                        <li>Not started — needs more stores running the PDA first</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a bar chart with one ingredient trending toward low stock">
-                        <line x1="16" y1="88" x2="284" y2="88" stroke="#5b6170" stroke-width="1.1"/>
-                        <rect x="36" y="48" width="26" height="40" rx="3" fill="rgba(136,145,163,0.18)" stroke="#8891a3" stroke-width="1.2"/>
-                        <rect x="92" y="34" width="26" height="54" rx="3" fill="rgba(136,145,163,0.18)" stroke="#8891a3" stroke-width="1.2"/>
-                        <rect x="148" y="64" width="26" height="24" rx="3" fill="rgba(217,154,61,0.16)" stroke="#d99a3d" stroke-width="1.4"/>
-                        <rect x="204" y="20" width="26" height="68" rx="3" fill="rgba(136,145,163,0.18)" stroke="#8891a3" stroke-width="1.2"/>
-                        <text x="161" y="100" text-anchor="middle" font-size="9" fill="#d99a3d" font-family="-apple-system,Segoe UI,sans-serif">running low</text>
-                    </svg>
-                </div>
-            </article>
+                </article>
 
-            <article class="entry entry--planned has-visual">
-                <div class="entry-body">
-                    <div class="entry-head">
-                        <h2>Nomos</h2>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
-                    </div>
-                    <p class="lede">Every project above has its own version of "these are the rules" — this would be the one place they're written down.</p>
-                    <p>The kill switch's conditions, the trading bot's gates, Skopos's scope list — right now each one encodes its own rules separately. Nomos is the idea of pulling them into one format I can read and audit in one place, instead of trusting I wrote the same constraint correctly in four different codebases.</p>
-                    <ul class="facts">
-                        <li>Would unify rule-logic already duplicated across the PDA, the trading bot, and Skopos</li>
-                        <li>Still just the idea — the duplication it would fix is real and already live</li>
-                    </ul>
-                </div>
-                <div class="entry-visual">
-                    <svg class="diagram" viewBox="0 0 300 120" role="img" aria-label="Diagram: scattered rule sets converging toward one unified, not-yet-built rulebook">
-                        <rect x="10" y="12" width="70" height="24" rx="5" fill="none" stroke="#8b92a1" stroke-width="1.2"/>
-                        <text x="45" y="28" text-anchor="middle" font-size="9" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">kill switch</text>
-                        <rect x="112" y="4" width="76" height="24" rx="5" fill="none" stroke="#8b92a1" stroke-width="1.2"/>
-                        <text x="150" y="20" text-anchor="middle" font-size="9" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">trading gates</text>
-                        <rect x="218" y="12" width="72" height="24" rx="5" fill="none" stroke="#8b92a1" stroke-width="1.2"/>
-                        <text x="254" y="28" text-anchor="middle" font-size="9" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">Skopos rules</text>
-                        <line x1="45" y1="36" x2="130" y2="76" stroke="#5b6170" stroke-width="1.1"/>
-                        <line x1="150" y1="28" x2="150" y2="76" stroke="#5b6170" stroke-width="1.1"/>
-                        <line x1="254" y1="36" x2="170" y2="76" stroke="#5b6170" stroke-width="1.1"/>
-                        <rect x="112" y="78" width="76" height="28" rx="6" fill="none" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="3 3"/>
-                        <text x="150" y="96" text-anchor="middle" font-size="10" fill="#8891a3" font-family="-apple-system,Segoe UI,sans-serif">Nomos</text>
-                    </svg>
-                </div>
-            </article>
-
+            </div>
         </div>
     </section>
 
-    <section class="principles">
+    <section class="lab-tier" data-status="planned">
+        <div class="wrap-wide">
+            <div class="tier-label">
+                <h2>Lab, planned</h2>
+                <span class="tier-note">ideas and constraints, no execution code yet</span>
+            </div>
+            <div class="lab-rows">
+
+                <div class="lab-row" data-status="planned">
+                    <div class="lab-row-main">
+                        <h3>Trading bot</h3>
+                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
+                        <p>A crypto trading bot that starts on paper money and stays there until it earns its way onto a real exchange. The phased plan and safety gates are written; no execution code yet, on purpose — the constraints came first.</p>
+                    </div>
+                </div>
+
+                <div class="lab-row" data-status="planned">
+                    <div class="lab-row-main">
+                        <h3>Apothema</h3><span class="gloss">Απόθεμα · the reserve</span>
+                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
+                        <p>The PDA already knows what a store sold today; this would flag what it's about to run out of, using the order history the PDA already collects. Needs more stores running the PDA before it's worth building.</p>
+                    </div>
+                </div>
+
+                <div class="lab-row" data-status="planned">
+                    <div class="lab-row-main">
+                        <h3>Nomos</h3><span class="gloss">Νόμος · the rule</span>
+                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
+                        <p>The kill switch's conditions, the trading bot's gates, Skopos's scope list — each encodes its own rules separately right now. Nomos would pull them into one format to read and audit in one place. Still just the idea; the duplication it would fix is real.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="principles" id="how-i-work">
         <div class="wrap">
             <h2>How I tend to work</h2>
             <dl>
@@ -421,31 +389,167 @@
                 </div>
                 <div>
                     <dt>Constraints before code</dt>
-                    <dd>For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty, the scope and rate limit got read before the first request. The rules come first.</dd>
+                    <dd>For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.</dd>
                 </div>
             </dl>
         </div>
     </section>
 
-    <section class="contact" id="contact">
+    <section class="about" id="about">
         <div class="wrap">
+            <div class="about-grid">
+                <div class="avatar" aria-hidden="true">AZ</div>
+                <div>
+                    <h2>About</h2>
+                    <p>I'm AlexZaxa — a solo developer who ends up building the whole system rather than just the feature: the product, the licensing around it, the pipeline that updates it, and the small tools that watch it after launch. Most of what's above exists because something I was already running needed it.</p>
+                    <ul class="tech-stack">
+                        <li>Python</li>
+                        <li>C#</li>
+                        <li>Supabase</li>
+                        <li>PostgreSQL</li>
+                        <li>Linux</li>
+                        <li>Networking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="wrap-wide">
             <p>Building something that needs to actually keep running? Let's talk.</p>
-            <div class="contact-links">
-                <a class="primary" href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a>
-                <a href="/pda/">AlexZaxa Solutions PDA</a>
+            <div class="contact-grid">
+                <form class="contact-form" id="contact-form">
+                    <label>Name
+                        <input type="text" name="name" id="cf-name" required maxlength="200" autocomplete="name">
+                    </label>
+                    <label>Email
+                        <input type="email" name="email" id="cf-email" required maxlength="200" autocomplete="email">
+                    </label>
+                    <label>Message
+                        <textarea name="message" id="cf-message" required maxlength="4000" rows="4"></textarea>
+                    </label>
+                    <input type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" aria-hidden="true">
+                    <button type="submit" id="cf-submit">Send message</button>
+                    <p class="form-msg" id="cf-msg" role="status"></p>
+                </form>
+                <div class="contact-aside">
+                    <div class="contact-links">
+                        <a class="primary" href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a>
+                    </div>
+                    <div class="contact-links">
+                        <a href="/pda/">AlexZaxa Solutions PDA</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <div class="wrap">
+    <div class="wrap-wide">
         &copy; <span id="year">2026</span> AlexZaxa
     </div>
 </footer>
 
-<script>
+<script type="module">
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
+
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Sticky header border once the page has scrolled past the hero.
+const header = document.getElementById('site-header');
+addEventListener('scroll', () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 8);
+}, { passive: true });
+
+// Filter chips: show/hide by data-status, tracked at the section level.
+const chips = document.querySelectorAll('#filter-chips button');
+const filterTargets = document.querySelectorAll('[data-status]');
+chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        const filter = chip.dataset.filter;
+        filterTargets.forEach((el) => {
+            const statuses = el.dataset.status.split(' ');
+            const show = filter === 'all' || statuses.includes(filter);
+            el.classList.toggle('is-filtered-out', !show);
+        });
+    });
+});
+
+// System map: hovering/focusing a node highlights it, its edges, and whatever it connects to.
+const mapSvg = document.getElementById('system-map-svg');
+if (mapSvg) {
+    const nodes = [...mapSvg.querySelectorAll('.map-node')];
+    const edges = [...mapSvg.querySelectorAll('.map-edge')];
+    function highlight(id) {
+        if (!id) {
+            mapSvg.removeAttribute('data-active');
+            nodes.forEach((n) => n.classList.remove('is-on'));
+            edges.forEach((e) => e.classList.remove('is-on'));
+            return;
+        }
+        mapSvg.setAttribute('data-active', 'true');
+        const connected = new Set([id]);
+        edges.forEach((e) => {
+            const on = e.dataset.from === id || e.dataset.to === id;
+            e.classList.toggle('is-on', on);
+            if (on) { connected.add(e.dataset.from); connected.add(e.dataset.to); }
+        });
+        nodes.forEach((n) => n.classList.toggle('is-on', connected.has(n.dataset.id)));
+    }
+    nodes.forEach((n) => {
+        n.addEventListener('mouseenter', () => highlight(n.dataset.id));
+        n.addEventListener('focus', () => highlight(n.dataset.id));
+        n.addEventListener('mouseleave', () => highlight(null));
+        n.addEventListener('blur', () => highlight(null));
+    });
+}
+
+// Contact form: reuses the existing public support-ticket pipeline (same one help.html
+// uses) so messages land in the admin Notifications tab instead of only a mailbox.
+const form = document.getElementById('contact-form');
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submit = document.getElementById('cf-submit');
+    const msg = document.getElementById('cf-msg');
+    const website = document.getElementById('cf-website').value;
+    const name = document.getElementById('cf-name').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+    submit.disabled = true;
+    msg.textContent = 'Sending…';
+    msg.className = 'form-msg';
+    try {
+        const resp = await fetch(`${SUPABASE_URL}/functions/v1/submit-ticket`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'apikey': SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({
+                website,
+                store_name: 'Portfolio — alexzaxa.com',
+                contact_name: name,
+                contact_info: email,
+                category: 'other',
+                message,
+            }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Failed to send');
+        msg.textContent = 'Sent — thanks, I’ll get back to you.';
+        msg.className = 'form-msg ok';
+        form.reset();
+    } catch (err) {
+        msg.textContent = 'Could not send right now — email projects@alexzaxa.com instead.';
+        msg.className = 'form-msg error';
+    } finally {
+        submit.disabled = false;
+    }
+});
 </script>
 
 </body>
