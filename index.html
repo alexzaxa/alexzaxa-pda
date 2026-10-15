@@ -98,15 +98,15 @@
     <section class="work-controls" id="work">
         <div class="wrap-wide" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; width:100%;">
             <div class="legend" aria-hidden="true">
-                <span class="item"><span class="swatch is-live"></span>live, in production</span>
-                <span class="item"><span class="swatch is-built"></span>built, not yet proven</span>
-                <span class="item"><span class="swatch is-planned"></span>planned, not started</span>
+                <span class="item"><span class="swatch is-live"></span><span data-i18n="legend_live">live, in production</span></span>
+                <span class="item"><span class="swatch is-built"></span><span data-i18n="legend_built">built, not yet proven</span></span>
+                <span class="item"><span class="swatch is-planned"></span><span data-i18n="legend_planned">planned, not started</span></span>
             </div>
             <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter projects by status">
-                <button type="button" data-filter="all" aria-pressed="true">All</button>
-                <button type="button" data-filter="live" aria-pressed="false">Live</button>
-                <button type="button" data-filter="built" aria-pressed="false">Built</button>
-                <button type="button" data-filter="planned" aria-pressed="false">Planned</button>
+                <button type="button" data-filter="all" aria-pressed="true" data-i18n="filter_all">All</button>
+                <button type="button" data-filter="live" aria-pressed="false" data-i18n="filter_live">Live</button>
+                <button type="button" data-filter="built" aria-pressed="false" data-i18n="filter_built">Built</button>
+                <button type="button" data-filter="planned" aria-pressed="false" data-i18n="filter_planned">Planned</button>
             </div>
         </div>
         <p class="status-note" data-i18n="status_note">A status report, not a highlight reel.</p>
@@ -115,8 +115,8 @@
     <section class="system-map">
         <div class="wrap-wide">
             <div class="tier-label" style="padding-top:8px;">
-                <h2>How the pieces connect</h2>
-                <span class="tier-note">hover or click a node</span>
+                <h2 data-i18n="map_heading">How the pieces connect</h2>
+                <span class="tier-note" data-i18n="map_tier_note">hover or click a node</span>
             </div>
             <div class="map-card reveal">
                 <svg class="map-svg" id="system-map-svg" viewBox="0 0 640 400" role="img" aria-label="System map: Fylakas watches the PDA and Skopos, Anemos updates the PDA, Kleidi licenses it, Nomos would unify rules across the PDA, Skopos and the trading bot, and Dokimi feeds the trading bot. Click any node to jump to that project.">
@@ -166,7 +166,7 @@
                         </g>
                     </g>
                 </svg>
-                <p class="map-hint">Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three — tap or click a node to jump to it</p>
+                <p class="map-hint" data-i18n="map_hint">Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three — tap or click a node to jump to it</p>
             </div>
         </div>
     </section>
@@ -174,7 +174,7 @@
     <section class="featured" data-status="live">
         <div class="wrap-wide">
             <div class="tier-label">
-                <h2>Featured</h2>
+                <h2 data-i18n="featured_heading">Featured</h2>
             </div>
             <article class="featured-card reveal" id="proj-pda">
                 <div class="featured-eyebrow">
@@ -229,23 +229,23 @@
     <section class="built-tier" data-status="live built">
         <div class="wrap-wide">
             <div class="tier-label">
-                <h2>Live, in production</h2>
-                <span class="tier-note">the tools that operate the featured system</span>
+                <h2 data-i18n="work_live_heading">Live, in production</h2>
+                <span class="tier-note" data-i18n="work_live_note">the tools that operate the featured system</span>
             </div>
             <div class="card-grid">
 
                 <article class="card entry--live reveal" data-status="live" id="proj-skopos">
                     <div class="card-head">
-                        <h3>Scope guard</h3>
+                        <h3 data-i18n="skopos_h3">Scope guard</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
                     <p class="gloss">Skopos · Σκοπός · the scope</p>
-                    <p class="plain-tag">Skopos: stops me from ever testing something I'm not allowed to.</p>
-                    <p class="lede">The program's scope document is the only thing allowed to say yes.</p>
-                    <p class="body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
+                    <p class="plain-tag" data-i18n="skopos_plain">Skopos: stops me from ever testing something I'm not allowed to.</p>
+                    <p class="lede" data-i18n="skopos_lede">The program's scope document is the only thing allowed to say yes.</p>
+                    <p class="body" data-i18n="skopos_body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
                     <ul class="facts">
-                        <li>Checks every outbound request against program scope before it's sent</li>
-                        <li>Enforces the program's rate limit locally, not just by discipline</li>
+                        <li data-i18n="skopos_fact1">Checks every outbound request against program scope before it's sent</li>
+                        <li data-i18n="skopos_fact2">Enforces the program's rate limit locally, not just by discipline</li>
                     </ul>
                     <div class="card-visual">
                         <div class="terminal term-reveal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
@@ -259,16 +259,16 @@
 
                 <article class="card entry--live reveal" data-status="live" id="proj-fylakas">
                     <div class="card-head">
-                        <h3>Uptime watchman</h3>
+                        <h3 data-i18n="fylakas_h3">Uptime watchman</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
                     <p class="gloss">Fylakas · Φύλακας · the watchman</p>
-                    <p class="plain-tag">Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.</p>
-                    <p class="lede">The thing that notices when something else goes quiet.</p>
-                    <p class="body">A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.</p>
+                    <p class="plain-tag" data-i18n="fylakas_plain">Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.</p>
+                    <p class="lede" data-i18n="fylakas_lede">The thing that notices when something else goes quiet.</p>
+                    <p class="body" data-i18n="fylakas_body">A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.</p>
                     <ul class="facts">
-                        <li>Watches every live system here, PDA included</li>
-                        <li>Alerts on silence, not just on error</li>
+                        <li data-i18n="fylakas_fact1">Watches every live system here, PDA included</li>
+                        <li data-i18n="fylakas_fact2">Alerts on silence, not just on error</li>
                     </ul>
                     <div class="card-visual">
                         <div class="terminal term-reveal" role="img" aria-label="Terminal log: Fylakas receiving heartbeats then alerting on a missed one">
@@ -282,16 +282,16 @@
 
                 <article class="card entry--live reveal" data-status="live" id="proj-anemos">
                     <div class="card-head">
-                        <h3>Update distributor</h3>
+                        <h3 data-i18n="anemos_h3">Update distributor</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
                     <p class="gloss">Anemos · Άνεμος · the wind</p>
-                    <p class="plain-tag">Anemos: pushes a signed update to every restaurant without me visiting.</p>
-                    <p class="lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
-                    <p class="body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.</p>
+                    <p class="plain-tag" data-i18n="anemos_plain">Anemos: pushes a signed update to every restaurant without me visiting.</p>
+                    <p class="lede" data-i18n="anemos_lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
+                    <p class="body" data-i18n="anemos_body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.</p>
                     <ul class="facts">
-                        <li>Signs every release before it's allowed to reach an install</li>
-                        <li>Runs on the same schedule as the income sync, no separate agent</li>
+                        <li data-i18n="anemos_fact1">Signs every release before it's allowed to reach an install</li>
+                        <li data-i18n="anemos_fact2">Runs on the same schedule as the income sync, no separate agent</li>
                     </ul>
                     <div class="card-visual">
                         <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: a signed release pushed out to three installs">
@@ -314,23 +314,23 @@
             </div>
 
             <div class="tier-label">
-                <h2>Built, not yet proven</h2>
-                <span class="tier-note">working, just hasn't carried real load yet</span>
+                <h2 data-i18n="work_built_heading">Built, not yet proven</h2>
+                <span class="tier-note" data-i18n="work_built_note">working, just hasn't carried real load yet</span>
             </div>
             <div class="card-grid">
 
                 <article class="card entry--built reveal" data-status="built" id="proj-kleidi">
                     <div class="card-head">
-                        <h3>License key library</h3>
+                        <h3 data-i18n="kleidi_h3">License key library</h3>
                         <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
                     </div>
                     <p class="gloss">Kleidi · Κλειδί · the key</p>
-                    <p class="plain-tag">Kleidi: the reusable version of the PDA's license system, for whatever I build next.</p>
-                    <p class="lede">The PDA's license system, with the restaurant software peeled off.</p>
-                    <p class="body">AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.</p>
+                    <p class="plain-tag" data-i18n="kleidi_plain">Kleidi: the reusable version of the PDA's license system, for whatever I build next.</p>
+                    <p class="lede" data-i18n="kleidi_lede">The PDA's license system, with the restaurant software peeled off.</p>
+                    <p class="body" data-i18n="kleidi_body">AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.</p>
                     <ul class="facts">
-                        <li>Same offline verification and machine-binding scheme the PDA runs in production</li>
-                        <li>Not yet wired into a second product</li>
+                        <li data-i18n="kleidi_fact1">Same offline verification and machine-binding scheme the PDA runs in production</li>
+                        <li data-i18n="kleidi_fact2">Not yet wired into a second product</li>
                     </ul>
                     <div class="card-visual">
                         <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
@@ -351,12 +351,12 @@
                         <h3>LiteVoice</h3>
                         <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
                     </div>
-                    <p class="plain-tag">LiteVoice: a simple voice chat app I built — not yet tested with a real call.</p>
-                    <p class="lede">A voice channel that doesn't need everything else Discord comes with.</p>
-                    <p class="body">A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.</p>
+                    <p class="plain-tag" data-i18n="litevoice_plain">LiteVoice: a simple voice chat app I built — not yet tested with a real call.</p>
+                    <p class="lede" data-i18n="litevoice_lede">A voice channel that doesn't need everything else Discord comes with.</p>
+                    <p class="body" data-i18n="litevoice_body">A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.</p>
                     <ul class="facts">
-                        <li>C# desktop client paired with a dedicated Ubuntu relay server</li>
-                        <li>Next milestone is a real multi-person call, not another unit test</li>
+                        <li data-i18n="litevoice_fact1">C# desktop client paired with a dedicated Ubuntu relay server</li>
+                        <li data-i18n="litevoice_fact2">Next milestone is a real multi-person call, not another unit test</li>
                     </ul>
                     <div class="card-visual">
                         <div class="ui-mock" role="img" aria-label="LiteVoice room mockup: three people in a voice room, one muted, relay connected">
@@ -372,16 +372,16 @@
 
                 <article class="card entry--built reveal" data-status="built" id="proj-dokimi">
                     <div class="card-head">
-                        <h3>Strategy backtester</h3>
+                        <h3 data-i18n="dokimi_h3">Strategy backtester</h3>
                         <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
                     </div>
                     <p class="gloss">Dokimi · Δοκιμή · the trial</p>
-                    <p class="plain-tag">Dokimi: tests a trading strategy against real price history before paper money touches it.</p>
-                    <p class="lede">Every strategy loses on history before it's allowed near paper money.</p>
-                    <p class="body">A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
+                    <p class="plain-tag" data-i18n="dokimi_plain">Dokimi: tests a trading strategy against real price history before paper money touches it.</p>
+                    <p class="lede" data-i18n="dokimi_lede">Every strategy loses on history before it's allowed near paper money.</p>
+                    <p class="body" data-i18n="dokimi_body">A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
                     <ul class="facts">
-                        <li>Replays historical price data against a strategy before paper trading starts</li>
-                        <li>Outputs the same risk metrics the live gates will eventually check</li>
+                        <li data-i18n="dokimi_fact1">Replays historical price data against a strategy before paper trading starts</li>
+                        <li data-i18n="dokimi_fact2">Outputs the same risk metrics the live gates will eventually check</li>
                     </ul>
                     <div class="card-visual">
                         <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
@@ -402,32 +402,32 @@
     <section class="next-up" data-status="planned">
         <div class="wrap-wide">
             <div class="tier-label">
-                <h2>Next up</h2>
-                <span class="tier-note">planned, not started</span>
+                <h2 data-i18n="nextup_heading">Next up</h2>
+                <span class="tier-note" data-i18n="nextup_note">planned, not started</span>
             </div>
             <ul class="next-up-list">
-                <li id="proj-tradingbot"><strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.</li>
-                <li><strong>Apothema</strong> <span class="gloss-inline">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.</li>
-                <li id="proj-nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, the rule</span> — one shared rules engine for the kill switch, the trading bot's gates, and Skopos's scope list.</li>
+                <li id="proj-tradingbot" data-i18n-html="nextup_tradingbot"><strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.</li>
+                <li data-i18n-html="nextup_apothema"><strong>Apothema</strong> <span class="gloss-inline">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.</li>
+                <li id="proj-nomos" data-i18n-html="nextup_nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, the rule</span> — one shared rules engine for the kill switch, the trading bot's gates, and Skopos's scope list.</li>
             </ul>
         </div>
     </section>
 
     <section class="principles" id="how-i-work">
         <div class="wrap">
-            <h2>How I tend to work</h2>
+            <h2 data-i18n="how_heading">How I tend to work</h2>
             <dl>
                 <div class="reveal">
-                    <dt>Ship the whole system, not the demo</dt>
-                    <dd>The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.</dd>
+                    <dt data-i18n="principle1_dt">Ship the whole system, not the demo</dt>
+                    <dd data-i18n="principle1_dd">The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.</dd>
                 </div>
                 <div class="reveal">
-                    <dt>Fail safe, not silent</dt>
-                    <dd>A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.</dd>
+                    <dt data-i18n="principle2_dt">Fail safe, not silent</dt>
+                    <dd data-i18n="principle2_dd">A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.</dd>
                 </div>
                 <div class="reveal">
-                    <dt>Constraints before code</dt>
-                    <dd>For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.</dd>
+                    <dt data-i18n="principle3_dt">Constraints before code</dt>
+                    <dd data-i18n="principle3_dd">For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.</dd>
                 </div>
             </dl>
         </div>
@@ -524,6 +524,59 @@ const STRINGS = {
         stat4_name: "Fylakas", stat4_value: "24/7", stat4_caption: "monitored, every live system",
         status_note: "A status report, not a highlight reel.",
         status_live: "live, in production", status_built: "built, not yet proven",
+        legend_live: "live, in production", legend_built: "built, not yet proven", legend_planned: "planned, not started",
+        filter_all: "All", filter_live: "Live", filter_built: "Built", filter_planned: "Planned",
+        map_heading: "How the pieces connect", map_tier_note: "hover or click a node",
+        map_hint: "Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three — tap or click a node to jump to it",
+        featured_heading: "Featured",
+        work_live_heading: "Live, in production", work_live_note: "the tools that operate the featured system",
+        work_built_heading: "Built, not yet proven", work_built_note: "working, just hasn't carried real load yet",
+        skopos_h3: "Scope guard",
+        skopos_plain: "Skopos: stops me from ever testing something I'm not allowed to.",
+        skopos_lede: "The program's scope document is the only thing allowed to say yes.",
+        skopos_body: "A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.",
+        skopos_fact1: "Checks every outbound request against program scope before it's sent",
+        skopos_fact2: "Enforces the program's rate limit locally, not just by discipline",
+        fylakas_h3: "Uptime watchman",
+        fylakas_plain: "Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.",
+        fylakas_lede: "The thing that notices when something else goes quiet.",
+        fylakas_body: "A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.",
+        fylakas_fact1: "Watches every live system here, PDA included",
+        fylakas_fact2: "Alerts on silence, not just on error",
+        anemos_h3: "Update distributor",
+        anemos_plain: "Anemos: pushes a signed update to every restaurant without me visiting.",
+        anemos_lede: "Every PDA install updates itself without me touching the restaurant's PC.",
+        anemos_body: "The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.",
+        anemos_fact1: "Signs every release before it's allowed to reach an install",
+        anemos_fact2: "Runs on the same schedule as the income sync, no separate agent",
+        kleidi_h3: "License key library",
+        kleidi_plain: "Kleidi: the reusable version of the PDA's license system, for whatever I build next.",
+        kleidi_lede: "The PDA's license system, with the restaurant software peeled off.",
+        kleidi_body: "AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.",
+        kleidi_fact1: "Same offline verification and machine-binding scheme the PDA runs in production",
+        kleidi_fact2: "Not yet wired into a second product",
+        litevoice_plain: "LiteVoice: a simple voice chat app I built — not yet tested with a real call.",
+        litevoice_lede: "A voice channel that doesn't need everything else Discord comes with.",
+        litevoice_body: "A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.",
+        litevoice_fact1: "C# desktop client paired with a dedicated Ubuntu relay server",
+        litevoice_fact2: "Next milestone is a real multi-person call, not another unit test",
+        dokimi_h3: "Strategy backtester",
+        dokimi_plain: "Dokimi: tests a trading strategy against real price history before paper money touches it.",
+        dokimi_lede: "Every strategy loses on history before it's allowed near paper money.",
+        dokimi_body: "A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.",
+        dokimi_fact1: "Replays historical price data against a strategy before paper trading starts",
+        dokimi_fact2: "Outputs the same risk metrics the live gates will eventually check",
+        nextup_heading: "Next up", nextup_note: "planned, not started",
+        nextup_tradingbot: "<strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.",
+        nextup_apothema: "<strong>Apothema</strong> <span class=\"gloss-inline\">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.",
+        nextup_nomos: "<strong>Nomos</strong> <span class=\"gloss-inline\">· Νόμος, the rule</span> — one shared rules engine for the kill switch, the trading bot's gates, and Skopos's scope list.",
+        how_heading: "How I tend to work",
+        principle1_dt: "Ship the whole system, not the demo",
+        principle1_dd: "The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.",
+        principle2_dt: "Fail safe, not silent",
+        principle2_dd: "A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.",
+        principle3_dt: "Constraints before code",
+        principle3_dd: "For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.",
         pda_lede: "A restaurant can run its entire floor on it without ever touching the cloud.",
         pda_problem_heading: "The problem",
         pda_problem_body: "Most restaurant ordering systems assume a reliable internet connection and a monthly cloud bill a small place can't always justify. Staff need something that works on the Wi-Fi that's already there, keeps running when the internet doesn't, and doesn't need a technician visit for routine updates.",
@@ -557,6 +610,59 @@ const STRINGS = {
         stat4_name: "Fylakas", stat4_value: "24/7", stat4_caption: "παρακολούθηση κάθε ζωντανού συστήματος",
         status_note: "Αναφορά κατάστασης, όχι βιτρίνα.",
         status_live: "ενεργό, σε παραγωγή", status_built: "έτοιμο, μη δοκιμασμένο ακόμα",
+        legend_live: "ενεργό, σε παραγωγή", legend_built: "έτοιμο, μη δοκιμασμένο ακόμα", legend_planned: "σχεδιασμένο, δεν έχει ξεκινήσει",
+        filter_all: "Όλα", filter_live: "Ενεργά", filter_built: "Έτοιμα", filter_planned: "Σχεδιασμένα",
+        map_heading: "Πώς συνδέονται τα κομμάτια", map_tier_note: "πέρασε το ποντίκι ή πάτησε έναν κόμβο",
+        map_hint: "Το Fylakas παρακολουθεί το PDA και το Skopos · Το Anemos ενημερώνει το PDA · Το Kleidi το αδειοδοτεί · Το Dokimi τροφοδοτεί το trading bot · Το Nomos θα ενοποιούσε τους κανόνες πίσω από τα τρία — πάτησε έναν κόμβο για μετάβαση",
+        featured_heading: "Προτεινόμενο",
+        work_live_heading: "Ενεργά, σε παραγωγή", work_live_note: "τα εργαλεία που λειτουργούν το προτεινόμενο σύστημα",
+        work_built_heading: "Έτοιμα, μη δοκιμασμένα ακόμα", work_built_note: "δουλεύουν, απλώς δεν έχουν δοκιμαστεί ακόμα σε πραγματικό φόρτο",
+        skopos_h3: "Έλεγχος εμβέλειας",
+        skopos_plain: "Skopos: με εμποδίζει να δοκιμάσω ποτέ κάτι που δεν επιτρέπεται.",
+        skopos_lede: "Το έγγραφο εμβέλειας του προγράμματος είναι το μόνο που επιτρέπεται να πει ναι.",
+        skopos_body: "Ένας μικρός φύλακας αιτημάτων φτιαγμένος για ένα ενεργό πρόγραμμα bug bounty: κάθε εξερχόμενο αίτημα ελέγχεται με βάση τη δημοσιευμένη εμβέλεια και το όριο ρυθμού του προγράμματος πριν επιτραπεί να φύγει. Αν ένας στόχος δεν είναι στη λίστα, ή το όριο έχει ήδη εξαντληθεί, το αίτημα δεν στέλνεται ποτέ.",
+        skopos_fact1: "Ελέγχει κάθε εξερχόμενο αίτημα με βάση την εμβέλεια του προγράμματος πριν σταλεί",
+        skopos_fact2: "Επιβάλλει το όριο ρυθμού του προγράμματος τοπικά, όχι μόνο με αυτοπειθαρχία",
+        fylakas_h3: "Φύλακας διαθεσιμότητας",
+        fylakas_plain: "Fylakas: με ειδοποιεί τη στιγμή που το PDA ή το Skopos σταματήσουν να απαντούν, όχι μόνο όταν σφάλλουν.",
+        fylakas_lede: "Αυτό που παρατηρεί όταν κάτι άλλο σταματά να απαντά.",
+        fylakas_body: "Ένας μικρός φύλακας που στέλνει pings σε κάθε ενεργό σύστημα εδώ και ειδοποιεί τη στιγμή που κάποιο σταματά να απαντά — το PDA να σβήνει, το Skopos να καταρρέει. Παρακολουθεί τη σιωπή, όχι μόνο τα σφάλματα· ένα πάγωμα μοιάζει το ίδιο με μια κατάρρευση γι' αυτό.",
+        fylakas_fact1: "Παρακολουθεί κάθε ενεργό σύστημα εδώ, συμπεριλαμβανομένου του PDA",
+        fylakas_fact2: "Ειδοποιεί στη σιωπή, όχι μόνο στο σφάλμα",
+        anemos_h3: "Διανομέας ενημερώσεων",
+        anemos_plain: "Anemos: στέλνει μια υπογεγραμμένη ενημέρωση σε κάθε εστιατόριο χωρίς να χρειαστεί να πάω εκεί.",
+        anemos_lede: "Κάθε εγκατάσταση του PDA ενημερώνεται μόνη της, χωρίς να αγγίξω τον υπολογιστή του εστιατορίου.",
+        anemos_body: "Ο διανομέας υπογεγραμμένων ενημερώσεων πίσω από το λογισμικό αυτο-ενημέρωσης του PDA: πακετάρει μια έκδοση, την υπογράφει, και αφήνει κάθε ενεργή εγκατάσταση να την κατεβάσει στο δικό της πρόγραμμα. Ο καθρέφτης του διακόπτη τερματισμού — αυτό κρατάει τις εγκαταστάσεις ενημερωμένες αντί να τις κλείνει.",
+        anemos_fact1: "Υπογράφει κάθε έκδοση πριν της επιτραπεί να φτάσει σε μια εγκατάσταση",
+        anemos_fact2: "Τρέχει στο ίδιο πρόγραμμα με τον συγχρονισμό εσόδων, χωρίς ξεχωριστό agent",
+        kleidi_h3: "Βιβλιοθήκη κλειδιών άδειας",
+        kleidi_plain: "Kleidi: η επαναχρησιμοποιήσιμη εκδοχή του συστήματος αδειών του PDA, για ό,τι φτιάξω μετά.",
+        kleidi_lede: "Το σύστημα αδειών του PDA, χωρίς το λογισμικό εστιατορίου γύρω του.",
+        kleidi_body: "Το AlexZaxa Solutions εκδίδει κλειδιά άδειας με offline επαλήθευση, δεμένα στο μηχάνημα που τα ενεργοποιεί — αυτή η λογική ζούσε παλιά μόνο μέσα στον κώδικα του PDA. Το Kleidi είναι το ίδιο σχήμα, βγαλμένο σε δική του μικρή βιβλιοθήκη, ώστε το επόμενο πράγμα που θα αδειοδοτήσω να μην ξεκινάει από το μηδέν. Δεν έχει αδειοδοτήσει τίποτα άλλο εκτός από το PDA ακόμα.",
+        kleidi_fact1: "Το ίδιο σχήμα offline επαλήθευσης και δεσίματος σε μηχάνημα που τρέχει το PDA σε παραγωγή",
+        kleidi_fact2: "Δεν έχει συνδεθεί ακόμα σε δεύτερο προϊόν",
+        litevoice_plain: "LiteVoice: μια απλή εφαρμογή φωνητικής συνομιλίας που έφτιαξα — δεν έχει δοκιμαστεί ακόμα με πραγματική κλήση.",
+        litevoice_lede: "Ένα φωνητικό κανάλι που δεν χρειάζεται όλα τα υπόλοιπα που έρχονται με το Discord.",
+        litevoice_body: "Μια ελαφριά εναλλακτική μόνο για φωνή: ένας client σε C# που μιλάει με έναν relay server που τρέχει σε Ubuntu. Χωρίς κανάλια κειμένου, χωρίς bots, χωρίς κοινή χρήση οθόνης — μόνο ένα δωμάτιο και οι άνθρωποι που μιλάνε μέσα του. Γραμμένο από άκρη σε άκρη· δεν έχει μεταφέρει ακόμα πραγματική κλήση.",
+        litevoice_fact1: "Client επιφάνειας εργασίας σε C#, συνδεδεμένος με αποκλειστικό relay server σε Ubuntu",
+        litevoice_fact2: "Ο επόμενος στόχος είναι μια πραγματική κλήση πολλών ατόμων, όχι άλλο unit test",
+        dokimi_h3: "Backtester στρατηγικής",
+        dokimi_plain: "Dokimi: δοκιμάζει μια στρατηγική trading πάνω σε πραγματικό ιστορικό τιμών πριν την αγγίξουν τα χρήματα δοκιμής.",
+        dokimi_lede: "Κάθε στρατηγική χάνει πρώτα στο ιστορικό πριν της επιτραπεί να πλησιάσει τα χρήματα δοκιμής.",
+        dokimi_body: "Ένα backtester που ξαναπαίζει μια στρατηγική trading πάνω σε πραγματικά ιστορικά δεδομένα τιμών πριν καν ανοίξει η πύλη δοκιμαστικού χρήματος του trading bot. Γραμμένο και λειτουργεί από άκρη σε άκρη — απλώς δεν του έχω δώσει ακόμα μια στρατηγική άξια εμπιστοσύνης, οπότε δεν έχει τίποτα να αναφέρει.",
+        dokimi_fact1: "Ξαναπαίζει ιστορικά δεδομένα τιμών πάνω σε μια στρατηγική πριν ξεκινήσει το paper trading",
+        dokimi_fact2: "Παράγει τις ίδιες μετρήσεις ρίσκου που θα ελέγχουν τελικά οι ζωντανές πύλες",
+        nextup_heading: "Επόμενα", nextup_note: "σχεδιασμένο, δεν έχει ξεκινήσει",
+        nextup_tradingbot: "<strong>Trading bot</strong> — ένα crypto bot που ξεκινάει με χρήματα δοκιμής και μένει εκεί μέχρι να κερδίσει τη θέση του σε πραγματικό exchange.",
+        nextup_apothema: "<strong>Apothema</strong> <span class=\"gloss-inline\">· Απόθεμα, το απόθεμα</span> — ειδοποιήσεις χαμηλού αποθέματος από το ιστορικό παραγγελιών που ήδη συλλέγει το PDA.",
+        nextup_nomos: "<strong>Nomos</strong> <span class=\"gloss-inline\">· Νόμος, ο νόμος</span> — μία κοινή μηχανή κανόνων για τον διακόπτη τερματισμού, τις πύλες του trading bot και τη λίστα εμβέλειας του Skopos.",
+        how_heading: "Πώς δουλεύω συνήθως",
+        principle1_dt: "Παραδίδω ολόκληρο το σύστημα, όχι το demo",
+        principle1_dd: "Το PDA δεν είναι απλώς μια εφαρμογή — είναι η αδειοδότηση, το pipeline ενημερώσεων, το dashboard που το παρακολουθεί, και ο διακόπτης τερματισμού για όταν ένα κατάστημα σταματήσει να πληρώνει. Αν δεν μπορώ να το λειτουργήσω μετά την κυκλοφορία, δεν είναι έτοιμο.",
+        principle2_dt: "Αποτυχία με ασφάλεια, όχι σιωπηλά",
+        principle2_dd: "Μια εργασία συγχρονισμού που μπορεί να κλειδώσει ένα εστιατόριο έξω από το δικό του λογισμικό ενεργεί μόνο με ένα ξεκάθαρο σήμα — οποιοδήποτε σφάλμα δικτύου ή κακή απάντηση αφήνει τα πράγματα ακριβώς όπως ήταν, αντί να μαντεύει.",
+        principle3_dt: "Περιορισμοί πριν τον κώδικα",
+        principle3_dd: "Για το trading bot, οι πύλες «πρώτα δοκιμαστικό χρήμα» γράφτηκαν πριν από μία μόνο γραμμή εκτέλεσης εντολών. Για τα εργαλεία bug bounty, η εμβέλεια και το όριο ρυθμού διαβάστηκαν πριν από το πρώτο αίτημα. Οι κανόνες έρχονται πρώτοι.",
         pda_lede: "Ένα εστιατόριο μπορεί να τρέξει ολόκληρη τη σάλα του χωρίς να αγγίξει ποτέ το cloud.",
         pda_problem_heading: "Το πρόβλημα",
         pda_problem_body: "Τα περισσότερα συστήματα παραγγελιών υποθέτουν σταθερή σύνδεση internet και μηνιαίο κόστος cloud που ένα μικρό μαγαζί δεν μπορεί πάντα να δικαιολογήσει. Το προσωπικό χρειάζεται κάτι που δουλεύει στο Wi-Fi που ήδη υπάρχει, συνεχίζει όταν κόβει το internet, και δεν χρειάζεται επίσκεψη τεχνικού για απλές ενημερώσεις.",
