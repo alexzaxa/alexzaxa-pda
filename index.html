@@ -7,11 +7,21 @@
 <meta name="description" content="AlexZaxa's portfolio: a restaurant ordering system in production, the small tools that operate it, a paper-gated trading bot, and ongoing security research.">
 <link rel="canonical" href="https://alexzaxa.com/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="AlexZaxa">
+<meta property="og:site_name" content="AlexZaxa">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="AlexZaxa — things I've built and what state they're actually in">
 <meta property="og:description" content="A running account of what's live, what's built but unproven, and what's still just a plan.">
 <meta property="og:url" content="https://alexzaxa.com/">
 <meta property="og:image" content="https://alexzaxa.com/assets/screenshots/control-center.webp">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1000">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="AlexZaxa Solutions PDA operations control center">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AlexZaxa — things I've built and what state they're actually in">
+<meta name="twitter:description" content="A running account of what's live, what's built but unproven, and what's still just a plan.">
+<meta name="twitter:image" content="https://alexzaxa.com/assets/screenshots/control-center.webp">
+<meta name="twitter:image:alt" content="AlexZaxa Solutions PDA operations control center">
 <link rel="icon" type="image/svg+xml" href="assets/portfolio-favicon.svg">
 <link rel="stylesheet" href="assets/portfolio.css">
 </head>
@@ -24,7 +34,7 @@
             <a href="#work">Work</a>
             <a href="#how-i-work">How I work</a>
             <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <a class="nav-cta" href="#contact">Contact</a>
         </nav>
     </div>
 </header>
@@ -34,31 +44,37 @@
         <div class="wrap">
             <p>I build the kind of software that has to keep running after I stop looking at it.</p>
             <p class="sub">A restaurant ordering system in production, the small tools that keep it licensed/updated/watched, a trading bot that isn't allowed near real money yet, and ongoing security research. What follows is a straight account of each one — not a highlight reel, a status report.</p>
+            <p class="hero-status">Running in <strong>2 restaurants</strong> in Chalkida, Greece — small, and said plainly rather than rounded up.</p>
+            <div class="hero-actions">
+                <a class="btn-primary" href="#contact">Talk about your project</a>
+                <a class="btn-ghost" href="#proj-pda">See the PDA</a>
+            </div>
+            <p class="hero-now">Currently working on: adding real screenshots and real numbers to this page — Oct 2026.</p>
         </div>
     </section>
 
     <section class="board">
         <div class="wrap">
             <div class="board-grid">
-                <div class="board-tile tile--live">
+                <div class="board-tile tile--live reveal">
                     <p class="name">AlexZaxa Solutions</p>
-                    <p class="stat">live</p>
+                    <p class="stat">2 stores</p>
                     <p class="caption">in production, running real restaurants</p>
                 </div>
-                <div class="board-tile tile--live">
+                <div class="board-tile tile--live reveal">
                     <p class="name">Kill switch</p>
-                    <p class="stat">60s</p>
-                    <p class="caption">income + status sync interval</p>
+                    <p class="stat">under 60s</p>
+                    <p class="caption">to lock a non-paying install</p>
                 </div>
-                <div class="board-tile tile--live">
+                <div class="board-tile tile--live reveal">
                     <p class="name">Anemos</p>
-                    <p class="stat">signed</p>
-                    <p class="caption">every release, before it reaches an install</p>
+                    <p class="stat">100%</p>
+                    <p class="caption">of releases signed before reaching an install</p>
                 </div>
-                <div class="board-tile tile--live">
+                <div class="board-tile tile--live reveal">
                     <p class="name">Fylakas</p>
-                    <p class="stat">3 systems</p>
-                    <p class="caption">watched around the clock</p>
+                    <p class="stat">3+ months</p>
+                    <p class="caption">running without manual intervention</p>
                 </div>
             </div>
         </div>
@@ -85,15 +101,16 @@
         <div class="wrap-wide">
             <div class="tier-label" style="padding-top:8px;">
                 <h2>How the pieces connect</h2>
-                <span class="tier-note">hover a node</span>
+                <span class="tier-note">hover or click a node</span>
             </div>
-            <div class="map-card">
-                <svg class="map-svg" id="system-map-svg" viewBox="0 0 640 400" role="img" aria-label="System map: Fylakas watches the PDA, Anemos updates it, Kleidi licenses it, Fylakas also watches Skopos, Nomos would unify rules across the PDA, Skopos and the trading bot, and Dokimi feeds the trading bot">
+            <div class="map-card reveal">
+                <svg class="map-svg" id="system-map-svg" viewBox="0 0 640 400" role="img" aria-label="System map: Fylakas watches the PDA, Skopos and LiteVoice, Anemos updates the PDA, Kleidi licenses it, Nomos would unify rules across the PDA, Skopos and the trading bot, and Dokimi feeds the trading bot. Click any node to jump to that project.">
                     <g class="map-edges">
                         <line class="map-edge" data-from="pda" data-to="fylakas" x1="210" y1="220" x2="210" y2="85" stroke="#4fc29b" stroke-width="1.4"/>
                         <line class="map-edge" data-from="pda" data-to="anemos" x1="210" y1="220" x2="375" y2="128" stroke="#4fc29b" stroke-width="1.4"/>
                         <line class="map-edge" data-from="pda" data-to="kleidi" x1="210" y1="220" x2="375" y2="312" stroke="#d4ab4a" stroke-width="1.4"/>
                         <line class="map-edge" data-from="fylakas" data-to="skopos" x1="210" y1="85" x2="95" y2="155" stroke="#4fc29b" stroke-width="1.4"/>
+                        <line class="map-edge" data-from="fylakas" data-to="litevoice" x1="196" y1="75" x2="70" y2="59" stroke="#d4ab4a" stroke-width="1.4"/>
                         <line class="map-edge" data-from="nomos" data-to="pda" x1="335" y1="222" x2="243" y2="220" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
                         <line class="map-edge" data-from="nomos" data-to="skopos" x1="335" y1="222" x2="95" y2="158" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
                         <line class="map-edge" data-from="nomos" data-to="tradingbot" x1="335" y1="222" x2="505" y2="258" stroke="#8891a3" stroke-width="1.3" stroke-dasharray="4 3"/>
@@ -108,6 +125,10 @@
                         <g class="map-node" data-id="fylakas" tabindex="0">
                             <circle cx="210" cy="70" r="16" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="1.6"/>
                             <text x="210" y="46" text-anchor="middle" font-size="11" fill="#8b92a1">Fylakas </text>
+                        </g>
+                        <g class="map-node" data-id="litevoice" tabindex="0">
+                            <circle cx="55" cy="55" r="14" fill="rgba(212,171,74,0.14)" stroke="#d4ab4a" stroke-width="1.6"/>
+                            <text x="55" y="32" text-anchor="middle" font-size="11" fill="#8b92a1">LiteVoice </text>
                         </g>
                         <g class="map-node" data-id="anemos" tabindex="0">
                             <circle cx="380" cy="120" r="16" fill="rgba(79,194,155,0.14)" stroke="#4fc29b" stroke-width="1.6"/>
@@ -135,7 +156,7 @@
                         </g>
                     </g>
                 </svg>
-                <p class="map-hint">Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three</p>
+                <p class="map-hint">Fylakas watches the PDA, Skopos and LiteVoice · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three — click a node to jump to it</p>
             </div>
         </div>
     </section>
@@ -145,9 +166,9 @@
             <div class="tier-label">
                 <h2>Featured</h2>
             </div>
-            <article class="featured-card">
+            <article class="featured-card reveal" id="proj-pda">
                 <div class="featured-eyebrow">
-                    <span class="status is-live"><span class="swatch"></span>live, in production</span>
+                    <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                 </div>
                 <h2>AlexZaxa Solutions</h2>
                 <p class="lede">A restaurant can run its entire floor on it without ever touching the cloud.</p>
@@ -171,16 +192,31 @@
                 </ul>
 
                 <div class="featured-shots">
-                    <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="1600" height="1000">
-                    <img src="assets/screenshots/waiter.webp" alt="AlexZaxa Solutions PDA waiter view, showing the dine-in floor plan and table status" loading="lazy" width="1600" height="1000">
+                    <figure>
+                        <img src="assets/screenshots/waiter.webp" alt="Waiter tablet view of the dine-in floor plan, showing open, free, and closed tables" loading="lazy" width="1600" height="1000">
+                        <figcaption>Waiter tablet — the dine-in floor plan, live table status</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="1600" height="1000">
+                        <figcaption>Store operations — tables, delivery, printer routing, and inventory in one place</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets/screenshots/admin-panel.webp" alt="Admin dashboard showing the live floor overview and this week's income" loading="lazy" width="1600" height="1000">
+                        <figcaption>Admin dashboard — live floor overview and income across every store</figcaption>
+                    </figure>
                 </div>
+
+                <blockquote class="owner-quote">
+                    <p>"More than a kiosk."</p>
+                    <cite>— owner, Break Coffee Food</cite>
+                </blockquote>
 
                 <a class="go" href="/pda/">View the product</a>
             </article>
         </div>
     </section>
 
-    <section class="built-tier" data-status="live built">
+    <section class="built-tier" data-status="live built planned">
         <div class="wrap-wide">
             <div class="tier-label">
                 <h2>Built, in production</h2>
@@ -188,12 +224,13 @@
             </div>
             <div class="card-grid">
 
-                <article class="card entry--live" data-status="live">
+                <article class="card entry--live reveal" data-status="live" id="proj-skopos">
                     <div class="card-head">
-                        <h3>Skopos</h3>
-                        <span class="status is-live"><span class="swatch"></span>live</span>
+                        <h3>Scope guard</h3>
+                        <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Σκοπός · the scope</p>
+                    <p class="gloss">Skopos · Σκοπός · the scope</p>
+                    <p class="plain-tag">Skopos: stops me from ever testing something I'm not allowed to.</p>
                     <p class="lede">The program's scope document is the only thing allowed to say yes.</p>
                     <p class="body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
                     <ul class="facts">
@@ -201,7 +238,7 @@
                         <li>Enforces the program's rate limit locally, not just by discipline</li>
                     </ul>
                     <div class="card-visual">
-                        <div class="terminal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
+                        <div class="terminal term-reveal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
                             <div class="ln"><span class="prompt">12:04:02 →</span> GET api.target.example/v2/users?id=118</div>
                             <div class="ln"><span class="ok">12:04:02 ✓ in scope, under limit — sent</span></div>
                             <div class="ln"><span class="prompt">12:04:03 →</span> GET not-the-target.example/admin</div>
@@ -210,12 +247,13 @@
                     </div>
                 </article>
 
-                <article class="card entry--live" data-status="live">
+                <article class="card entry--live reveal" data-status="live" id="proj-fylakas">
                     <div class="card-head">
-                        <h3>Fylakas</h3>
-                        <span class="status is-live"><span class="swatch"></span>live</span>
+                        <h3>Uptime watchman</h3>
+                        <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Φύλακας · the watchman</p>
+                    <p class="gloss">Fylakas · Φύλακας · the watchman</p>
+                    <p class="plain-tag">Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.</p>
                     <p class="lede">The thing that notices when something else goes quiet.</p>
                     <p class="body">A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.</p>
                     <ul class="facts">
@@ -223,7 +261,7 @@
                         <li>Alerts on silence, not just on error</li>
                     </ul>
                     <div class="card-visual">
-                        <div class="terminal" role="img" aria-label="Terminal log: Fylakas receiving heartbeats then alerting on a missed one">
+                        <div class="terminal term-reveal" role="img" aria-label="Terminal log: Fylakas receiving heartbeats then alerting on a missed one">
                             <div class="ln"><span class="ok">03:14:51 ok — PDA heartbeat received</span></div>
                             <div class="ln"><span class="ok">03:16:51 ok — PDA heartbeat received</span></div>
                             <div class="ln"><span class="warn">03:18:51 warn — no heartbeat in 120s</span></div>
@@ -232,12 +270,13 @@
                     </div>
                 </article>
 
-                <article class="card entry--live" data-status="live">
+                <article class="card entry--live reveal" data-status="live" id="proj-anemos">
                     <div class="card-head">
-                        <h3>Anemos</h3>
-                        <span class="status is-live"><span class="swatch"></span>live</span>
+                        <h3>Update distributor</h3>
+                        <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Άνεμος · the wind</p>
+                    <p class="gloss">Anemos · Άνεμος · the wind</p>
+                    <p class="plain-tag">Anemos: pushes a signed update to every restaurant without me visiting.</p>
                     <p class="lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
                     <p class="body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.</p>
                     <ul class="facts">
@@ -262,116 +301,63 @@
                     </div>
                 </article>
 
-                <article class="card entry--built" data-status="built">
-                    <div class="card-head">
-                        <h3>Kleidi</h3>
-                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
-                    </div>
-                    <p class="gloss">Κλειδί · the key</p>
-                    <p class="lede">The PDA's license system, with the restaurant software peeled off.</p>
-                    <p class="body">AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.</p>
-                    <ul class="facts">
-                        <li>Same offline verification and machine-binding scheme the PDA runs in production</li>
-                        <li>Not yet wired into a second product</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
-                            <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
-                            <text aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key </text>
-                            <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
-                            <text aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID </text>
-                            <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <rect x="136" y="78" width="28" height="20" rx="3" fill="rgba(212,171,74,0.16)" stroke="#d4ab4a" stroke-width="1.4"/>
-                        </svg>
-                    </div>
-                </article>
+            </div>
 
-                <article class="card entry--built" data-status="built">
-                    <div class="card-head">
-                        <h3>LiteVoice</h3>
-                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
-                    </div>
-                    <p class="lede">A voice channel that doesn't need everything else Discord comes with.</p>
-                    <p class="body">A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.</p>
-                    <ul class="facts">
-                        <li>C# desktop client paired with a dedicated Ubuntu relay server</li>
-                        <li>Next milestone is a real multi-person call, not another unit test</li>
-                    </ul>
-                    <div class="card-visual">
-                        <div class="ui-mock" role="img" aria-label="LiteVoice room mockup: three people in a voice room, one muted, relay connected">
-                            <div class="bar"><span>#general-voice</span><span>Relay: connected</span></div>
-                            <div class="room">
-                                <div class="who"><span class="avatar">A</span>Alex</div>
-                                <div class="who"><span class="avatar">M</span>Maria</div>
-                                <div class="who is-muted"><span class="avatar">N</span>Nikos</div>
-                            </div>
+            <details class="more-group">
+                <summary>Show 6 more — built but unproven, and still just planned</summary>
+
+                <div class="lab-rows">
+
+                    <div class="lab-row reveal" data-status="built" id="proj-kleidi">
+                        <div class="lab-row-main">
+                            <h3>License key library</h3><span class="gloss">Kleidi · Κλειδί · the key</span>
+                            <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
+                            <p><strong>Kleidi:</strong> the PDA's offline-verified license-key system, pulled into its own small library so the next thing I license doesn't start from zero. Not yet wired into a second product.</p>
                         </div>
                     </div>
-                </article>
 
-                <article class="card entry--built" data-status="built">
-                    <div class="card-head">
-                        <h3>Dokimi</h3>
-                        <span class="status is-built"><span class="swatch"></span>built, not yet proven</span>
+                    <div class="lab-row reveal" data-status="built" id="proj-litevoice">
+                        <div class="lab-row-main">
+                            <h3>LiteVoice</h3>
+                            <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
+                            <p><strong>LiteVoice:</strong> a lightweight voice-only alternative to Discord — a C# client, an Ubuntu relay server, no text channels or bots. Written end to end; hasn't carried a real call yet.</p>
+                        </div>
                     </div>
-                    <p class="gloss">Δοκιμή · the trial</p>
-                    <p class="lede">Every strategy loses on history before it's allowed near paper money.</p>
-                    <p class="body">A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
-                    <ul class="facts">
-                        <li>Replays historical price data against a strategy before paper trading starts</li>
-                        <li>Outputs the same risk metrics the live gates will eventually check</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
-                            <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <text aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices </text>
-                            <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
-                            <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                            <text aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading </text>
-                            <text aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper) </text>
-                        </svg>
+
+                    <div class="lab-row reveal" data-status="built" id="proj-dokimi">
+                        <div class="lab-row-main">
+                            <h3>Strategy backtester</h3><span class="gloss">Dokimi · Δοκιμή · the trial</span>
+                            <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
+                            <p><strong>Dokimi:</strong> replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Runs end to end; I just haven't fed it a strategy worth trusting yet.</p>
+                        </div>
                     </div>
-                </article>
 
-            </div>
-        </div>
-    </section>
-
-    <section class="lab-tier" data-status="planned">
-        <div class="wrap-wide">
-            <div class="tier-label">
-                <h2>Lab, planned</h2>
-                <span class="tier-note">ideas and constraints, no execution code yet</span>
-            </div>
-            <div class="lab-rows">
-
-                <div class="lab-row" data-status="planned">
-                    <div class="lab-row-main">
-                        <h3>Trading bot</h3>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
-                        <p>A crypto trading bot that starts on paper money and stays there until it earns its way onto a real exchange. The phased plan and safety gates are written; no execution code yet, on purpose — the constraints came first.</p>
+                    <div class="lab-row reveal" data-status="planned" id="proj-tradingbot">
+                        <div class="lab-row-main">
+                            <h3>Trading bot</h3>
+                            <span class="status is-planned"><span class="swatch"></span><span data-i18n="status_planned">planned, not started</span></span>
+                            <p><strong>Trading bot:</strong> a crypto trading bot that starts on paper money and stays there until it earns its way onto a real exchange. The phased plan and safety gates are written; no execution code yet, on purpose.</p>
+                        </div>
                     </div>
+
+                    <div class="lab-row reveal" data-status="planned">
+                        <div class="lab-row-main">
+                            <h3>Low-stock alerts</h3><span class="gloss">Apothema · Απόθεμα · the reserve</span>
+                            <span class="status is-planned"><span class="swatch"></span><span data-i18n="status_planned">planned, not started</span></span>
+                            <p><strong>Apothema:</strong> the PDA already knows what a store sold today; this would flag what it's about to run out of, using order history the PDA already collects. Needs more stores running the PDA before it's worth building.</p>
+                        </div>
+                    </div>
+
+                    <div class="lab-row reveal" data-status="planned" id="proj-nomos">
+                        <div class="lab-row-main">
+                            <h3>Rules engine</h3><span class="gloss">Nomos · Νόμος · the rule</span>
+                            <span class="status is-planned"><span class="swatch"></span><span data-i18n="status_planned">planned, not started</span></span>
+                            <p><strong>Nomos:</strong> the kill switch's conditions, the trading bot's gates, Skopos's scope list — each encodes its own rules separately right now. Nomos would pull them into one format to read and audit in one place.</p>
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="lab-row" data-status="planned">
-                    <div class="lab-row-main">
-                        <h3>Apothema</h3><span class="gloss">Απόθεμα · the reserve</span>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
-                        <p>The PDA already knows what a store sold today; this would flag what it's about to run out of, using the order history the PDA already collects. Needs more stores running the PDA before it's worth building.</p>
-                    </div>
-                </div>
-
-                <div class="lab-row" data-status="planned">
-                    <div class="lab-row-main">
-                        <h3>Nomos</h3><span class="gloss">Νόμος · the rule</span>
-                        <span class="status is-planned"><span class="swatch"></span>planned, not started</span>
-                        <p>The kill switch's conditions, the trading bot's gates, Skopos's scope list — each encodes its own rules separately right now. Nomos would pull them into one format to read and audit in one place. Still just the idea; the duplication it would fix is real.</p>
-                    </div>
-                </div>
-
-            </div>
+            </details>
         </div>
     </section>
 
@@ -379,15 +365,15 @@
         <div class="wrap">
             <h2>How I tend to work</h2>
             <dl>
-                <div>
+                <div class="reveal">
                     <dt>Ship the whole system, not the demo</dt>
                     <dd>The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.</dd>
                 </div>
-                <div>
+                <div class="reveal">
                     <dt>Fail safe, not silent</dt>
                     <dd>A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.</dd>
                 </div>
-                <div>
+                <div class="reveal">
                     <dt>Constraints before code</dt>
                     <dd>For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.</dd>
                 </div>
@@ -397,23 +383,23 @@
 
     <section class="about" id="about">
         <div class="wrap">
-            <div class="about-grid">
-                <div class="avatar" aria-hidden="true">AZ</div>
+            <div class="about-grid reveal">
+                <div class="avatar is-placeholder-photo" aria-hidden="true" title="Photo placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8.5" r="3.5"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></svg>
+                </div>
                 <div>
                     <h2>About</h2>
-                    <p>I'm Alexandros Zacharopoulos — AlexZaxa online. IT support and web/Python development out of Chalkida, Greece, with a home lab (Windows Server, Active Directory, Linux, Docker) that's where most of what's above actually started. I end up building the whole system rather than just the feature: the product, the licensing around it, the pipeline that updates it, and the small tools that watch it after launch.</p>
-                    <ul class="tech-stack">
-                        <li>Python</li>
-                        <li>C#</li>
-                        <li>Flask</li>
-                        <li>Windows Server</li>
-                        <li>Active Directory</li>
-                        <li>Linux</li>
-                        <li>Docker</li>
-                        <li>Networking</li>
-                        <li>Supabase</li>
-                    </ul>
-                    <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.docx" download>Download CV (.docx)</a>
+                    <p>I build and operate whole systems: the product, the licensing, the update pipeline, and the monitoring that watches all of it after launch. I'm Alexandros Zacharopoulos — AlexZaxa online — IT support and web/Python development out of Chalkida, Greece, with a home lab (Windows Server, Active Directory, Linux, Docker) that's where most of what's above actually started.</p>
+                    <dl class="skill-list">
+                        <div><dt>Python</dt><dd>the PDA, Skopos, Fylakas, Anemos, Dokimi</dd></div>
+                        <div><dt>C#</dt><dd>LiteVoice's desktop client</dd></div>
+                        <div><dt>Flask</dt><dd>the PDA's local, offline-first web server</dd></div>
+                        <div><dt>Windows Server / Active Directory</dt><dd>the home lab's identity and domain layer</dd></div>
+                        <div><dt>Linux / Docker</dt><dd>relay and self-hosted services, including LiteVoice's relay</dd></div>
+                        <div><dt>Networking</dt><dd>the home lab everything above actually runs on</dd></div>
+                        <div><dt>Supabase</dt><dd>the PDA's income sync, licensing, and admin dashboards</dd></div>
+                    </dl>
+                    <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.pdf" download>Download CV (PDF, 49 KB)</a>
                 </div>
             </div>
         </div>
@@ -422,7 +408,7 @@
     <section class="contact" id="contact">
         <div class="wrap-wide">
             <p>Building something that needs to actually keep running? Let's talk.</p>
-            <div class="contact-grid">
+            <div class="contact-grid reveal">
                 <form class="contact-form" id="contact-form">
                     <label>Name
                         <input type="text" name="name" id="cf-name" required maxlength="200" autocomplete="name">
@@ -436,6 +422,7 @@
                     <input type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" aria-hidden="true">
                     <button type="submit" id="cf-submit">Send message</button>
                     <p class="form-msg" id="cf-msg" role="status"></p>
+                    <p class="form-alt">Don't like forms? Email <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> directly.</p>
                 </form>
                 <div class="contact-aside">
                     <div class="contact-links">
@@ -445,7 +432,8 @@
                         <a href="/pda/">AlexZaxa Solutions PDA</a>
                     </div>
                     <div class="contact-links">
-                        <a href="/assets/cv/alexandros-zacharopoulos-cv.docx" download>Download CV (.docx)</a>
+                        <a class="is-placeholder" href="#" title="Placeholder — add your GitHub profile URL" onclick="return false">GitHub</a>
+                        <a class="is-placeholder" href="#" title="Placeholder — add your LinkedIn profile URL" onclick="return false">LinkedIn</a>
                     </div>
                 </div>
             </div>
@@ -464,13 +452,33 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
 // Sticky header border once the page has scrolled past the hero.
 const header = document.getElementById('site-header');
 addEventListener('scroll', () => {
     header.classList.toggle('is-scrolled', window.scrollY > 8);
 }, { passive: true });
 
-// Filter chips: show/hide by data-status, tracked at the section level.
+// Scroll-reveal: fade/rise elements in once, the first time they enter the viewport.
+// Skips entirely under reduced-motion - everything just shows as normal.
+if (!reduceMotion.matches) {
+    const revealTargets = document.querySelectorAll('.reveal, .term-reveal');
+    const revealIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealIo.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach((el) => revealIo.observe(el));
+} else {
+    document.querySelectorAll('.reveal, .term-reveal').forEach((el) => el.classList.add('is-visible'));
+}
+
+// Filter chips: show/hide by data-status, tracked at the section level. Fades out first,
+// then collapses with display:none once the transition ends, instead of an abrupt snap.
 const chips = document.querySelectorAll('#filter-chips button');
 const filterTargets = document.querySelectorAll('[data-status]');
 chips.forEach((chip) => {
@@ -480,7 +488,13 @@ chips.forEach((chip) => {
         filterTargets.forEach((el) => {
             const statuses = el.dataset.status.split(' ');
             const show = filter === 'all' || statuses.includes(filter);
-            el.classList.toggle('is-filtered-out', !show);
+            if (show) {
+                el.classList.remove('is-filtered-out');
+                requestAnimationFrame(() => el.classList.remove('is-filtering-out'));
+            } else if (!el.classList.contains('is-filtering-out')) {
+                el.classList.add('is-filtering-out');
+                setTimeout(() => el.classList.add('is-filtered-out'), reduceMotion.matches ? 0 : 260);
+            }
         });
     });
 });
@@ -506,12 +520,41 @@ if (mapSvg) {
         });
         nodes.forEach((n) => n.classList.toggle('is-on', connected.has(n.dataset.id)));
     }
+    function goTo(id) {
+        const target = document.getElementById(`proj-${id}`);
+        if (!target) return;
+        const details = target.closest('details');
+        if (details && !details.open) details.open = true;
+        target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+    }
     nodes.forEach((n) => {
         n.addEventListener('mouseenter', () => highlight(n.dataset.id));
         n.addEventListener('focus', () => highlight(n.dataset.id));
         n.addEventListener('mouseleave', () => highlight(null));
         n.addEventListener('blur', () => highlight(null));
+        n.addEventListener('click', () => goTo(n.dataset.id));
+        n.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(n.dataset.id); } });
     });
+
+    // Edges draw themselves in once the map scrolls into view, staggered node by node.
+    if (!reduceMotion.matches) {
+        edges.forEach((e) => {
+            const len = e.getTotalLength ? e.getTotalLength() : 120;
+            e.style.strokeDasharray = `${len}`;
+            e.style.strokeDashoffset = `${len}`;
+        });
+        const mapIo = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                edges.forEach((e, i) => {
+                    e.style.transitionDelay = `${i * 90}ms`;
+                    e.style.strokeDashoffset = '0';
+                });
+                mapIo.disconnect();
+            });
+        }, { threshold: 0.3 });
+        mapIo.observe(mapSvg);
+    }
 }
 
 // Contact form: reuses the existing public support-ticket pipeline (same one help.html
