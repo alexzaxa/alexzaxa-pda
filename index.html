@@ -6,6 +6,9 @@
 <title>AlexZaxa: offline-first restaurant ordering & reliable small systems</title>
 <meta name="description" content="Offline-first restaurant ordering built and run by AlexZaxa (Alexandros Zacharopoulos) in Chalkida, Greece — waiter tablets, kitchen printing, self-updating software, plus the small tools that keep it running.">
 <link rel="canonical" href="https://alexzaxa.com/">
+<link rel="alternate" hreflang="en" href="https://alexzaxa.com/">
+<link rel="alternate" hreflang="el" href="https://alexzaxa.com/el/">
+<link rel="alternate" hreflang="x-default" href="https://alexzaxa.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AlexZaxa">
 <meta property="og:locale" content="en_US">
@@ -22,8 +25,8 @@
 <meta name="twitter:description" content="Restaurant ordering that works on your own Wi-Fi, no cloud dependency, updates itself — plus the small tools that keep it running.">
 <meta name="twitter:image" content="https://alexzaxa.com/assets/screenshots/control-center.webp">
 <meta name="twitter:image:alt" content="AlexZaxa Solutions PDA operations control center">
-<link rel="icon" type="image/svg+xml" href="assets/portfolio-favicon.svg">
-<link rel="stylesheet" href="assets/portfolio.css">
+<link rel="icon" type="image/svg+xml" href="/assets/portfolio-favicon.svg">
+<link rel="stylesheet" href="/assets/portfolio.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -50,10 +53,15 @@
             <a href="#how-i-work" data-i18n="nav_how">How I work</a>
             <a href="#about" data-i18n="nav_about">About</a>
             <a class="nav-cta" href="#contact" data-i18n="nav_contact">Contact</a>
-            <button id="lang-switch" class="lang-switch" type="button">ΕΛ</button>
+            <a id="lang-switch" class="lang-switch" href="/el/">ΕΛ</a>
         </nav>
     </div>
 </header>
+
+<div class="lang-banner" id="lang-banner" hidden>
+    <p><a href="/el/">Διαβάστε στα ελληνικά</a></p>
+    <button type="button" id="lang-banner-dismiss" aria-label="Dismiss">&times;</button>
+</div>
 
 <main>
     <section class="hero">
@@ -84,7 +92,7 @@
                 <div class="board-tile tile--live reveal">
                     <p class="name" data-i18n="stat3_name">Updates</p>
                     <p class="stat" data-i18n="stat3_value">Self-updating</p>
-                    <p class="caption" data-i18n="stat3_caption">no technician visit, ever</p>
+                    <p class="caption" data-i18n="stat3_caption">updates arrive without a technician visit</p>
                 </div>
                 <div class="board-tile tile--live reveal">
                     <p class="name" data-i18n="stat4_name">Fylakas</p>
@@ -116,7 +124,7 @@
         <div class="wrap-wide">
             <div class="tier-label" style="padding-top:8px;">
                 <h2 data-i18n="map_heading">How the pieces connect</h2>
-                <span class="tier-note" data-i18n="map_tier_note">hover or click a node</span>
+                <span class="tier-note" data-i18n="map_tier_note">tap or click a node</span>
             </div>
             <div class="map-card reveal">
                 <svg class="map-svg" id="system-map-svg" viewBox="0 0 640 400" role="img" aria-label="System map: Fylakas watches the PDA and Skopos, Anemos updates the PDA, Kleidi licenses it, Nomos would unify rules across the PDA, Skopos and the trading bot, and Dokimi feeds the trading bot. Click any node to jump to that project.">
@@ -190,28 +198,28 @@
                     </div>
                     <div class="featured-block">
                         <h3 data-i18n="pda_how_heading">How it works</h3>
-                        <p data-i18n="pda_how_body">Waiter tablets, a dine-in floor plan, phone and delivery orders, and kitchen printing all run on the restaurant's local network. An admin dashboard reports income across every licensed store, software updates itself in the background, and a remote kill switch handles installs that stop paying.</p>
+                        <p data-i18n="pda_how_body">Waiter tablets, a dine-in floor plan, phone and delivery orders, and kitchen printing all run on the restaurant's local network. An admin dashboard reports income across every licensed store, and software updates itself in the background.</p>
                     </div>
                 </div>
 
                 <ul class="facts">
                     <li data-i18n="pda_fact1">Admin dashboard with income reporting across every licensed store, built on Supabase</li>
                     <li data-i18n="pda_fact2">Offline-verified license keys, each one bound to the machine that first activates it</li>
-                    <li data-i18n="pda_fact3">A real remote kill switch — terminate a store and its install goes dark within a minute</li>
+                    <li data-i18n="pda_fact3">Remote license management — suspend or reactivate an install within a minute</li>
                     <li data-i18n="pda_fact4">Self-updating software — every install signs and pulls its own releases, no site visit</li>
                 </ul>
 
                 <div class="featured-shots">
                     <figure>
-                        <img src="assets/screenshots/waiter.webp" alt="Waiter tablet view of the dine-in floor plan, showing open, free, and closed tables" loading="lazy" width="1600" height="1000">
+                        <img src="/assets/screenshots/waiter.webp" alt="Waiter tablet view of the dine-in floor plan, showing open, free, and closed tables" loading="lazy" width="1600" height="1000">
                         <figcaption data-i18n="pda_shot1_caption">Waiter tablet — the dine-in floor plan, live table status</figcaption>
                     </figure>
                     <figure>
-                        <img src="assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="1600" height="1000">
+                        <img src="/assets/screenshots/control-center.webp" alt="AlexZaxa Solutions PDA operations control center, showing live tables, menu items, and delivery orders" loading="lazy" width="1600" height="1000">
                         <figcaption data-i18n="pda_shot2_caption">Store operations — tables, delivery, printer routing, and inventory in one place</figcaption>
                     </figure>
                     <figure>
-                        <img src="assets/screenshots/admin-panel.webp" alt="Admin dashboard showing the live floor overview and this week's income" loading="lazy" width="1600" height="1000">
+                        <img src="/assets/screenshots/admin-panel.webp" alt="Admin dashboard showing the live floor overview and this week's income" loading="lazy" width="1600" height="1000">
                         <figcaption data-i18n="pda_shot3_caption">Admin dashboard — live floor overview and income across every store</figcaption>
                     </figure>
                 </div>
@@ -226,6 +234,35 @@
         </div>
     </section>
 
+    <section class="get-started" id="get-started">
+        <div class="wrap-wide">
+            <div class="tier-label">
+                <h2 data-i18n="getstarted_heading">How to get started</h2>
+            </div>
+            <ol class="steps">
+                <li>
+                    <span class="step-num">1</span>
+                    <h3 data-i18n="getstarted_step1_h">Free demo</h3>
+                    <p data-i18n="getstarted_step1_p">At your restaurant, or online — whichever works for you.</p>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <h3 data-i18n="getstarted_step2_h">Setup</h3>
+                    <p data-i18n="getstarted_step2_p">Installed on the Wi-Fi and tablets you already have.</p>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <h3 data-i18n="getstarted_step3_h">Ongoing updates &amp; monitoring</h3>
+                    <p data-i18n="getstarted_step3_p">Software updates itself, and Fylakas watches it around the clock.</p>
+                </li>
+            </ol>
+            <div class="get-started-cta">
+                <a class="btn-primary" href="#contact" id="book-demo-cta" data-i18n="getstarted_cta" data-prefill="I'd like a PDA demo for my restaurant: " data-i18n-data-prefill="getstarted_prefill">Book a free demo</a>
+                <span class="get-started-price" data-i18n="getstarted_price">Ask for a quote</span>
+            </div>
+        </div>
+    </section>
+
     <section class="built-tier" data-status="live built">
         <div class="wrap-wide">
             <div class="tier-label">
@@ -234,26 +271,34 @@
             </div>
             <div class="card-grid">
 
-                <article class="card entry--live reveal" data-status="live" id="proj-skopos">
+                <article class="card entry--live reveal" data-status="live" id="proj-anemos">
                     <div class="card-head">
-                        <h3 data-i18n="skopos_h3">Scope guard</h3>
+                        <h3 data-i18n="anemos_h3">Update distributor</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Skopos · Σκοπός · the scope</p>
-                    <p class="plain-tag" data-i18n="skopos_plain">Skopos: stops me from ever testing something I'm not allowed to.</p>
-                    <p class="lede" data-i18n="skopos_lede">The program's scope document is the only thing allowed to say yes.</p>
-                    <p class="body" data-i18n="skopos_body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
+                    <p class="gloss">Anemos · Άνεμος · the wind</p>
+                    <p class="plain-tag" data-i18n="anemos_plain">Anemos: pushes a signed update to every restaurant without me visiting.</p>
+                    <p class="lede" data-i18n="anemos_lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
+                    <p class="body" data-i18n="anemos_body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The mirror image of remote license management — this is what keeps installs current instead of locking them out.</p>
                     <ul class="facts">
-                        <li data-i18n="skopos_fact1">Checks every outbound request against program scope before it's sent</li>
-                        <li data-i18n="skopos_fact2">Enforces the program's rate limit locally, not just by discipline</li>
+                        <li data-i18n="anemos_fact1">Signs every release before it's allowed to reach an install</li>
+                        <li data-i18n="anemos_fact2">Runs on the same schedule as the income sync, no separate agent</li>
                     </ul>
                     <div class="card-visual">
-                        <div class="terminal term-reveal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
-                            <div class="ln"><span class="prompt">12:04:02 →</span> GET api.target.example/v2/users?id=118</div>
-                            <div class="ln"><span class="ok">12:04:02 ✓ in scope, under limit — sent</span></div>
-                            <div class="ln"><span class="prompt">12:04:03 →</span> GET not-the-target.example/admin</div>
-                            <div class="ln"><span class="drop">12:04:03 ✗ not in scope — blocked before it left</span></div>
-                        </div>
+                        <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: a signed release pushed out to three installs">
+                            <rect x="118" y="10" width="64" height="28" rx="6" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
+                            <text data-i18n="svg_release" aria-hidden="true" x="150" y="28" text-anchor="middle" font-size="10.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Release </text>
+                            <line x1="150" y1="38" x2="150" y2="54" stroke="#4fc29b" stroke-width="1.4"/>
+                            <circle cx="150" cy="62" r="13" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
+                            <path d="M145,62 l3.5,4 l7,-8" fill="none" stroke="#4fc29b" stroke-width="1.6"/>
+                            <line x1="150" y1="75" x2="40" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <line x1="150" y1="75" x2="150" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <line x1="150" y1="75" x2="260" y2="106" stroke="#5b6170" stroke-width="1.2"/>
+                            <circle cx="40" cy="110" r="5" fill="#8b92a1"/>
+                            <circle cx="150" cy="110" r="5" fill="#8b92a1"/>
+                            <circle cx="260" cy="110" r="5" fill="#8b92a1"/>
+                            <text data-i18n="svg_installs_field" aria-hidden="true" x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">installs in the field </text>
+                        </svg>
                     </div>
                 </article>
 
@@ -280,34 +325,26 @@
                     </div>
                 </article>
 
-                <article class="card entry--live reveal" data-status="live" id="proj-anemos">
+                <article class="card entry--live reveal" data-status="live" id="proj-skopos">
                     <div class="card-head">
-                        <h3 data-i18n="anemos_h3">Update distributor</h3>
+                        <h3 data-i18n="skopos_h3">Scope guard</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Anemos · Άνεμος · the wind</p>
-                    <p class="plain-tag" data-i18n="anemos_plain">Anemos: pushes a signed update to every restaurant without me visiting.</p>
-                    <p class="lede" data-i18n="anemos_lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
-                    <p class="body" data-i18n="anemos_body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.</p>
+                    <p class="gloss">Skopos · Σκοπός · the scope</p>
+                    <p class="plain-tag" data-i18n="skopos_plain">Skopos: stops me from ever testing something I'm not allowed to.</p>
+                    <p class="lede" data-i18n="skopos_lede">The program's scope document is the only thing allowed to say yes.</p>
+                    <p class="body" data-i18n="skopos_body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
                     <ul class="facts">
-                        <li data-i18n="anemos_fact1">Signs every release before it's allowed to reach an install</li>
-                        <li data-i18n="anemos_fact2">Runs on the same schedule as the income sync, no separate agent</li>
+                        <li data-i18n="skopos_fact1">Checks every outbound request against program scope before it's sent</li>
+                        <li data-i18n="skopos_fact2">Enforces the program's rate limit locally, not just by discipline</li>
                     </ul>
                     <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 130" role="img" aria-label="Diagram: a signed release pushed out to three installs">
-                            <rect x="118" y="10" width="64" height="28" rx="6" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
-                            <text aria-hidden="true" x="150" y="28" text-anchor="middle" font-size="10.5" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Release </text>
-                            <line x1="150" y1="38" x2="150" y2="54" stroke="#4fc29b" stroke-width="1.4"/>
-                            <circle cx="150" cy="62" r="13" fill="rgba(79,194,155,0.12)" stroke="#4fc29b" stroke-width="1.4"/>
-                            <path d="M145,62 l3.5,4 l7,-8" fill="none" stroke="#4fc29b" stroke-width="1.6"/>
-                            <line x1="150" y1="75" x2="40" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                            <line x1="150" y1="75" x2="150" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                            <line x1="150" y1="75" x2="260" y2="106" stroke="#5b6170" stroke-width="1.2"/>
-                            <circle cx="40" cy="110" r="5" fill="#8b92a1"/>
-                            <circle cx="150" cy="110" r="5" fill="#8b92a1"/>
-                            <circle cx="260" cy="110" r="5" fill="#8b92a1"/>
-                            <text aria-hidden="true" x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">installs in the field </text>
-                        </svg>
+                        <div class="terminal term-reveal" role="img" aria-label="Terminal log: an in-scope request is sent, an out-of-scope request is blocked before it leaves">
+                            <div class="ln"><span class="prompt">12:04:02 →</span> GET api.target.example/v2/users?id=118</div>
+                            <div class="ln"><span class="ok">12:04:02 ✓ in scope, under limit — sent</span></div>
+                            <div class="ln"><span class="prompt">12:04:03 →</span> GET not-the-target.example/admin</div>
+                            <div class="ln"><span class="drop">12:04:03 ✗ not in scope — blocked before it left</span></div>
+                        </div>
                     </div>
                 </article>
 
@@ -335,9 +372,9 @@
                     <div class="card-visual">
                         <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
                             <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
-                            <text aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key </text>
+                            <text data-i18n="svg_license_key" aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key </text>
                             <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
-                            <text aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID </text>
+                            <text data-i18n="svg_machine_id" aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID </text>
                             <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
                             <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
                             <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
@@ -386,11 +423,11 @@
                     <div class="card-visual">
                         <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
                             <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <text aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices </text>
+                            <text data-i18n="svg_historical_prices" aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices </text>
                             <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
                             <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                            <text aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading </text>
-                            <text aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper) </text>
+                            <text data-i18n="svg_trading" aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading </text>
+                            <text data-i18n="svg_bot_paper" aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper) </text>
                         </svg>
                     </div>
                 </article>
@@ -408,7 +445,7 @@
             <ul class="next-up-list">
                 <li id="proj-tradingbot" data-i18n-html="nextup_tradingbot"><strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.</li>
                 <li data-i18n-html="nextup_apothema"><strong>Apothema</strong> <span class="gloss-inline">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.</li>
-                <li id="proj-nomos" data-i18n-html="nextup_nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, the rule</span> — one shared rules engine for the kill switch, the trading bot's gates, and Skopos's scope list.</li>
+                <li id="proj-nomos" data-i18n-html="nextup_nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, the rule</span> — one shared rules engine for license management, the trading bot's gates, and Skopos's scope list.</li>
             </ul>
         </div>
     </section>
@@ -419,7 +456,7 @@
             <dl>
                 <div class="reveal">
                     <dt data-i18n="principle1_dt">Ship the whole system, not the demo</dt>
-                    <dd data-i18n="principle1_dd">The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.</dd>
+                    <dd data-i18n="principle1_dd">The PDA isn't just an app — it's the licensing, the update pipeline, and the dashboard that watches it. If I can't operate it after launch, it isn't done.</dd>
                 </div>
                 <div class="reveal">
                     <dt data-i18n="principle2_dt">Fail safe, not silent</dt>
@@ -436,22 +473,22 @@
     <section class="about" id="about">
         <div class="wrap">
             <div class="about-grid reveal">
-                <img class="avatar" src="assets/avatar.webp" alt="Alexandros Zacharopoulos" width="64" height="64" loading="lazy">
+                <img class="avatar" src="/assets/avatar.webp" alt="Alexandros Zacharopoulos" width="64" height="64" loading="lazy">
                 <div>
-                    <h2>About</h2>
-                    <p>I build and operate whole systems for clients and employers alike: the product, its licensing, the pipeline that updates it, and the monitoring that watches it after launch. For a restaurant, that means software that doesn't go down when the internet does. For an employer, that means someone who ships and maintains the whole thing, not just a demo. I'm Alexandros Zacharopoulos — AlexZaxa online — IT support and web/Python development out of Chalkida, Greece, with a home lab (Windows Server, Active Directory, Linux, Docker) that's where most of what's above actually started.</p>
-                    <p class="languages"><strong>Languages:</strong> Greek (native), English (fluent)</p>
+                    <h2 data-i18n="about_heading">About</h2>
+                    <p data-i18n="about_body">I build and operate whole systems for clients and employers alike: the product, its licensing, the pipeline that updates it, and the monitoring that watches it after launch. For a restaurant, that means software that doesn't go down when the internet does. For an employer, that means someone who ships and maintains the whole thing, not just a demo. I'm Alexandros Zacharopoulos — AlexZaxa online — IT support and web/Python development out of Chalkida, Greece, with a home lab (Windows Server, Active Directory, Linux, Docker) that's where most of what's above actually started.</p>
+                    <p class="languages" data-i18n-html="about_languages"><strong>Languages:</strong> Greek (native), English (fluent)</p>
                     <dl class="skill-list">
-                        <div><dt>Python</dt><dd>the PDA, Skopos, Fylakas, Anemos, Dokimi</dd></div>
-                        <div><dt>C#</dt><dd>LiteVoice's desktop client</dd></div>
-                        <div><dt>Flask</dt><dd>the PDA's local, offline-first web server</dd></div>
-                        <div><dt>Windows Server / Active Directory</dt><dd>the home lab's identity and domain layer</dd></div>
-                        <div><dt>Linux / Docker</dt><dd>relay and self-hosted services, including LiteVoice's relay</dd></div>
-                        <div><dt>Networking</dt><dd>the home lab everything above actually runs on</dd></div>
-                        <div><dt>Supabase</dt><dd>the PDA's income sync, licensing, and admin dashboards</dd></div>
+                        <div><dt>Python</dt><dd data-i18n="skill_python">the PDA, Skopos, Fylakas, Anemos, Dokimi</dd></div>
+                        <div><dt>C#</dt><dd data-i18n="skill_csharp">LiteVoice's desktop client</dd></div>
+                        <div><dt>Flask</dt><dd data-i18n="skill_flask">the PDA's local, offline-first web server</dd></div>
+                        <div><dt>Windows Server / Active Directory</dt><dd data-i18n="skill_winserver">the home lab's identity and domain layer</dd></div>
+                        <div><dt>Linux / Docker</dt><dd data-i18n="skill_linux">relay and self-hosted services, including LiteVoice's relay</dd></div>
+                        <div><dt>Networking</dt><dd data-i18n="skill_networking">the home lab everything above actually runs on</dd></div>
+                        <div><dt>Supabase</dt><dd data-i18n="skill_supabase">the PDA's income sync, licensing, and admin dashboards</dd></div>
                     </dl>
                     <div class="about-links">
-                        <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.pdf" download>Download CV (PDF, 49 KB)</a>
+                        <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.pdf" download data-i18n="about_cv">Download CV (PDF, 49 KB)</a>
                         <a class="go" href="https://github.com/alexzaxa" target="_blank" rel="noopener noreferrer">GitHub</a>
                         <a class="go" href="https://www.linkedin.com/in/alexandros-z-b53122344/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </div>
@@ -476,7 +513,10 @@
                     </label>
                     <input type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" aria-hidden="true">
                     <button type="submit" id="cf-submit" data-i18n="contact_submit">Send message</button>
-                    <p class="form-msg" id="cf-msg" role="status"></p>
+                    <p class="form-msg" id="cf-msg" role="status"
+                       data-sending="Sending…" data-i18n-data-sending="form_sending"
+                       data-success="Sent — thanks, I’ll get back to you." data-i18n-data-success="form_success"
+                       data-error="Could not send right now — email projects@alexzaxa.com instead." data-i18n-data-error="form_error"></p>
                     <p class="form-alt" data-i18n-html="contact_alt">Don't like forms? Email <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> directly.</p>
                 </form>
                 <div class="contact-aside">
@@ -503,188 +543,41 @@
 </footer>
 
 <script type="module">
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./assets/supabase-client.js";
-import { initLangSwitch } from "./assets/i18n.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "/assets/supabase-client.js";
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Translations for the EN/ΕΛ toggle - same pattern as the rest of the site (assets/i18n.js).
-// Scope is deliberately the hero, stats, PDA case study, and contact section - the parts a
-// Greek-speaking restaurant owner actually needs. The tool cards (Work section) stay English-only.
-const STRINGS = {
-    en: {
-        nav_work: "Work", nav_how: "How I work", nav_about: "About", nav_contact: "Contact",
-        hero_title: "Restaurant ordering that keeps working when the internet doesn't.",
-        hero_sub: "Waiter tablets, a dine-in floor plan, kitchen printing, and delivery orders — all on your own Wi-Fi. No cloud bill, no technician visits, and it updates itself. Running daily in 2 restaurants in Chalkida.",
-        hero_cta_primary: "See the PDA", hero_cta_secondary: "Talk about your project",
-        hero_hiring: "Hiring? See my skills & CV →",
-        stat1_name: "AlexZaxa Solutions", stat1_value: "2 restaurants", stat1_caption: "running daily, in production",
-        stat2_name: "Connectivity", stat2_value: "Works offline", stat2_caption: "your own Wi-Fi, no cloud bill",
-        stat3_name: "Updates", stat3_value: "Self-updating", stat3_caption: "no technician visit, ever",
-        stat4_name: "Fylakas", stat4_value: "24/7", stat4_caption: "monitored, every live system",
-        status_note: "A status report, not a highlight reel.",
-        status_live: "live, in production", status_built: "built, not yet proven",
-        legend_live: "live, in production", legend_built: "built, not yet proven", legend_planned: "planned, not started",
-        filter_all: "All", filter_live: "Live", filter_built: "Built", filter_planned: "Planned",
-        map_heading: "How the pieces connect", map_tier_note: "hover or click a node",
-        map_hint: "Fylakas watches the PDA and Skopos · Anemos updates the PDA · Kleidi licenses it · Dokimi feeds the trading bot · Nomos would unify the rules behind all three — tap or click a node to jump to it",
-        featured_heading: "Featured",
-        work_live_heading: "Live, in production", work_live_note: "the tools that operate the featured system",
-        work_built_heading: "Built, not yet proven", work_built_note: "working, just hasn't carried real load yet",
-        skopos_h3: "Scope guard",
-        skopos_plain: "Skopos: stops me from ever testing something I'm not allowed to.",
-        skopos_lede: "The program's scope document is the only thing allowed to say yes.",
-        skopos_body: "A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.",
-        skopos_fact1: "Checks every outbound request against program scope before it's sent",
-        skopos_fact2: "Enforces the program's rate limit locally, not just by discipline",
-        fylakas_h3: "Uptime watchman",
-        fylakas_plain: "Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.",
-        fylakas_lede: "The thing that notices when something else goes quiet.",
-        fylakas_body: "A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.",
-        fylakas_fact1: "Watches every live system here, PDA included",
-        fylakas_fact2: "Alerts on silence, not just on error",
-        anemos_h3: "Update distributor",
-        anemos_plain: "Anemos: pushes a signed update to every restaurant without me visiting.",
-        anemos_lede: "Every PDA install updates itself without me touching the restaurant's PC.",
-        anemos_body: "The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The kill switch's mirror image — this is what keeps installs current instead of shutting them down.",
-        anemos_fact1: "Signs every release before it's allowed to reach an install",
-        anemos_fact2: "Runs on the same schedule as the income sync, no separate agent",
-        kleidi_h3: "License key library",
-        kleidi_plain: "Kleidi: the reusable version of the PDA's license system, for whatever I build next.",
-        kleidi_lede: "The PDA's license system, with the restaurant software peeled off.",
-        kleidi_body: "AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.",
-        kleidi_fact1: "Same offline verification and machine-binding scheme the PDA runs in production",
-        kleidi_fact2: "Not yet wired into a second product",
-        litevoice_plain: "LiteVoice: a simple voice chat app I built — not yet tested with a real call.",
-        litevoice_lede: "A voice channel that doesn't need everything else Discord comes with.",
-        litevoice_body: "A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.",
-        litevoice_fact1: "C# desktop client paired with a dedicated Ubuntu relay server",
-        litevoice_fact2: "Next milestone is a real multi-person call, not another unit test",
-        dokimi_h3: "Strategy backtester",
-        dokimi_plain: "Dokimi: tests a trading strategy against real price history before paper money touches it.",
-        dokimi_lede: "Every strategy loses on history before it's allowed near paper money.",
-        dokimi_body: "A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.",
-        dokimi_fact1: "Replays historical price data against a strategy before paper trading starts",
-        dokimi_fact2: "Outputs the same risk metrics the live gates will eventually check",
-        nextup_heading: "Next up", nextup_note: "planned, not started",
-        nextup_tradingbot: "<strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.",
-        nextup_apothema: "<strong>Apothema</strong> <span class=\"gloss-inline\">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.",
-        nextup_nomos: "<strong>Nomos</strong> <span class=\"gloss-inline\">· Νόμος, the rule</span> — one shared rules engine for the kill switch, the trading bot's gates, and Skopos's scope list.",
-        how_heading: "How I tend to work",
-        principle1_dt: "Ship the whole system, not the demo",
-        principle1_dd: "The PDA isn't just an app — it's the licensing, the update pipeline, the dashboard that watches it, and the kill switch for when a store stops paying. If I can't operate it after launch, it isn't done.",
-        principle2_dt: "Fail safe, not silent",
-        principle2_dd: "A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.",
-        principle3_dt: "Constraints before code",
-        principle3_dd: "For the trading bot, the paper-first gates got written before a single order-execution line did. For the bug bounty tooling, the scope and rate limit got read before the first request. The rules come first.",
-        pda_lede: "A restaurant can run its entire floor on it without ever touching the cloud.",
-        pda_problem_heading: "The problem",
-        pda_problem_body: "Most restaurant ordering systems assume a reliable internet connection and a monthly cloud bill a small place can't always justify. Staff need something that works on the Wi-Fi that's already there, keeps running when the internet doesn't, and doesn't need a technician visit for routine updates.",
-        pda_how_heading: "How it works",
-        pda_how_body: "Waiter tablets, a dine-in floor plan, phone and delivery orders, and kitchen printing all run on the restaurant's local network. An admin dashboard reports income across every licensed store, software updates itself in the background, and a remote kill switch handles installs that stop paying.",
-        pda_fact1: "Admin dashboard with income reporting across every licensed store, built on Supabase",
-        pda_fact2: "Offline-verified license keys, each one bound to the machine that first activates it",
-        pda_fact3: "A real remote kill switch — terminate a store and its install goes dark within a minute",
-        pda_fact4: "Self-updating software — every install signs and pulls its own releases, no site visit",
-        pda_shot1_caption: "Waiter tablet — the dine-in floor plan, live table status",
-        pda_shot2_caption: "Store operations — tables, delivery, printer routing, and inventory in one place",
-        pda_shot3_caption: "Admin dashboard — live floor overview and income across every store",
-        pda_quote: "“It changes the way orders are made — faster and more secure.”",
-        pda_quote_cite: "— Manos, Chalkoutsi, Chalkida",
-        pda_cta: "View the product",
-        contact_intro: "Building something that needs to actually keep running? Let's talk.",
-        contact_name_label: "Name", contact_email_label: "Email", contact_message_label: "Message",
-        contact_submit: "Send message",
-        contact_alt: "Don't like forms? Email <a href=\"mailto:projects@alexzaxa.com\">projects@alexzaxa.com</a> directly.",
-    },
-    el: {
-        __title: "AlexZaxa: παραγγελίες εστιατορίου offline-first & αξιόπιστα μικρά συστήματα",
-        nav_work: "Έργα", nav_how: "Πώς δουλεύω", nav_about: "Σχετικά", nav_contact: "Επικοινωνία",
-        hero_title: "Παραγγελίες εστιατορίου που συνεχίζουν να δουλεύουν ακόμα κι όταν κόψει το ίντερνετ.",
-        hero_sub: "Tablet σερβιτόρων, κάτοψη σάλας, εκτύπωση στην κουζίνα και παραγγελίες delivery — όλα πάνω στο δικό σας Wi-Fi. Χωρίς μηνιαίο κόστος cloud, χωρίς επίσκεψη τεχνικού, και ενημερώνεται μόνο του. Τρέχει καθημερινά σε 2 εστιατόρια στη Χαλκίδα.",
-        hero_cta_primary: "Δες το PDA", hero_cta_secondary: "Πες μου για το έργο σου",
-        hero_hiring: "Προσλήψεις; Δες τις δεξιότητες & το βιογραφικό μου →",
-        stat1_name: "AlexZaxa Solutions", stat1_value: "2 εστιατόρια", stat1_caption: "καθημερινή λειτουργία, σε παραγωγή",
-        stat2_name: "Σύνδεση", stat2_value: "Δουλεύει offline", stat2_caption: "στο δικό σας Wi-Fi, χωρίς cloud",
-        stat3_name: "Ενημερώσεις", stat3_value: "Αυτοενημέρωση", stat3_caption: "χωρίς επίσκεψη τεχνικού",
-        stat4_name: "Fylakas", stat4_value: "24/7", stat4_caption: "παρακολούθηση κάθε ζωντανού συστήματος",
-        status_note: "Αναφορά κατάστασης, όχι βιτρίνα.",
-        status_live: "ενεργό, σε παραγωγή", status_built: "έτοιμο, μη δοκιμασμένο ακόμα",
-        legend_live: "ενεργό, σε παραγωγή", legend_built: "έτοιμο, μη δοκιμασμένο ακόμα", legend_planned: "σχεδιασμένο, δεν έχει ξεκινήσει",
-        filter_all: "Όλα", filter_live: "Ενεργά", filter_built: "Έτοιμα", filter_planned: "Σχεδιασμένα",
-        map_heading: "Πώς συνδέονται τα κομμάτια", map_tier_note: "πέρασε το ποντίκι ή πάτησε έναν κόμβο",
-        map_hint: "Το Fylakas παρακολουθεί το PDA και το Skopos · Το Anemos ενημερώνει το PDA · Το Kleidi το αδειοδοτεί · Το Dokimi τροφοδοτεί το trading bot · Το Nomos θα ενοποιούσε τους κανόνες πίσω από τα τρία — πάτησε έναν κόμβο για μετάβαση",
-        featured_heading: "Προτεινόμενο",
-        work_live_heading: "Ενεργά, σε παραγωγή", work_live_note: "τα εργαλεία που λειτουργούν το προτεινόμενο σύστημα",
-        work_built_heading: "Έτοιμα, μη δοκιμασμένα ακόμα", work_built_note: "δουλεύουν, απλώς δεν έχουν δοκιμαστεί ακόμα σε πραγματικό φόρτο",
-        skopos_h3: "Έλεγχος εμβέλειας",
-        skopos_plain: "Skopos: με εμποδίζει να δοκιμάσω ποτέ κάτι που δεν επιτρέπεται.",
-        skopos_lede: "Το έγγραφο εμβέλειας του προγράμματος είναι το μόνο που επιτρέπεται να πει ναι.",
-        skopos_body: "Ένας μικρός φύλακας αιτημάτων φτιαγμένος για ένα ενεργό πρόγραμμα bug bounty: κάθε εξερχόμενο αίτημα ελέγχεται με βάση τη δημοσιευμένη εμβέλεια και το όριο ρυθμού του προγράμματος πριν επιτραπεί να φύγει. Αν ένας στόχος δεν είναι στη λίστα, ή το όριο έχει ήδη εξαντληθεί, το αίτημα δεν στέλνεται ποτέ.",
-        skopos_fact1: "Ελέγχει κάθε εξερχόμενο αίτημα με βάση την εμβέλεια του προγράμματος πριν σταλεί",
-        skopos_fact2: "Επιβάλλει το όριο ρυθμού του προγράμματος τοπικά, όχι μόνο με αυτοπειθαρχία",
-        fylakas_h3: "Φύλακας διαθεσιμότητας",
-        fylakas_plain: "Fylakas: με ειδοποιεί τη στιγμή που το PDA ή το Skopos σταματήσουν να απαντούν, όχι μόνο όταν σφάλλουν.",
-        fylakas_lede: "Αυτό που παρατηρεί όταν κάτι άλλο σταματά να απαντά.",
-        fylakas_body: "Ένας μικρός φύλακας που στέλνει pings σε κάθε ενεργό σύστημα εδώ και ειδοποιεί τη στιγμή που κάποιο σταματά να απαντά — το PDA να σβήνει, το Skopos να καταρρέει. Παρακολουθεί τη σιωπή, όχι μόνο τα σφάλματα· ένα πάγωμα μοιάζει το ίδιο με μια κατάρρευση γι' αυτό.",
-        fylakas_fact1: "Παρακολουθεί κάθε ενεργό σύστημα εδώ, συμπεριλαμβανομένου του PDA",
-        fylakas_fact2: "Ειδοποιεί στη σιωπή, όχι μόνο στο σφάλμα",
-        anemos_h3: "Διανομέας ενημερώσεων",
-        anemos_plain: "Anemos: στέλνει μια υπογεγραμμένη ενημέρωση σε κάθε εστιατόριο χωρίς να χρειαστεί να πάω εκεί.",
-        anemos_lede: "Κάθε εγκατάσταση του PDA ενημερώνεται μόνη της, χωρίς να αγγίξω τον υπολογιστή του εστιατορίου.",
-        anemos_body: "Ο διανομέας υπογεγραμμένων ενημερώσεων πίσω από το λογισμικό αυτο-ενημέρωσης του PDA: πακετάρει μια έκδοση, την υπογράφει, και αφήνει κάθε ενεργή εγκατάσταση να την κατεβάσει στο δικό της πρόγραμμα. Ο καθρέφτης του διακόπτη τερματισμού — αυτό κρατάει τις εγκαταστάσεις ενημερωμένες αντί να τις κλείνει.",
-        anemos_fact1: "Υπογράφει κάθε έκδοση πριν της επιτραπεί να φτάσει σε μια εγκατάσταση",
-        anemos_fact2: "Τρέχει στο ίδιο πρόγραμμα με τον συγχρονισμό εσόδων, χωρίς ξεχωριστό agent",
-        kleidi_h3: "Βιβλιοθήκη κλειδιών άδειας",
-        kleidi_plain: "Kleidi: η επαναχρησιμοποιήσιμη εκδοχή του συστήματος αδειών του PDA, για ό,τι φτιάξω μετά.",
-        kleidi_lede: "Το σύστημα αδειών του PDA, χωρίς το λογισμικό εστιατορίου γύρω του.",
-        kleidi_body: "Το AlexZaxa Solutions εκδίδει κλειδιά άδειας με offline επαλήθευση, δεμένα στο μηχάνημα που τα ενεργοποιεί — αυτή η λογική ζούσε παλιά μόνο μέσα στον κώδικα του PDA. Το Kleidi είναι το ίδιο σχήμα, βγαλμένο σε δική του μικρή βιβλιοθήκη, ώστε το επόμενο πράγμα που θα αδειοδοτήσω να μην ξεκινάει από το μηδέν. Δεν έχει αδειοδοτήσει τίποτα άλλο εκτός από το PDA ακόμα.",
-        kleidi_fact1: "Το ίδιο σχήμα offline επαλήθευσης και δεσίματος σε μηχάνημα που τρέχει το PDA σε παραγωγή",
-        kleidi_fact2: "Δεν έχει συνδεθεί ακόμα σε δεύτερο προϊόν",
-        litevoice_plain: "LiteVoice: μια απλή εφαρμογή φωνητικής συνομιλίας που έφτιαξα — δεν έχει δοκιμαστεί ακόμα με πραγματική κλήση.",
-        litevoice_lede: "Ένα φωνητικό κανάλι που δεν χρειάζεται όλα τα υπόλοιπα που έρχονται με το Discord.",
-        litevoice_body: "Μια ελαφριά εναλλακτική μόνο για φωνή: ένας client σε C# που μιλάει με έναν relay server που τρέχει σε Ubuntu. Χωρίς κανάλια κειμένου, χωρίς bots, χωρίς κοινή χρήση οθόνης — μόνο ένα δωμάτιο και οι άνθρωποι που μιλάνε μέσα του. Γραμμένο από άκρη σε άκρη· δεν έχει μεταφέρει ακόμα πραγματική κλήση.",
-        litevoice_fact1: "Client επιφάνειας εργασίας σε C#, συνδεδεμένος με αποκλειστικό relay server σε Ubuntu",
-        litevoice_fact2: "Ο επόμενος στόχος είναι μια πραγματική κλήση πολλών ατόμων, όχι άλλο unit test",
-        dokimi_h3: "Backtester στρατηγικής",
-        dokimi_plain: "Dokimi: δοκιμάζει μια στρατηγική trading πάνω σε πραγματικό ιστορικό τιμών πριν την αγγίξουν τα χρήματα δοκιμής.",
-        dokimi_lede: "Κάθε στρατηγική χάνει πρώτα στο ιστορικό πριν της επιτραπεί να πλησιάσει τα χρήματα δοκιμής.",
-        dokimi_body: "Ένα backtester που ξαναπαίζει μια στρατηγική trading πάνω σε πραγματικά ιστορικά δεδομένα τιμών πριν καν ανοίξει η πύλη δοκιμαστικού χρήματος του trading bot. Γραμμένο και λειτουργεί από άκρη σε άκρη — απλώς δεν του έχω δώσει ακόμα μια στρατηγική άξια εμπιστοσύνης, οπότε δεν έχει τίποτα να αναφέρει.",
-        dokimi_fact1: "Ξαναπαίζει ιστορικά δεδομένα τιμών πάνω σε μια στρατηγική πριν ξεκινήσει το paper trading",
-        dokimi_fact2: "Παράγει τις ίδιες μετρήσεις ρίσκου που θα ελέγχουν τελικά οι ζωντανές πύλες",
-        nextup_heading: "Επόμενα", nextup_note: "σχεδιασμένο, δεν έχει ξεκινήσει",
-        nextup_tradingbot: "<strong>Trading bot</strong> — ένα crypto bot που ξεκινάει με χρήματα δοκιμής και μένει εκεί μέχρι να κερδίσει τη θέση του σε πραγματικό exchange.",
-        nextup_apothema: "<strong>Apothema</strong> <span class=\"gloss-inline\">· Απόθεμα, το απόθεμα</span> — ειδοποιήσεις χαμηλού αποθέματος από το ιστορικό παραγγελιών που ήδη συλλέγει το PDA.",
-        nextup_nomos: "<strong>Nomos</strong> <span class=\"gloss-inline\">· Νόμος, ο νόμος</span> — μία κοινή μηχανή κανόνων για τον διακόπτη τερματισμού, τις πύλες του trading bot και τη λίστα εμβέλειας του Skopos.",
-        how_heading: "Πώς δουλεύω συνήθως",
-        principle1_dt: "Παραδίδω ολόκληρο το σύστημα, όχι το demo",
-        principle1_dd: "Το PDA δεν είναι απλώς μια εφαρμογή — είναι η αδειοδότηση, το pipeline ενημερώσεων, το dashboard που το παρακολουθεί, και ο διακόπτης τερματισμού για όταν ένα κατάστημα σταματήσει να πληρώνει. Αν δεν μπορώ να το λειτουργήσω μετά την κυκλοφορία, δεν είναι έτοιμο.",
-        principle2_dt: "Αποτυχία με ασφάλεια, όχι σιωπηλά",
-        principle2_dd: "Μια εργασία συγχρονισμού που μπορεί να κλειδώσει ένα εστιατόριο έξω από το δικό του λογισμικό ενεργεί μόνο με ένα ξεκάθαρο σήμα — οποιοδήποτε σφάλμα δικτύου ή κακή απάντηση αφήνει τα πράγματα ακριβώς όπως ήταν, αντί να μαντεύει.",
-        principle3_dt: "Περιορισμοί πριν τον κώδικα",
-        principle3_dd: "Για το trading bot, οι πύλες «πρώτα δοκιμαστικό χρήμα» γράφτηκαν πριν από μία μόνο γραμμή εκτέλεσης εντολών. Για τα εργαλεία bug bounty, η εμβέλεια και το όριο ρυθμού διαβάστηκαν πριν από το πρώτο αίτημα. Οι κανόνες έρχονται πρώτοι.",
-        pda_lede: "Ένα εστιατόριο μπορεί να τρέξει ολόκληρη τη σάλα του χωρίς να αγγίξει ποτέ το cloud.",
-        pda_problem_heading: "Το πρόβλημα",
-        pda_problem_body: "Τα περισσότερα συστήματα παραγγελιών υποθέτουν σταθερή σύνδεση internet και μηνιαίο κόστος cloud που ένα μικρό μαγαζί δεν μπορεί πάντα να δικαιολογήσει. Το προσωπικό χρειάζεται κάτι που δουλεύει στο Wi-Fi που ήδη υπάρχει, συνεχίζει όταν κόβει το internet, και δεν χρειάζεται επίσκεψη τεχνικού για απλές ενημερώσεις.",
-        pda_how_heading: "Πώς δουλεύει",
-        pda_how_body: "Tablet σερβιτόρων, κάτοψη σάλας, τηλεφωνικές και delivery παραγγελίες, και εκτύπωση στην κουζίνα τρέχουν όλα στο τοπικό δίκτυο του εστιατορίου. Ένα admin dashboard δείχνει τα έσοδα κάθε αδειοδοτημένου καταστήματος, το λογισμικό ενημερώνεται μόνο του, και ένας απομακρυσμένος διακόπτης κλειδώνει εγκαταστάσεις που σταματούν να πληρώνουν.",
-        pda_fact1: "Admin dashboard με αναφορά εσόδων για κάθε αδειοδοτημένο κατάστημα, χτισμένο πάνω στο Supabase",
-        pda_fact2: "Κλειδιά άδειας με offline επαλήθευση, δεμένα στο μηχάνημα που τα ενεργοποίησε πρώτο",
-        pda_fact3: "Πραγματικός απομακρυσμένος διακόπτης — τερματισμός καταστήματος και η εγκατάσταση σβήνει μέσα σε ένα λεπτό",
-        pda_fact4: "Λογισμικό που ενημερώνεται μόνο του — κάθε εγκατάσταση υπογράφει και κατεβάζει τις δικές της εκδόσεις, χωρίς επίσκεψη",
-        pda_shot1_caption: "Tablet σερβιτόρου — η κάτοψη σάλας, κατάσταση τραπεζιών σε πραγματικό χρόνο",
-        pda_shot2_caption: "Λειτουργία καταστήματος — τραπέζια, delivery, εκτυπωτές και απόθεμα σε ένα μέρος",
-        pda_shot3_caption: "Admin dashboard — κατάσταση σάλας και έσοδα από όλα τα καταστήματα",
-        pda_quote: "«Αλλάζει τον τρόπο που γίνονται οι παραγγελίες — πιο γρήγορα και πιο ασφαλώς.»",
-        pda_quote_cite: "— Μάνος, Chalkoutsi, Χαλκίδα",
-        pda_cta: "Δες το προϊόν",
-        contact_intro: "Φτιάχνεις κάτι που πρέπει πραγματικά να συνεχίσει να δουλεύει; Ας μιλήσουμε.",
-        contact_name_label: "Όνομα", contact_email_label: "Email", contact_message_label: "Μήνυμα",
-        contact_submit: "Αποστολή μηνύματος",
-        contact_alt: "Δεν σ'αρέσουν οι φόρμες; Στείλε email στο <a href=\"mailto:projects@alexzaxa.com\">projects@alexzaxa.com</a> απευθείας.",
-    },
-};
-initLangSwitch(STRINGS);
+// Greek-visitor banner: EN page only. Shown once per visitor (localStorage-remembered
+// dismissal) when the browser's language is Greek, since this page itself doesn't
+// redirect - /el/ is a real, separate, independently-indexable page (see hreflang tags
+// in <head>), not a client-side swap. Never auto-redirects, just offers the link.
+(function () {
+    const STORAGE_KEY = 'lang-banner-dismissed';
+    let dismissed = false;
+    try { dismissed = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { /* storage unavailable - just show it */ }
+    const isGreekBrowser = (navigator.language || '').toLowerCase().startsWith('el');
+    const banner = document.getElementById('lang-banner');
+    if (banner && isGreekBrowser && !dismissed) {
+        banner.hidden = false;
+    }
+    const dismissBtn = document.getElementById('lang-banner-dismiss');
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+            banner.hidden = true;
+            try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) { /* ignore - just won't be remembered */ }
+        });
+    }
+})();
+
+// "Book a free demo" prefills the contact message so a restaurant owner doesn't have to
+// write the opening line themselves. data-prefill carries the (build-time-translated) text.
+const demoCta = document.getElementById('book-demo-cta');
+if (demoCta) {
+    demoCta.addEventListener('click', () => {
+        const msgField = document.getElementById('cf-message');
+        if (msgField && !msgField.value) msgField.value = demoCta.dataset.prefill || '';
+    });
+}
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -803,7 +696,7 @@ form.addEventListener('submit', async (event) => {
     const email = document.getElementById('cf-email').value.trim();
     const message = document.getElementById('cf-message').value.trim();
     submit.disabled = true;
-    msg.textContent = 'Sending…';
+    msg.textContent = msg.dataset.sending;
     msg.className = 'form-msg';
     try {
         const resp = await fetch(`${SUPABASE_URL}/functions/v1/submit-ticket`, {
@@ -824,11 +717,11 @@ form.addEventListener('submit', async (event) => {
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Failed to send');
-        msg.textContent = 'Sent — thanks, I’ll get back to you.';
+        msg.textContent = msg.dataset.success;
         msg.className = 'form-msg ok';
         form.reset();
     } catch (err) {
-        msg.textContent = 'Could not send right now — email projects@alexzaxa.com instead.';
+        msg.textContent = msg.dataset.error;
         msg.className = 'form-msg error';
     } finally {
         submit.disabled = false;

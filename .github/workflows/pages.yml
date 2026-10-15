@@ -22,10 +22,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Build the Greek page (el/index.html) from index.html + assets/i18n/el.json
+        run: python3 scripts/build-el.py
       - name: Assemble site (only the public frontend, not supabase/ or scripts/)
         run: |
           mkdir _site
           cp index.html login.html admin.html dashboard.html pda-login.html 404.html robots.txt sitemap.xml _redirects _site/
+          mkdir -p _site/el
+          cp el/index.html _site/el/
           mkdir -p _site/pda
           cp pda/index.html pda/changelog.html pda/download.html pda/menu-creator.html pda/help.html pda/terms.html _site/pda/
           cp -r assets _site/assets

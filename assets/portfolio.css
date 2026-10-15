@@ -141,8 +141,17 @@ a:hover { text-decoration-color: currentColor; }
     color: var(--text-dim);
 }
 
-.site-nav a { color: var(--text-dim); }
+.site-nav a { color: var(--text-dim); white-space: nowrap; }
 .site-nav a:hover { color: var(--text); }
+
+@media (max-width: 760px) {
+    .site-nav { gap: 14px; }
+}
+
+@media (max-width: 720px) {
+    .site-header .wrap-wide { flex-wrap: wrap; row-gap: 10px; }
+    .site-nav { width: 100%; flex-wrap: wrap; gap: 14px; }
+}
 
 .site-nav a.nav-cta {
     color: var(--ink);
@@ -201,8 +210,8 @@ a:hover { text-decoration-color: currentColor; }
     margin: 22px 0 0;
 }
 
-.hero-actions .btn-primary,
-.hero-actions .btn-ghost {
+.btn-primary,
+.btn-ghost {
     display: inline-flex;
     align-items: center;
     font-size: 0.95rem;
@@ -212,20 +221,20 @@ a:hover { text-decoration-color: currentColor; }
     text-decoration: none;
 }
 
-.hero-actions .btn-primary {
+.btn-primary {
     color: var(--ink);
     background: var(--live);
 }
 
-.hero-actions .btn-primary:hover { background: #5fd2ac; }
+.btn-primary:hover { background: #5fd2ac; }
 
-.hero-actions .btn-ghost {
+.btn-ghost {
     color: var(--text);
     background: transparent;
     border: 1px solid var(--hairline);
 }
 
-.hero-actions .btn-ghost:hover { border-color: var(--text); }
+.btn-ghost:hover { border-color: var(--text); }
 
 .hero-hiring {
     margin: 18px 0 0;
@@ -238,6 +247,97 @@ a:hover { text-decoration-color: currentColor; }
 
 .hero-hiring a:hover { color: var(--text-dim); }
 
+/* ---------- Greek-visitor banner ---------- */
+
+.lang-banner {
+    background: var(--panel);
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px 20px;
+    font-size: 0.86rem;
+}
+
+.lang-banner[hidden] { display: none; }
+
+.lang-banner p { margin: 0; }
+.lang-banner a { color: var(--live); font-weight: 600; }
+
+.lang-banner button {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.lang-banner button:hover { color: var(--text); }
+
+/* ---------- how to get started ---------- */
+
+.get-started {
+    padding: 48px 0 8px;
+}
+
+.steps {
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 680px) {
+    .steps { grid-template-columns: repeat(3, 1fr); }
+}
+
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--live) 16%, var(--panel));
+    border: 1.5px solid var(--live);
+    color: var(--live);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 10px;
+}
+
+.steps h3 {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0 0 6px;
+}
+
+.steps p {
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+}
+
+.get-started-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+.get-started-price {
+    font-size: 0.88rem;
+    color: var(--text-faint);
+    font-style: italic;
+}
+
 /* ---------- systems board ---------- */
 
 .board {
@@ -247,8 +347,12 @@ a:hover { text-decoration-color: currentColor; }
 
 .board-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+}
+
+@media (min-width: 860px) {
+    .board-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 .board-tile {
