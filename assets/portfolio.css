@@ -872,14 +872,8 @@ a:hover { text-decoration-color: currentColor; }
     height: 64px;
     border-radius: 50%;
     flex: none;
-    background: linear-gradient(150deg, var(--live), var(--active));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    color: var(--ink);
-    font-weight: 600;
+    object-fit: cover;
+    display: block;
 }
 
 .about h2 {
@@ -1076,16 +1070,6 @@ a:hover { text-decoration-color: currentColor; }
 }
 
 .is-placeholder:hover { color: var(--text-faint); text-decoration: none; }
-
-/* ---------- photo placeholder (About avatar) ---------- */
-
-.avatar.is-placeholder-photo {
-    background: none;
-    border: 1.5px dashed var(--hairline);
-    color: var(--text-faint);
-}
-
-.avatar.is-placeholder-photo svg { width: 24px; height: 24px; }
 
 /* ---------- scroll-reveal + motion ---------- */
 
