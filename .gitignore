@@ -2,7 +2,3 @@
 node_modules/
 .env
 .env.local
-
-# el/index.html is a build artifact (scripts/build-el.py generates it fresh from
-# index.html + assets/i18n/el.json on every deploy) - never hand-edit, never commit.
-el/

@@ -4,9 +4,14 @@
 index.html is the single hand-maintained source (English text, with data-i18n /
 data-i18n-html / data-i18n-data-* attributes marking what's translatable). This
 script never hand-duplicates markup - it transforms a copy of the real page.
-Run on every deploy (see .github/workflows/pages.yml) so el/index.html can
-never drift from the English source; it is not meant to be hand-edited or,
-normally, committed.
+
+IMPORTANT - re-run this and commit the result after every change to index.html
+or assets/i18n/el.json. The live site at alexzaxa.com is served by a Cloudflare
+Worker (see wrangler.jsonc) that Cloudflare auto-builds straight from whatever
+is committed on `master` - it runs no build step of its own, so el/index.html
+must already be a real, up-to-date file in the repo, not a CI-only artifact.
+(.github/workflows/pages.yml also runs this script, but that workflow deploys
+to GitHub Pages, which is not what the custom domain actually serves.)
 
 Conventions read from index.html:
   data-i18n="key"             -> replace the element's direct text content
