@@ -22,19 +22,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      # el/index.html is committed (the custom domain's real deploy target - a Cloudflare
-      # Worker with Git auto-build, see wrangler.jsonc - runs no build step of its own and
-      # just serves whatever's in the repo). Rebuilding here too just keeps this GitHub
-      # Pages mirror in sync; it's a no-op if scripts/build-el.py was already run and
-      # committed before pushing.
-      - name: Build the Greek page (el/index.html) from index.html + assets/i18n/el.json
+      # el/index.html and el/lab/index.html are committed (the custom domain's real deploy
+      # target - a Cloudflare Worker with Git auto-build, see wrangler.jsonc - runs no build
+      # step of its own and just serves whatever's in the repo). Rebuilding here too just
+      # keeps this GitHub Pages mirror in sync; it's a no-op if scripts/build-el.py was
+      # already run and committed before pushing.
+      - name: Build the Greek pages (el/) from index.html, lab/index.html + assets/i18n/el.json
         run: python3 scripts/build-el.py
       - name: Assemble site (only the public frontend, not supabase/ or scripts/)
         run: |
           mkdir _site
           cp index.html login.html admin.html dashboard.html pda-login.html 404.html robots.txt sitemap.xml _redirects _site/
-          mkdir -p _site/el
+          mkdir -p _site/el _site/lab _site/el/lab
           cp el/index.html _site/el/
+          cp lab/index.html _site/lab/
+          cp el/lab/index.html _site/el/lab/
           mkdir -p _site/pda
           cp pda/index.html pda/changelog.html pda/download.html pda/menu-creator.html pda/help.html pda/terms.html _site/pda/
           cp -r assets _site/assets
