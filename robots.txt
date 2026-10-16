@@ -11,5 +11,6 @@ Allow: /pda/
 Allow: /pda/index.html
 Allow: /pda/help.html
 Allow: /pda/changelog.html
+Allow: /el/pda/
 
 Sitemap: https://alexzaxa.com/sitemap.xml

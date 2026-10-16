@@ -87,7 +87,7 @@
     </table>
 </main>
 <script type="module">
-import { supabase, requireRole } from "./assets/supabase-client.js";
+import { supabase, requireRole } from "../assets/supabase-client.js";
 
 const auth = await requireRole(["admin", "download"]);
 if (!auth) throw new Error("redirecting");

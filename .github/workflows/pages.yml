@@ -33,10 +33,11 @@ jobs:
         run: |
           mkdir _site
           cp index.html login.html admin.html dashboard.html pda-login.html 404.html robots.txt sitemap.xml _redirects _site/
-          mkdir -p _site/el _site/lab _site/el/lab
+          mkdir -p _site/el _site/lab _site/el/lab _site/el/pda
           cp el/index.html _site/el/
           cp lab/index.html _site/lab/
           cp el/lab/index.html _site/el/lab/
+          cp el/pda/index.html _site/el/pda/
           mkdir -p _site/pda
           cp pda/index.html pda/changelog.html pda/download.html pda/menu-creator.html pda/help.html pda/terms.html _site/pda/
           cp -r assets _site/assets
