@@ -48,13 +48,22 @@
 <header class="site-header" id="site-header">
     <div class="wrap-wide">
         <div class="mark"><span class="dot" aria-hidden="true"></span>AlexZaxa</div>
-        <nav class="site-nav">
-            <a href="#work" data-i18n="nav_work">Work</a>
-            <a href="#how-i-work" data-i18n="nav_how">How I work</a>
-            <a href="#about" data-i18n="nav_about">About</a>
-            <a class="nav-cta" href="#contact" data-i18n="nav_contact">Contact</a>
+        <div class="header-right">
+            <nav class="site-nav" id="site-nav">
+                <a href="#work" data-i18n="nav_work">Work</a>
+                <a href="/lab/" data-i18n="nav_lab" data-i18n-attr="href:lab_href">Lab</a>
+                <a href="#how-i-work" data-i18n="nav_how">How I work</a>
+                <a href="#about" data-i18n="nav_about">About</a>
+                <a class="nav-cta" href="#contact" data-i18n="nav_contact">Contact</a>
+            </nav>
             <a id="lang-switch" class="lang-switch" href="/el/">ΕΛ</a>
-        </nav>
+            <button type="button" id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
+                    aria-label="Menu" data-i18n-attr="aria-label:nav_menu_label">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+        </div>
     </div>
 </header>
 
@@ -72,7 +81,7 @@
                 <a class="btn-primary" href="#proj-pda" data-i18n="hero_cta_primary">See the PDA</a>
                 <a class="btn-ghost" href="#contact" data-i18n="hero_cta_secondary">Talk about your project</a>
             </div>
-            <p class="hero-hiring"><a href="#about" data-i18n="hero_hiring">Hiring? See my skills &amp; CV →</a></p>
+            <p class="hero-hiring"><a href="#about" data-i18n="hero_hiring">Hiring? See my skills &amp; CV&#160;→</a></p>
         </div>
     </section>
 
@@ -107,14 +116,10 @@
         <div class="wrap-wide" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; width:100%;">
             <div class="legend" aria-hidden="true">
                 <span class="item"><span class="swatch is-live"></span><span data-i18n="legend_live">live, in production</span></span>
-                <span class="item"><span class="swatch is-built"></span><span data-i18n="legend_built">built, not yet proven</span></span>
-                <span class="item"><span class="swatch is-planned"></span><span data-i18n="legend_planned">planned, not started</span></span>
             </div>
             <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter projects by status">
                 <button type="button" data-filter="all" aria-pressed="true" data-i18n="filter_all">All</button>
                 <button type="button" data-filter="live" aria-pressed="false" data-i18n="filter_live">Live</button>
-                <button type="button" data-filter="built" aria-pressed="false" data-i18n="filter_built">Built</button>
-                <button type="button" data-filter="planned" aria-pressed="false" data-i18n="filter_planned">Planned</button>
             </div>
         </div>
         <p class="status-note" data-i18n="status_note">A status report, not a highlight reel.</p>
@@ -257,8 +262,8 @@
                 </li>
             </ol>
             <div class="get-started-cta">
-                <a class="btn-primary" href="#contact" id="book-demo-cta" data-i18n="getstarted_cta" data-prefill="I'd like a PDA demo for my restaurant: " data-i18n-data-prefill="getstarted_prefill">Book a free demo</a>
-                <span class="get-started-price" data-i18n="getstarted_price">Ask for a quote</span>
+                <a class="btn-primary prefill-cta" href="#contact" id="book-demo-cta" data-i18n="getstarted_cta" data-prefill="I'd like a PDA demo for my restaurant: " data-i18n-attr="data-prefill:getstarted_prefill">Book a free demo</a>
+                <a class="btn-ghost prefill-cta" href="#contact" id="quote-cta" data-i18n="getstarted_price" data-prefill="I'd like a quote for the PDA for my restaurant: " data-i18n-attr="data-prefill:getstarted_quote_prefill">Ask for a quote</a>
             </div>
         </div>
     </section>
@@ -276,10 +281,10 @@
                         <h3 data-i18n="anemos_h3">Update distributor</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Anemos · Άνεμος · the wind</p>
+                    <p class="gloss" data-i18n="anemos_gloss">Anemos · Άνεμος · the wind</p>
                     <p class="plain-tag" data-i18n="anemos_plain">Anemos: pushes a signed update to every restaurant without me visiting.</p>
                     <p class="lede" data-i18n="anemos_lede">Every PDA install updates itself without me touching the restaurant's PC.</p>
-                    <p class="body" data-i18n="anemos_body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The mirror image of remote license management — this is what keeps installs current instead of locking them out.</p>
+                    <p class="body" data-i18n="anemos_body">The signed-update distributor behind the PDA's self-updating software: packages a release, signs it, and lets every live install pull it down on its own schedule. The mirror image of remote license management — the other half of keeping an install healthy.</p>
                     <ul class="facts">
                         <li data-i18n="anemos_fact1">Signs every release before it's allowed to reach an install</li>
                         <li data-i18n="anemos_fact2">Runs on the same schedule as the income sync, no separate agent</li>
@@ -307,7 +312,7 @@
                         <h3 data-i18n="fylakas_h3">Uptime watchman</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Fylakas · Φύλακας · the watchman</p>
+                    <p class="gloss" data-i18n="fylakas_gloss">Fylakas · Φύλακας · the watchman</p>
                     <p class="plain-tag" data-i18n="fylakas_plain">Fylakas: tells me the moment the PDA or Skopos goes quiet, not just when they error.</p>
                     <p class="lede" data-i18n="fylakas_lede">The thing that notices when something else goes quiet.</p>
                     <p class="body" data-i18n="fylakas_body">A small watchman that pings every live system here and alerts the moment one stops answering — the PDA going dark, Skopos falling over. It watches for silence, not just errors; a hang looks the same as a crash to it.</p>
@@ -330,7 +335,7 @@
                         <h3 data-i18n="skopos_h3">Scope guard</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">live, in production</span></span>
                     </div>
-                    <p class="gloss">Skopos · Σκοπός · the scope</p>
+                    <p class="gloss" data-i18n="skopos_gloss">Skopos · Σκοπός · the scope</p>
                     <p class="plain-tag" data-i18n="skopos_plain">Skopos: stops me from ever testing something I'm not allowed to.</p>
                     <p class="lede" data-i18n="skopos_lede">The program's scope document is the only thing allowed to say yes.</p>
                     <p class="body" data-i18n="skopos_body">A small request gatekeeper built for an active bug bounty engagement: every outbound request gets checked against the program's published scope and rate limit before it's allowed to leave. If a target isn't on the list, or the limit's already spent, the request never goes out.</p>
@@ -349,104 +354,12 @@
                 </article>
 
             </div>
-
-            <div class="tier-label">
-                <h2 data-i18n="work_built_heading">Built, not yet proven</h2>
-                <span class="tier-note" data-i18n="work_built_note">working, just hasn't carried real load yet</span>
-            </div>
-            <div class="card-grid">
-
-                <article class="card entry--built reveal" data-status="built" id="proj-kleidi">
-                    <div class="card-head">
-                        <h3 data-i18n="kleidi_h3">License key library</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
-                    </div>
-                    <p class="gloss">Kleidi · Κλειδί · the key</p>
-                    <p class="plain-tag" data-i18n="kleidi_plain">Kleidi: the reusable version of the PDA's license system, for whatever I build next.</p>
-                    <p class="lede" data-i18n="kleidi_lede">The PDA's license system, with the restaurant software peeled off.</p>
-                    <p class="body" data-i18n="kleidi_body">AlexZaxa Solutions issues offline-verified license keys bound to the activating machine — that logic used to live inside the PDA codebase alone. Kleidi is the same scheme pulled into its own small library, so the next thing I license doesn't start from zero. Hasn't licensed anything but the PDA yet.</p>
-                    <ul class="facts">
-                        <li data-i18n="kleidi_fact1">Same offline verification and machine-binding scheme the PDA runs in production</li>
-                        <li data-i18n="kleidi_fact2">Not yet wired into a second product</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
-                            <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
-                            <text data-i18n="svg_license_key" aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">License key </text>
-                            <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
-                            <text data-i18n="svg_machine_id" aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Machine ID </text>
-                            <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <rect x="136" y="78" width="28" height="20" rx="3" fill="rgba(212,171,74,0.16)" stroke="#d4ab4a" stroke-width="1.4"/>
-                        </svg>
-                    </div>
-                </article>
-
-                <article class="card entry--built reveal" data-status="built" id="proj-litevoice">
-                    <div class="card-head">
-                        <h3>LiteVoice</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
-                    </div>
-                    <p class="plain-tag" data-i18n="litevoice_plain">LiteVoice: a simple voice chat app I built — not yet tested with a real call.</p>
-                    <p class="lede" data-i18n="litevoice_lede">A voice channel that doesn't need everything else Discord comes with.</p>
-                    <p class="body" data-i18n="litevoice_body">A lightweight, voice-only alternative: a C# client talking to a relay server running on Ubuntu. No text channels, no bots, no screen share — just a room and the people talking in it. Written end to end; it hasn't carried a real call yet.</p>
-                    <ul class="facts">
-                        <li data-i18n="litevoice_fact1">C# desktop client paired with a dedicated Ubuntu relay server</li>
-                        <li data-i18n="litevoice_fact2">Next milestone is a real multi-person call, not another unit test</li>
-                    </ul>
-                    <div class="card-visual">
-                        <div class="ui-mock" role="img" aria-label="LiteVoice room mockup: three people in a voice room, one muted, relay connected">
-                            <div class="bar"><span>#general-voice</span><span>Relay: connected</span></div>
-                            <div class="room">
-                                <div class="who"><span class="avatar">A</span>Alex</div>
-                                <div class="who"><span class="avatar">M</span>Maria</div>
-                                <div class="who is-muted"><span class="avatar">N</span>Nikos</div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card entry--built reveal" data-status="built" id="proj-dokimi">
-                    <div class="card-head">
-                        <h3 data-i18n="dokimi_h3">Strategy backtester</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">built, not yet proven</span></span>
-                    </div>
-                    <p class="gloss">Dokimi · Δοκιμή · the trial</p>
-                    <p class="plain-tag" data-i18n="dokimi_plain">Dokimi: tests a trading strategy against real price history before paper money touches it.</p>
-                    <p class="lede" data-i18n="dokimi_lede">Every strategy loses on history before it's allowed near paper money.</p>
-                    <p class="body" data-i18n="dokimi_body">A backtester that replays a trading strategy against real historical price data before the trading bot's paper gate even opens. Written and runs end to end — I just haven't fed it a strategy worth trusting yet, so it has nothing to report.</p>
-                    <ul class="facts">
-                        <li data-i18n="dokimi_fact1">Replays historical price data against a strategy before paper trading starts</li>
-                        <li data-i18n="dokimi_fact2">Outputs the same risk metrics the live gates will eventually check</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
-                            <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <text data-i18n="svg_historical_prices" aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">historical prices </text>
-                            <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
-                            <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                            <text data-i18n="svg_trading" aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading </text>
-                            <text data-i18n="svg_bot_paper" aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (paper) </text>
-                        </svg>
-                    </div>
-                </article>
-
-            </div>
         </div>
     </section>
 
-    <section class="next-up" data-status="planned">
+    <section class="lab-teaser">
         <div class="wrap-wide">
-            <div class="tier-label">
-                <h2 data-i18n="nextup_heading">Next up</h2>
-                <span class="tier-note" data-i18n="nextup_note">planned, not started</span>
-            </div>
-            <ul class="next-up-list">
-                <li id="proj-tradingbot" data-i18n-html="nextup_tradingbot"><strong>Trading bot</strong> — a crypto bot that starts on paper money and stays there until it earns its way onto a real exchange.</li>
-                <li data-i18n-html="nextup_apothema"><strong>Apothema</strong> <span class="gloss-inline">· Απόθεμα, the reserve</span> — low-stock alerts from order history the PDA already collects.</li>
-                <li id="proj-nomos" data-i18n-html="nextup_nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, the rule</span> — one shared rules engine for license management, the trading bot's gates, and Skopos's scope list.</li>
-            </ul>
+            <a class="lab-teaser-card" href="/lab/" data-i18n="lab_teaser" data-i18n-attr="href:lab_href">The lab — side projects that are built but not yet proven →</a>
         </div>
     </section>
 
@@ -460,7 +373,7 @@
                 </div>
                 <div class="reveal">
                     <dt data-i18n="principle2_dt">Fail safe, not silent</dt>
-                    <dd data-i18n="principle2_dd">A sync job that can lock a restaurant out of its own software only acts on a clear signal — any network error or bad response leaves things exactly as they were, rather than guessing.</dd>
+                    <dd data-i18n="principle2_dd">A license sync job only acts on a clear signal — any network error or bad response leaves the restaurant running exactly as it was, rather than guessing.</dd>
                 </div>
                 <div class="reveal">
                     <dt data-i18n="principle3_dt">Constraints before code</dt>
@@ -484,7 +397,7 @@
                         <div><dt>Flask</dt><dd data-i18n="skill_flask">the PDA's local, offline-first web server</dd></div>
                         <div><dt>Windows Server / Active Directory</dt><dd data-i18n="skill_winserver">the home lab's identity and domain layer</dd></div>
                         <div><dt>Linux / Docker</dt><dd data-i18n="skill_linux">relay and self-hosted services, including LiteVoice's relay</dd></div>
-                        <div><dt>Networking</dt><dd data-i18n="skill_networking">the home lab everything above actually runs on</dd></div>
+                        <div><dt data-i18n="skill_networking_label">Networking</dt><dd data-i18n="skill_networking">the home lab everything above actually runs on</dd></div>
                         <div><dt>Supabase</dt><dd data-i18n="skill_supabase">the PDA's income sync, licensing, and admin dashboards</dd></div>
                     </dl>
                     <div class="about-links">
@@ -514,9 +427,10 @@
                     <input type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" aria-hidden="true">
                     <button type="submit" id="cf-submit" data-i18n="contact_submit">Send message</button>
                     <p class="form-msg" id="cf-msg" role="status"
-                       data-sending="Sending…" data-i18n-data-sending="form_sending"
-                       data-success="Sent — thanks, I’ll get back to you." data-i18n-data-success="form_success"
-                       data-error="Could not send right now — email projects@alexzaxa.com instead." data-i18n-data-error="form_error"></p>
+                       data-sending="Sending…"
+                       data-success="Sent — thanks, I’ll get back to you."
+                       data-error="Could not send right now — email projects@alexzaxa.com instead."
+                       data-i18n-attr="data-sending:form_sending,data-success:form_success,data-error:form_error"></p>
                     <p class="form-alt" data-i18n-html="contact_alt">Don't like forms? Email <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> directly.</p>
                 </form>
                 <div class="contact-aside">
@@ -569,13 +483,51 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
 })();
 
-// "Book a free demo" prefills the contact message so a restaurant owner doesn't have to
-// write the opening line themselves. data-prefill carries the (build-time-translated) text.
-const demoCta = document.getElementById('book-demo-cta');
-if (demoCta) {
-    demoCta.addEventListener('click', () => {
+// "Book a free demo" / "Ask for a quote" prefill the contact message so a restaurant
+// owner doesn't have to write the opening line themselves, then hand focus straight to
+// the textarea (cursor at the end) so they can just keep typing.
+document.querySelectorAll('.prefill-cta').forEach((cta) => {
+    cta.addEventListener('click', () => {
         const msgField = document.getElementById('cf-message');
-        if (msgField && !msgField.value) msgField.value = demoCta.dataset.prefill || '';
+        if (!msgField) return;
+        if (!msgField.value) msgField.value = cta.dataset.prefill || '';
+        // Deferred: the browser's own in-page #contact navigation resets focus to <body>
+        // right after this handler returns, so focusing synchronously here gets overridden.
+        setTimeout(() => {
+            msgField.focus();
+            const end = msgField.value.length;
+            msgField.setSelectionRange(end, end);
+        }, 0);
+    });
+});
+
+// Mobile header menu: collapses the nav behind a toggle button below 600px (see CSS).
+// Closes on link click, Escape (returning focus to the toggle), or an outside click.
+const navToggle = document.getElementById('nav-toggle');
+const siteNav = document.getElementById('site-nav');
+if (navToggle && siteNav) {
+    const closeNav = () => {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+    };
+    const openNav = () => {
+        siteNav.classList.add('is-open');
+        navToggle.setAttribute('aria-expanded', 'true');
+    };
+    navToggle.addEventListener('click', () => {
+        if (siteNav.classList.contains('is-open')) closeNav(); else openNav();
+    });
+    siteNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav));
+    document.addEventListener('click', (e) => {
+        if (siteNav.classList.contains('is-open') && !siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+            closeNav();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+            closeNav();
+            navToggle.focus();
+        }
     });
 }
 
@@ -649,7 +601,13 @@ if (mapSvg) {
     }
     function goTo(id) {
         const target = document.getElementById(`proj-${id}`);
-        if (!target) return;
+        if (!target) {
+            // Lab-stage projects (Kleidi, LiteVoice, Dokimi, Trading bot, Nomos) live on
+            // their own page now - if the id isn't here, it's there.
+            const labPath = document.documentElement.lang === 'el' ? '/el/lab/' : '/lab/';
+            window.location.href = `${labPath}#proj-${id}`;
+            return;
+        }
         const details = target.closest('details');
         if (details && !details.open) details.open = true;
         target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });

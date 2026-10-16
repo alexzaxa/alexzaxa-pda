@@ -105,6 +105,12 @@ a:hover { text-decoration-color: currentColor; }
     gap: 16px;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .mark {
     display: flex;
     align-items: baseline;
@@ -148,9 +154,55 @@ a:hover { text-decoration-color: currentColor; }
     .site-nav { gap: 14px; }
 }
 
-@media (max-width: 720px) {
-    .site-header .wrap-wide { flex-wrap: wrap; row-gap: 10px; }
-    .site-nav { width: 100%; flex-wrap: wrap; gap: 14px; }
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 34px;
+    height: 34px;
+    background: none;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    cursor: pointer;
+    flex: none;
+}
+
+.nav-toggle-bar {
+    width: 16px;
+    height: 1.5px;
+    background: var(--text);
+    transition: transform 200ms var(--ease), opacity 200ms var(--ease);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+/* Below 600px: one-row header - logo, lang toggle, hamburger. The nav itself becomes
+   a dropdown sheet anchored to the sticky header, hidden until .is-open. */
+@media (max-width: 600px) {
+    .site-header .wrap-wide { flex-wrap: nowrap; align-items: center; }
+    .header-right { gap: 10px; }
+    .nav-toggle { display: inline-flex; }
+    .site-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--hairline);
+        padding: 10px 20px 16px;
+    }
+    .site-nav.is-open { display: flex; }
+    .site-nav a { padding: 10px 0; border-bottom: 1px solid var(--hairline-soft); }
+    .site-nav a:last-child { border-bottom: none; }
+    .site-nav a.nav-cta { margin-top: 8px; text-align: center; }
 }
 
 .site-nav a.nav-cta {
@@ -332,10 +384,28 @@ a:hover { text-decoration-color: currentColor; }
     gap: 16px;
 }
 
-.get-started-price {
-    font-size: 0.88rem;
-    color: var(--text-faint);
-    font-style: italic;
+/* ---------- lab teaser (home page) ---------- */
+
+.lab-teaser {
+    padding: 8px 0 48px;
+}
+
+.lab-teaser-card {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 20px 24px;
+    color: var(--text-dim);
+    font-size: 0.98rem;
+    text-decoration: none;
+    transition: transform var(--ease), border-color var(--ease), color var(--ease);
+}
+
+.lab-teaser-card:hover {
+    color: var(--text);
+    border-color: var(--hairline-soft);
+    transform: translateY(-2px);
 }
 
 /* ---------- systems board ---------- */

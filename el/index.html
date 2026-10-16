@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AlexZaxa: παραγγελίες εστιατορίου offline-first & αξιόπιστα μικρά συστήματα</title>
-<meta name="description" content="Παραγγελίες εστιατορίου offline-first, φτιαγμένες και λειτουργούμενες από τον AlexZaxa (Αλέξανδρος Ζαχαρόπουλος) στη Χαλκίδα — tablet σερβιτόρων, εκτύπωση κουζίνας, λογισμικό που ενημερώνεται μόνο του, και τα μικρά εργαλεία που το κρατούν σε λειτουργία.">
+<meta name="description" content="Παραγγελίες εστιατορίου offline-first, που σχεδιάζει και υποστηρίζει ο AlexZaxa (Αλέξανδρος Ζαχαρόπουλος) στη Χαλκίδα — tablet σερβιτόρων, εκτύπωση κουζίνας, λογισμικό που ενημερώνεται μόνο του, και τα μικρά εργαλεία που το κρατούν σε λειτουργία.">
 <link rel="canonical" href="https://alexzaxa.com/el/">
 <link rel="alternate" hreflang="en" href="https://alexzaxa.com/">
 <link rel="alternate" hreflang="el" href="https://alexzaxa.com/el/">
@@ -48,13 +48,22 @@
 <header class="site-header" id="site-header">
     <div class="wrap-wide">
         <div class="mark"><span class="dot" aria-hidden="true"></span>AlexZaxa</div>
-        <nav class="site-nav">
-            <a href="#work" data-i18n="nav_work">Έργα</a>
-            <a href="#how-i-work" data-i18n="nav_how">Πώς δουλεύω</a>
-            <a href="#about" data-i18n="nav_about">Σχετικά</a>
-            <a class="nav-cta" href="#contact" data-i18n="nav_contact">Επικοινωνία</a>
+        <div class="header-right">
+            <nav class="site-nav" id="site-nav">
+                <a href="#work" data-i18n="nav_work">Έργα</a>
+                <a href="/el/lab/" data-i18n="nav_lab" data-i18n-attr="href:lab_href">Εργαστήριο</a>
+                <a href="#how-i-work" data-i18n="nav_how">Πώς δουλεύω</a>
+                <a href="#about" data-i18n="nav_about">Σχετικά</a>
+                <a class="nav-cta" href="#contact" data-i18n="nav_contact">Επικοινωνία</a>
+            </nav>
             <a id="lang-switch" class="lang-switch" href="/">EN</a>
-        </nav>
+            <button type="button" id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"
+                    aria-label="Μενού" data-i18n-attr="aria-label:nav_menu_label">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+        </div>
     </div>
 </header>
 
@@ -103,14 +112,10 @@
         <div class="wrap-wide" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; width:100%;">
             <div class="legend" aria-hidden="true">
                 <span class="item"><span class="swatch is-live"></span><span data-i18n="legend_live">ενεργό, σε παραγωγή</span></span>
-                <span class="item"><span class="swatch is-built"></span><span data-i18n="legend_built">έτοιμο, μη δοκιμασμένο ακόμα</span></span>
-                <span class="item"><span class="swatch is-planned"></span><span data-i18n="legend_planned">σχεδιασμένο, δεν έχει ξεκινήσει</span></span>
             </div>
             <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter projects by status">
                 <button type="button" data-filter="all" aria-pressed="true" data-i18n="filter_all">Όλα</button>
                 <button type="button" data-filter="live" aria-pressed="false" data-i18n="filter_live">Ενεργά</button>
-                <button type="button" data-filter="built" aria-pressed="false" data-i18n="filter_built">Έτοιμα</button>
-                <button type="button" data-filter="planned" aria-pressed="false" data-i18n="filter_planned">Σχεδιασμένα</button>
             </div>
         </div>
         <p class="status-note" data-i18n="status_note">Αναφορά κατάστασης, όχι βιτρίνα.</p>
@@ -253,8 +258,8 @@
                 </li>
             </ol>
             <div class="get-started-cta">
-                <a class="btn-primary" href="#contact" id="book-demo-cta" data-i18n="getstarted_cta" data-prefill="Θα ήθελα ένα demo του PDA για το εστιατόριό μου: " data-i18n-data-prefill="getstarted_prefill">Κλείστε ένα δωρεάν demo</a>
-                <span class="get-started-price" data-i18n="getstarted_price">Ζητήστε προσφορά</span>
+                <a class="btn-primary prefill-cta" href="#contact" id="book-demo-cta" data-i18n="getstarted_cta" data-prefill="Θα ήθελα ένα demo του PDA για το εστιατόριό μου: " data-i18n-attr="data-prefill:getstarted_prefill">Κλείστε ένα δωρεάν demo</a>
+                <a class="btn-ghost prefill-cta" href="#contact" id="quote-cta" data-i18n="getstarted_price" data-prefill="Θα ήθελα μια προσφορά για το PDA για το εστιατόριό μου: " data-i18n-attr="data-prefill:getstarted_quote_prefill">Ζητήστε προσφορά</a>
             </div>
         </div>
     </section>
@@ -272,10 +277,10 @@
                         <h3 data-i18n="anemos_h3">Διανομέας ενημερώσεων</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">ενεργό, σε παραγωγή</span></span>
                     </div>
-                    <p class="gloss">Anemos · Άνεμος · the wind</p>
+                    <p class="gloss" data-i18n="anemos_gloss">Anemos · Άνεμος · ο άνεμος</p>
                     <p class="plain-tag" data-i18n="anemos_plain">Anemos: στέλνει μια υπογεγραμμένη ενημέρωση σε κάθε εστιατόριο χωρίς να χρειαστεί να πάω εκεί.</p>
                     <p class="lede" data-i18n="anemos_lede">Κάθε εγκατάσταση του PDA ενημερώνεται μόνη της, χωρίς να αγγίξω τον υπολογιστή του εστιατορίου.</p>
-                    <p class="body" data-i18n="anemos_body">Ο διανομέας υπογεγραμμένων ενημερώσεων πίσω από το λογισμικό αυτο-ενημέρωσης του PDA: πακετάρει μια έκδοση, την υπογράφει, και αφήνει κάθε ενεργή εγκατάσταση να την κατεβάσει στο δικό της πρόγραμμα. Ο καθρέφτης της απομακρυσμένης διαχείρισης αδειών — αυτό κρατάει τις εγκαταστάσεις ενημερωμένες αντί να τις κλειδώνει έξω.</p>
+                    <p class="body" data-i18n="anemos_body">Ο διανομέας υπογεγραμμένων ενημερώσεων πίσω από το λογισμικό αυτο-ενημέρωσης του PDA: πακετάρει μια έκδοση, την υπογράφει, και αφήνει κάθε ενεργή εγκατάσταση να την κατεβάσει στο δικό της πρόγραμμα. Ο καθρέφτης της απομακρυσμένης διαχείρισης αδειών — το άλλο μισό του να κρατάς μια εγκατάσταση υγιή.</p>
                     <ul class="facts">
                         <li data-i18n="anemos_fact1">Υπογράφει κάθε έκδοση πριν της επιτραπεί να φτάσει σε μια εγκατάσταση</li>
                         <li data-i18n="anemos_fact2">Τρέχει στο ίδιο πρόγραμμα με τον συγχρονισμό εσόδων, χωρίς ξεχωριστό agent</li>
@@ -293,7 +298,7 @@
                             <circle cx="40" cy="110" r="5" fill="#8b92a1"/>
                             <circle cx="150" cy="110" r="5" fill="#8b92a1"/>
                             <circle cx="260" cy="110" r="5" fill="#8b92a1"/>
-                            <text data-i18n="svg_installs_field" aria-hidden="true" x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">εγκαταστάσεις στο πεδίο</text>
+                            <text data-i18n="svg_installs_field" aria-hidden="true" x="150" y="124" text-anchor="middle" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">εγκαταστάσεις σε λειτουργία</text>
                         </svg>
                     </div>
                 </article>
@@ -303,7 +308,7 @@
                         <h3 data-i18n="fylakas_h3">Φύλακας διαθεσιμότητας</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">ενεργό, σε παραγωγή</span></span>
                     </div>
-                    <p class="gloss">Fylakas · Φύλακας · the watchman</p>
+                    <p class="gloss" data-i18n="fylakas_gloss">Fylakas · Φύλακας · ο φύλακας</p>
                     <p class="plain-tag" data-i18n="fylakas_plain">Fylakas: με ειδοποιεί τη στιγμή που το PDA ή το Skopos σταματήσουν να απαντούν, όχι μόνο όταν σφάλλουν.</p>
                     <p class="lede" data-i18n="fylakas_lede">Αυτό που παρατηρεί όταν κάτι άλλο σταματά να απαντά.</p>
                     <p class="body" data-i18n="fylakas_body">Ένας μικρός φύλακας που στέλνει pings σε κάθε ενεργό σύστημα εδώ και ειδοποιεί τη στιγμή που κάποιο σταματά να απαντά — το PDA να σβήνει, το Skopos να καταρρέει. Παρακολουθεί τη σιωπή, όχι μόνο τα σφάλματα· ένα πάγωμα μοιάζει το ίδιο με μια κατάρρευση γι' αυτό.</p>
@@ -326,7 +331,7 @@
                         <h3 data-i18n="skopos_h3">Έλεγχος εμβέλειας</h3>
                         <span class="status is-live"><span class="swatch"></span><span data-i18n="status_live">ενεργό, σε παραγωγή</span></span>
                     </div>
-                    <p class="gloss">Skopos · Σκοπός · the scope</p>
+                    <p class="gloss" data-i18n="skopos_gloss">Skopos · Σκοπός · η εμβέλεια</p>
                     <p class="plain-tag" data-i18n="skopos_plain">Skopos: με εμποδίζει να δοκιμάσω ποτέ κάτι που δεν επιτρέπεται.</p>
                     <p class="lede" data-i18n="skopos_lede">Το έγγραφο εμβέλειας του προγράμματος είναι το μόνο που επιτρέπεται να πει ναι.</p>
                     <p class="body" data-i18n="skopos_body">Ένας μικρός φύλακας αιτημάτων φτιαγμένος για ένα ενεργό πρόγραμμα bug bounty: κάθε εξερχόμενο αίτημα ελέγχεται με βάση τη δημοσιευμένη εμβέλεια και το όριο ρυθμού του προγράμματος πριν επιτραπεί να φύγει. Αν ένας στόχος δεν είναι στη λίστα, ή το όριο έχει ήδη εξαντληθεί, το αίτημα δεν στέλνεται ποτέ.</p>
@@ -345,104 +350,12 @@
                 </article>
 
             </div>
-
-            <div class="tier-label">
-                <h2 data-i18n="work_built_heading">Έτοιμα, μη δοκιμασμένα ακόμα</h2>
-                <span class="tier-note" data-i18n="work_built_note">δουλεύουν, απλώς δεν έχουν δοκιμαστεί ακόμα σε πραγματικό φόρτο</span>
-            </div>
-            <div class="card-grid">
-
-                <article class="card entry--built reveal" data-status="built" id="proj-kleidi">
-                    <div class="card-head">
-                        <h3 data-i18n="kleidi_h3">Βιβλιοθήκη κλειδιών άδειας</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">έτοιμο, μη δοκιμασμένο ακόμα</span></span>
-                    </div>
-                    <p class="gloss">Kleidi · Κλειδί · the key</p>
-                    <p class="plain-tag" data-i18n="kleidi_plain">Kleidi: η επαναχρησιμοποιήσιμη εκδοχή του συστήματος αδειών του PDA, για ό,τι φτιάξω μετά.</p>
-                    <p class="lede" data-i18n="kleidi_lede">Το σύστημα αδειών του PDA, χωρίς το λογισμικό εστιατορίου γύρω του.</p>
-                    <p class="body" data-i18n="kleidi_body">Το AlexZaxa Solutions εκδίδει κλειδιά άδειας με offline επαλήθευση, δεμένα στο μηχάνημα που τα ενεργοποιεί — αυτή η λογική ζούσε παλιά μόνο μέσα στον κώδικα του PDA. Το Kleidi είναι το ίδιο σχήμα, βγαλμένο σε δική του μικρή βιβλιοθήκη, ώστε το επόμενο πράγμα που θα αδειοδοτήσω να μην ξεκινάει από το μηδέν. Δεν έχει αδειοδοτήσει τίποτα άλλο εκτός από το PDA ακόμα.</p>
-                    <ul class="facts">
-                        <li data-i18n="kleidi_fact1">Το ίδιο σχήμα offline επαλήθευσης και δεσίματος σε μηχάνημα που τρέχει το PDA σε παραγωγή</li>
-                        <li data-i18n="kleidi_fact2">Δεν έχει συνδεθεί ακόμα σε δεύτερο προϊόν</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a license key and machine ID binding together into a lock">
-                            <rect x="12" y="14" width="108" height="30" rx="6" fill="rgba(212,171,74,0.12)" stroke="#d4ab4a" stroke-width="1.4"/>
-                            <text data-i18n="svg_license_key" aria-hidden="true" x="66" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">Κλειδί άδειας</text>
-                            <rect x="178" y="14" width="110" height="30" rx="6" fill="none" stroke="#8b92a1" stroke-width="1.3"/>
-                            <text data-i18n="svg_machine_id" aria-hidden="true" x="233" y="33" text-anchor="middle" font-size="11" fill="#eceef2" font-family="-apple-system,Segoe UI,sans-serif">ID μηχανήματος</text>
-                            <line x1="80" y1="44" x2="145" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <line x1="225" y1="44" x2="162" y2="76" stroke="#5b6170" stroke-width="1.3"/>
-                            <path d="M142,78 v-9 a8,8 0 0 1 16,0 v9" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <rect x="136" y="78" width="28" height="20" rx="3" fill="rgba(212,171,74,0.16)" stroke="#d4ab4a" stroke-width="1.4"/>
-                        </svg>
-                    </div>
-                </article>
-
-                <article class="card entry--built reveal" data-status="built" id="proj-litevoice">
-                    <div class="card-head">
-                        <h3>LiteVoice</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">έτοιμο, μη δοκιμασμένο ακόμα</span></span>
-                    </div>
-                    <p class="plain-tag" data-i18n="litevoice_plain">LiteVoice: μια απλή εφαρμογή φωνητικής συνομιλίας που έφτιαξα — δεν έχει δοκιμαστεί ακόμα με πραγματική κλήση.</p>
-                    <p class="lede" data-i18n="litevoice_lede">Ένα φωνητικό κανάλι που δεν χρειάζεται όλα τα υπόλοιπα που έρχονται με το Discord.</p>
-                    <p class="body" data-i18n="litevoice_body">Μια ελαφριά εναλλακτική μόνο για φωνή: ένας client σε C# που μιλάει με έναν relay server που τρέχει σε Ubuntu. Χωρίς κανάλια κειμένου, χωρίς bots, χωρίς κοινή χρήση οθόνης — μόνο ένα δωμάτιο και οι άνθρωποι που μιλάνε μέσα του. Γραμμένο από άκρη σε άκρη· δεν έχει μεταφέρει ακόμα πραγματική κλήση.</p>
-                    <ul class="facts">
-                        <li data-i18n="litevoice_fact1">Client επιφάνειας εργασίας σε C#, συνδεδεμένος με αποκλειστικό relay server σε Ubuntu</li>
-                        <li data-i18n="litevoice_fact2">Ο επόμενος στόχος είναι μια πραγματική κλήση πολλών ατόμων, όχι άλλο unit test</li>
-                    </ul>
-                    <div class="card-visual">
-                        <div class="ui-mock" role="img" aria-label="LiteVoice room mockup: three people in a voice room, one muted, relay connected">
-                            <div class="bar"><span>#general-voice</span><span>Relay: connected</span></div>
-                            <div class="room">
-                                <div class="who"><span class="avatar">A</span>Alex</div>
-                                <div class="who"><span class="avatar">M</span>Maria</div>
-                                <div class="who is-muted"><span class="avatar">N</span>Nikos</div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="card entry--built reveal" data-status="built" id="proj-dokimi">
-                    <div class="card-head">
-                        <h3 data-i18n="dokimi_h3">Backtester στρατηγικής</h3>
-                        <span class="status is-built"><span class="swatch"></span><span data-i18n="status_built">έτοιμο, μη δοκιμασμένο ακόμα</span></span>
-                    </div>
-                    <p class="gloss">Dokimi · Δοκιμή · the trial</p>
-                    <p class="plain-tag" data-i18n="dokimi_plain">Dokimi: δοκιμάζει μια στρατηγική trading πάνω σε πραγματικό ιστορικό τιμών πριν την αγγίξουν τα χρήματα δοκιμής.</p>
-                    <p class="lede" data-i18n="dokimi_lede">Κάθε στρατηγική χάνει πρώτα στο ιστορικό πριν της επιτραπεί να πλησιάσει τα χρήματα δοκιμής.</p>
-                    <p class="body" data-i18n="dokimi_body">Ένα backtester που ξαναπαίζει μια στρατηγική trading πάνω σε πραγματικά ιστορικά δεδομένα τιμών πριν καν ανοίξει η πύλη δοκιμαστικού χρήματος του trading bot. Γραμμένο και λειτουργεί από άκρη σε άκρη — απλώς δεν του έχω δώσει ακόμα μια στρατηγική άξια εμπιστοσύνης, οπότε δεν έχει τίποτα να αναφέρει.</p>
-                    <ul class="facts">
-                        <li data-i18n="dokimi_fact1">Ξαναπαίζει ιστορικά δεδομένα τιμών πάνω σε μια στρατηγική πριν ξεκινήσει το paper trading</li>
-                        <li data-i18n="dokimi_fact2">Παράγει τις ίδιες μετρήσεις ρίσκου που θα ελέγχουν τελικά οι ζωντανές πύλες</li>
-                    </ul>
-                    <div class="card-visual">
-                        <svg class="diagram" viewBox="0 0 300 110" role="img" aria-label="Diagram: a historical price line feeding into the still-planned trading bot">
-                            <polyline points="14,70 44,52 74,64 104,38 134,48 164,30 194,44" fill="none" stroke="#d4ab4a" stroke-width="1.6"/>
-                            <text data-i18n="svg_historical_prices" aria-hidden="true" x="14" y="88" font-size="9.5" fill="#8b92a1" font-family="-apple-system,Segoe UI,sans-serif">ιστορικές τιμές</text>
-                            <line x1="196" y1="44" x2="222" y2="44" stroke="#5b6170" stroke-width="1.3"/>
-                            <rect x="222" y="26" width="70" height="36" rx="6" fill="none" stroke="#5b6170" stroke-width="1.1" stroke-dasharray="3 3"/>
-                            <text data-i18n="svg_trading" aria-hidden="true" x="257" y="41" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">Trading</text>
-                            <text data-i18n="svg_bot_paper" aria-hidden="true" x="257" y="54" text-anchor="middle" font-size="10" fill="#5b6170" font-family="-apple-system,Segoe UI,sans-serif">bot (δοκιμαστικό)</text>
-                        </svg>
-                    </div>
-                </article>
-
-            </div>
         </div>
     </section>
 
-    <section class="next-up" data-status="planned">
+    <section class="lab-teaser">
         <div class="wrap-wide">
-            <div class="tier-label">
-                <h2 data-i18n="nextup_heading">Επόμενα</h2>
-                <span class="tier-note" data-i18n="nextup_note">σχεδιασμένο, δεν έχει ξεκινήσει</span>
-            </div>
-            <ul class="next-up-list">
-                <li id="proj-tradingbot" data-i18n-html="nextup_tradingbot"><strong>Trading bot</strong> — ένα crypto bot που ξεκινάει με χρήματα δοκιμής και μένει εκεί μέχρι να κερδίσει τη θέση του σε πραγματικό exchange.</li>
-                <li data-i18n-html="nextup_apothema"><strong>Apothema</strong> <span class="gloss-inline">· Απόθεμα, το απόθεμα</span> — ειδοποιήσεις χαμηλού αποθέματος από το ιστορικό παραγγελιών που ήδη συλλέγει το PDA.</li>
-                <li id="proj-nomos" data-i18n-html="nextup_nomos"><strong>Nomos</strong> <span class="gloss-inline">· Νόμος, ο νόμος</span> — μία κοινή μηχανή κανόνων για τη διαχείριση αδειών, τις πύλες του trading bot και τη λίστα εμβέλειας του Skopos.</li>
-            </ul>
+            <a class="lab-teaser-card" href="/el/lab/" data-i18n="lab_teaser" data-i18n-attr="href:lab_href">Το εργαστήριο — δευτερεύοντα έργα, έτοιμα αλλά όχι ακόμα δοκιμασμένα →</a>
         </div>
     </section>
 
@@ -456,7 +369,7 @@
                 </div>
                 <div class="reveal">
                     <dt data-i18n="principle2_dt">Αποτυχία με ασφάλεια, όχι σιωπηλά</dt>
-                    <dd data-i18n="principle2_dd">Μια εργασία συγχρονισμού που μπορεί να κλειδώσει ένα εστιατόριο έξω από το δικό του λογισμικό ενεργεί μόνο με ένα ξεκάθαρο σήμα — οποιοδήποτε σφάλμα δικτύου ή κακή απάντηση αφήνει τα πράγματα ακριβώς όπως ήταν, αντί να μαντεύει.</dd>
+                    <dd data-i18n="principle2_dd">Μια εργασία συγχρονισμού αδειών ενεργεί μόνο με ένα ξεκάθαρο σήμα — οποιοδήποτε σφάλμα δικτύου ή κακή απάντηση αφήνει το εστιατόριο να λειτουργεί ακριβώς όπως πριν, αντί να μαντεύει.</dd>
                 </div>
                 <div class="reveal">
                     <dt data-i18n="principle3_dt">Περιορισμοί πριν τον κώδικα</dt>
@@ -480,11 +393,11 @@
                         <div><dt>Flask</dt><dd data-i18n="skill_flask">ο τοπικός, offline-first web server του PDA</dd></div>
                         <div><dt>Windows Server / Active Directory</dt><dd data-i18n="skill_winserver">το επίπεδο ταυτότητας και domain του home lab</dd></div>
                         <div><dt>Linux / Docker</dt><dd data-i18n="skill_linux">relay και self-hosted υπηρεσίες, συμπεριλαμβανομένου του relay του LiteVoice</dd></div>
-                        <div><dt>Networking</dt><dd data-i18n="skill_networking">το home lab πάνω στο οποίο τρέχουν όλα τα παραπάνω</dd></div>
+                        <div><dt data-i18n="skill_networking_label">Δικτύωση</dt><dd data-i18n="skill_networking">το home lab πάνω στο οποίο τρέχουν όλα τα παραπάνω</dd></div>
                         <div><dt>Supabase</dt><dd data-i18n="skill_supabase">ο συγχρονισμός εσόδων, η αδειοδότηση και τα admin dashboards του PDA</dd></div>
                     </dl>
                     <div class="about-links">
-                        <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.pdf" download data-i18n="about_cv">Λήψη βιογραφικού (Αγγλικά, PDF, 49 KB)</a>
+                        <a class="go" href="/assets/cv/alexandros-zacharopoulos-cv.pdf" download data-i18n="about_cv">Λήψη βιογραφικού (PDF, 49 KB)</a>
                         <a class="go" href="https://github.com/alexzaxa" target="_blank" rel="noopener noreferrer">GitHub</a>
                         <a class="go" href="https://www.linkedin.com/in/alexandros-z-b53122344/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </div>
@@ -510,9 +423,10 @@
                     <input type="text" name="website" id="cf-website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" aria-hidden="true">
                     <button type="submit" id="cf-submit" data-i18n="contact_submit">Αποστολή μηνύματος</button>
                     <p class="form-msg" id="cf-msg" role="status"
-                       data-sending="Αποστολή…" data-i18n-data-sending="form_sending"
-                       data-success="Στάλθηκε — ευχαριστώ, θα επικοινωνήσω μαζί σας σύντομα." data-i18n-data-success="form_success"
-                       data-error="Δεν ήταν δυνατή η αποστολή αυτή τη στιγμή — στείλτε email στο projects@alexzaxa.com." data-i18n-data-error="form_error"></p>
+                       data-sending="Αποστολή…"
+                       data-success="Στάλθηκε — ευχαριστώ, θα επικοινωνήσω μαζί σας σύντομα."
+                       data-error="Δεν ήταν δυνατή η αποστολή αυτή τη στιγμή — στείλτε email στο projects@alexzaxa.com."
+                       data-i18n-attr="data-sending:form_sending,data-success:form_success,data-error:form_error"></p>
                     <p class="form-alt" data-i18n-html="contact_alt">Δεν σας αρέσουν οι φόρμες; Στείλτε email στο <a href="mailto:projects@alexzaxa.com">projects@alexzaxa.com</a> απευθείας.</p>
                 </form>
                 <div class="contact-aside">
@@ -565,13 +479,51 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
 })();
 
-// "Book a free demo" prefills the contact message so a restaurant owner doesn't have to
-// write the opening line themselves. data-prefill carries the (build-time-translated) text.
-const demoCta = document.getElementById('book-demo-cta');
-if (demoCta) {
-    demoCta.addEventListener('click', () => {
+// "Book a free demo" / "Ask for a quote" prefill the contact message so a restaurant
+// owner doesn't have to write the opening line themselves, then hand focus straight to
+// the textarea (cursor at the end) so they can just keep typing.
+document.querySelectorAll('.prefill-cta').forEach((cta) => {
+    cta.addEventListener('click', () => {
         const msgField = document.getElementById('cf-message');
-        if (msgField && !msgField.value) msgField.value = demoCta.dataset.prefill || '';
+        if (!msgField) return;
+        if (!msgField.value) msgField.value = cta.dataset.prefill || '';
+        // Deferred: the browser's own in-page #contact navigation resets focus to <body>
+        // right after this handler returns, so focusing synchronously here gets overridden.
+        setTimeout(() => {
+            msgField.focus();
+            const end = msgField.value.length;
+            msgField.setSelectionRange(end, end);
+        }, 0);
+    });
+});
+
+// Mobile header menu: collapses the nav behind a toggle button below 600px (see CSS).
+// Closes on link click, Escape (returning focus to the toggle), or an outside click.
+const navToggle = document.getElementById('nav-toggle');
+const siteNav = document.getElementById('site-nav');
+if (navToggle && siteNav) {
+    const closeNav = () => {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+    };
+    const openNav = () => {
+        siteNav.classList.add('is-open');
+        navToggle.setAttribute('aria-expanded', 'true');
+    };
+    navToggle.addEventListener('click', () => {
+        if (siteNav.classList.contains('is-open')) closeNav(); else openNav();
+    });
+    siteNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav));
+    document.addEventListener('click', (e) => {
+        if (siteNav.classList.contains('is-open') && !siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+            closeNav();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+            closeNav();
+            navToggle.focus();
+        }
     });
 }
 
@@ -645,7 +597,13 @@ if (mapSvg) {
     }
     function goTo(id) {
         const target = document.getElementById(`proj-${id}`);
-        if (!target) return;
+        if (!target) {
+            // Lab-stage projects (Kleidi, LiteVoice, Dokimi, Trading bot, Nomos) live on
+            // their own page now - if the id isn't here, it's there.
+            const labPath = document.documentElement.lang === 'el' ? '/el/lab/' : '/lab/';
+            window.location.href = `${labPath}#proj-${id}`;
+            return;
+        }
         const details = target.closest('details');
         if (details && !details.open) details.open = true;
         target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
